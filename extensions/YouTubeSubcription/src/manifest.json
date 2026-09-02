@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Subscription Groups & Stats for YouTube",
+  "short_name": "Subs & Stats",
+  "version": "1.0.0",
+  "description": "Group subscriptions, watch one group at a time, spot new uploads, and chart views and likes across channels. Stays in your browser.",
+  "homepage_url": "https://coolsoftware.io/extensions/youtube-subscription-manager/",
+  "permissions": ["storage", "sidePanel", "scripting"],
+  "host_permissions": ["*://*.youtube.com/*"],
+  "side_panel": {
+    "default_path": "sidepanel/sidepanel.html"
+  },
+  "action": {
+    "default_title": "Subs & Stats",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "options_page": "options/options.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content/index.js"],
+      "css": ["content/content.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

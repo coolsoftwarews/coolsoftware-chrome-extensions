@@ -1,0 +1,13 @@
+node_modules/
+dist/
+release/
+icons/
+
+# Build artefacts.
+*.zip
+
+# Web Store listing material (screenshots, promo videos/images, store logos).
+# Lives on the Web Store and in a local copy outside this repo — the only copy
+# git would keep is one nobody fetches, permanently, in every clone.
+store-assets/
+store-src/

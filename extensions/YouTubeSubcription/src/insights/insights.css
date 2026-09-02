@@ -1,0 +1,623 @@
+/* Insights — charts and table, as an overlay on the YouTube page.
+
+   Loaded as text and injected into a shadow root, so every selector here is
+   scoped by construction: nothing leaks onto YouTube, and none of YouTube's
+   several thousand rules reach in. That is also why the dark-mode block below
+   keys off `.viz-root` alone — `:root` does not match inside a shadow tree, so
+   a `:root … .viz-root` selector would silently never apply.
+
+   Colour roles come from the validated categorical palette (see the data-viz
+   reference): eight fixed slots, assigned in order and never cycled, with dark
+   steps chosen for the dark surface rather than flipped automatically. Both
+   modes were run through the validator; light mode carries a sub-3:1 contrast
+   warning on three slots, which is why every chart here ships direct labels and
+   a table view — the documented relief for exactly that case. */
+
+.viz-root {
+  color-scheme: light;
+  --surface-0: #f4f5f7;
+  --surface-1: #ffffff;
+  --surface-2: #fbfbfc;
+  --line: #e7e9ee;
+  --text-primary: #14161a;
+  --text-secondary: #4b5058;
+  --text-muted: #656a73;
+  --accent: #3663d6;
+  --shadow-1: 0 1px 2px rgb(16 20 30 / 6%);
+  --shadow-2: 0 12px 32px rgb(16 20 30 / 14%), 0 2px 8px rgb(16 20 30 / 8%);
+  --ease: 140ms cubic-bezier(0.33, 0, 0.15, 1);
+
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #008300;
+  --series-7: #4a3aa7;
+  --series-other: #8a8880;
+}
+
+@media (prefers-color-scheme: dark) {
+  .viz-root {
+    color-scheme: dark;
+    --surface-0: #131417;
+    --surface-1: #1c1e23;
+    --surface-2: #24262c;
+    --line: #2c2f36;
+    --text-primary: #f4f5f7;
+    --text-secondary: #c2c6cd;
+    --text-muted: #9ba1ac;
+    --accent: #7ba7f5;
+    --shadow-1: 0 1px 2px rgb(0 0 0 / 30%);
+    --shadow-2: 0 14px 36px rgb(0 0 0 / 55%), 0 2px 8px rgb(0 0 0 / 35%);
+
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --series-5: #d55181;
+    --series-6: #008300;
+    --series-7: #9085e9;
+    --series-other: #7d7b74;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* ── Modal shell ──────────────────────────────────────────────────────── */
+
+/* The backdrop dims the feed rather than hiding it: the charts are *about*
+   what is behind them, and a solid cover would make closing feel like leaving.
+   z-index sits above YouTube's own overlays (its miniplayer tops out ~2200). */
+.viz-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgb(9 11 16 / 46%);
+  backdrop-filter: blur(3px);
+  font: 14px/1.5 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.viz-root {
+  background: var(--surface-0);
+  color: var(--text-primary);
+  border-radius: 16px;
+  box-shadow:
+    0 32px 80px rgb(0 0 0 / 40%),
+    0 0 0 1px rgb(255 255 255 / 6%);
+  padding: 20px 24px 28px;
+  width: min(1280px, 100%);
+  /* One scrolling region, so the sticky table head has something to stick to
+     and the page behind never scrolls with the wheel. */
+  max-height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.top__close {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--surface-1);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  margin-left: auto;
+  flex: none;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  transition:
+    background var(--ease),
+    border-color var(--ease),
+    color var(--ease);
+}
+
+.top__close:hover {
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface-1));
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+  color: var(--text-primary);
+}
+
+.top__close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* What the panel's filters currently say, restated where the data is — the
+   controls are in another surface, which may be scrolled elsewhere or shut. */
+.scope {
+  margin-top: 4px;
+}
+
+h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+h2 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.muted {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin: 2px 0 0;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────── */
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+/* ── Stat tiles ───────────────────────────────────────────────────────── */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.stat {
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-1);
+}
+
+.stat__label {
+  color: var(--text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.stat__value {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 2px 0 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat__note {
+  color: var(--text-muted);
+  font-size: 11px;
+  margin: 2px 0 0;
+}
+
+/* ── Cards & plots ────────────────────────────────────────────────────── */
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px 8px;
+  margin: 0 0 14px;
+  box-shadow: var(--shadow-1);
+}
+
+.card--flush {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Title, then the control that changes this chart, then the legend pushed to
+   the right. The legend is a key to what is drawn; the control decides what
+   gets drawn — so it sits next to the title, which is the other thing that
+   names the picture. */
+figcaption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+/* ── In-chart controls ────────────────────────────────────────────────── */
+
+.field {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.field__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.field__select {
+  appearance: none;
+  height: 28px;
+  padding: 0 26px 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-1);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  transition:
+    background var(--ease),
+    border-color var(--ease);
+  /* The chevron, drawn rather than fetched: the CSP forbids remote assets and
+     a data-URI arrow is smaller than a background image file. */
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) calc(50% + 1px),
+    calc(100% - 10px) calc(50% + 1px);
+  background-size: 4px 4px, 4px 4px;
+  background-repeat: no-repeat;
+}
+
+.field__select:hover {
+  background-color: color-mix(in srgb, var(--accent) 7%, var(--surface-1));
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+
+.field__select:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.plot svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Grid and axes recede; the marks are the content. */
+.grid line {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.axis text {
+  fill: var(--text-muted);
+  font-size: 11px;
+}
+
+.mark-label {
+  fill: var(--text-secondary);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A caveat about the data itself, not an instruction — it sits under the plot
+   it qualifies, quiet but unavoidable. */
+.note {
+  margin: 4px 2px 8px;
+  line-height: 1.45;
+}
+
+/* ── Legend ───────────────────────────────────────────────────────────── */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.legend__item[aria-pressed='false'] {
+  opacity: 0.45;
+}
+
+.legend__swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex: none;
+}
+
+/* ── Table ────────────────────────────────────────────────────────────── */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--surface-1);
+}
+
+th[aria-sort='ascending']::after {
+  content: ' ↑';
+}
+
+th[aria-sort='descending']::after {
+  content: ' ↓';
+}
+
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+tbody tr:hover {
+  background: var(--surface-0);
+}
+
+td.num,
+th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+mark {
+  background: color-mix(in srgb, var(--series-4) 38%, transparent);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+td a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+td a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.cell-muted {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.empty {
+  padding: 24px;
+  text-align: center;
+}
+
+/* ── Tooltip ──────────────────────────────────────────────────────────── */
+
+/* The popover is the chart's readout, not a label: it is a small card with its
+   own elevation, a heading that names the slice of time, a total stated once,
+   and one row per series. Rows are a two-column grid so the numbers form a
+   column you can scan down — the whole point of reading a stack. */
+.tip {
+  position: fixed;
+  z-index: 20;
+  pointer-events: none;
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-2);
+  padding: 10px 12px;
+  font-size: 12px;
+  min-width: 190px;
+  max-width: 320px;
+  /* Moving from one column to the next, the card glides rather than teleports —
+     it is the same readout answering about a neighbour, and the eye follows it
+     across instead of re-finding it. */
+  transition:
+    opacity var(--ease),
+    transform var(--ease),
+    left 120ms cubic-bezier(0.33, 0, 0.15, 1),
+    top 120ms cubic-bezier(0.33, 0, 0.15, 1);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tip[hidden] {
+  display: none;
+}
+
+/* One frame of "arriving", so the card reads as attached to the mark rather
+   than blinking into existence somewhere new. Transitions are off for that
+   frame: the first placement is a jump from wherever it was last left, and
+   gliding in from there is the jitter this is meant to avoid. */
+.tip[data-entering='true'] {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tip {
+    transition: none;
+  }
+}
+
+.tip__title {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-primary);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The total, stated once at the top and set large: on a stacked column it is
+   the number the reader came for, and the breakdown explains it. */
+.tip__total {
+  margin: 1px 0 0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.tip__unit {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.tip__rows {
+  margin: 8px 0 0;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 3px 8px;
+}
+
+.tip__row {
+  display: contents;
+}
+
+/* A short stroke, not a filled box: at this density a swatch is data-weight ink
+   doing a label's job. */
+.tip__key {
+  width: 12px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.tip__name {
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Values lead: the reader already knows the series, they want the number. */
+.tip__value {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* The hovered series inside its own tooltip, when one segment was aimed at. */
+.tip__row--hot .tip__name {
+  color: var(--text-primary);
+}
+
+.tip__foot {
+  margin: 7px 0 0;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* ── Mark hover ───────────────────────────────────────────────────────── */
+
+/* Hovering a column lifts it and settles everything else back, so the answer
+   to "which one am I reading?" is in the chart and not only in the popover. */
+.plot .mark {
+  transition: opacity var(--ease);
+}
+
+.plot[data-hovering='true'] .mark {
+  opacity: 0.4;
+}
+
+.plot[data-hovering='true'] .mark.is-hot {
+  opacity: 1;
+}
+
+/* The band the pointer is over, painted behind the marks. It gives the column
+   a hit target the full height of the plot — nobody should have to hit a 3px
+   segment — and shows which column owns the popover. */
+.plot .hit {
+  fill: currentColor;
+  color: var(--text-primary);
+  opacity: 0;
+  transition: opacity var(--ease);
+  cursor: default;
+}
+
+.plot .hit.is-hot {
+  opacity: 0.05;
+}
+
+.plot .hit:focus-visible {
+  outline: none;
+  opacity: 0.09;
+}
+
+/* The titles behind a mark.
+
+   A count answers "how many"; on a chart of your own subscriptions the next
+   question is always "which ones", and the names are the data. Each is clamped
+   to two lines so one long title cannot push the rest out of view. */
+.tip__items {
+  margin: 8px 0 0;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 4px;
+}
+
+.tip__item {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tip__item--more {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}

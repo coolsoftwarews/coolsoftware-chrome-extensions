@@ -1,0 +1,1337 @@
+/* Palette follows YouTube's own light/dark split so the panel does not fight
+   the page it sits next to. */
+:root {
+  --bg: #ffffff;
+  --bg-raised: #f2f2f2;
+  --bg-hover: #e8e8e8;
+  --text: #0f0f0f;
+  --text-muted: #606060;
+  --border: #e0e0e0;
+  --accent: #2340ff;
+  --accent-text: #ffffff;
+  --mark: #ffe14d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f0f0f;
+    --bg-raised: #212121;
+    --bg-hover: #303030;
+    --text: #f1f1f1;
+    --text-muted: #aaaaaa;
+    --border: #303030;
+    --accent: #7d93ff;
+    --accent-text: #0b1030;
+    --mark: #7a5c00;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 "Roboto", -apple-system, "Segoe UI", sans-serif;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+.small {
+  font-size: 12px;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+
+.bar {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.bar__title {
+  flex: 1;
+  min-width: 0;
+}
+
+.bar h1 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  /* Two lines of title, then ellipsis — long titles are the norm here. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bar p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Controls ───────────────────────────────────────────────────────── */
+
+.controls {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.options {
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.exports {
+  flex-wrap: wrap;
+}
+
+.search,
+.select {
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  min-width: 0;
+}
+
+.search {
+  flex: 1 1 60%;
+}
+.select {
+  flex: 1 1 34%;
+  max-width: 45%;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.check input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.btn {
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.link-btn {
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ── Transcript ─────────────────────────────────────────────────────── */
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.transcript {
+  list-style: none;
+  margin: 0;
+  padding: 8px 12px 16px;
+}
+
+.line {
+  display: flex;
+  gap: 8px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.line:hover {
+  background: var(--bg-raised);
+}
+
+.line--active {
+  background: var(--bg-hover);
+}
+
+.line__time {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--accent);
+  padding-top: 1px;
+}
+
+.line__text {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.line mark {
+  background: var(--mark);
+  color: inherit;
+  border-radius: 2px;
+}
+
+.state {
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.state__text {
+  margin: 0 0 12px;
+}
+
+.state--error .state__text {
+  color: var(--text);
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  margin: 0 auto 12px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2.4s;
+  }
+}
+
+.sentinel {
+  height: 1px;
+}
+
+/* ── Footer + stats ─────────────────────────────────────────────────── */
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-top: 1px solid var(--border);
+}
+
+.footer span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stats {
+  width: min(320px, 90vw);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.stats h2 {
+  margin: 0 0 4px;
+  font-size: 15px;
+}
+
+.stats__body {
+  max-height: 40vh;
+  overflow: auto;
+  background: var(--bg-raised);
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.stats::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Footer end-cap: usage, version, studio. Grouped so the status line keeps the
+   whole left side and truncates on its own rather than shoving these off. */
+.footer__end {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+/* ── Shell + rail ───────────────────────────────────────────────────────
+   The panel is a row: everything, then a fixed rail down the right edge.
+   The rail sits outside the scrolling area so it never moves. */
+
+body {
+  flex-direction: row;
+}
+
+.shell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.screens {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen[hidden] {
+  display: none;
+}
+
+.rail {
+  width: 44px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0;
+  border-left: 1px solid var(--border);
+  background: var(--bg);
+}
+
+/* Pushed to the foot of the rail: rarely reached for, always in one place. */
+.rail__btn--end {
+  margin-top: auto;
+}
+
+.rail__btn {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.rail__btn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.rail__btn[aria-current='true'] {
+  background: var(--bg-raised);
+  color: var(--accent);
+}
+
+.rail__btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Settings screen ────────────────────────────────────────────────── */
+
+.body--pad {
+  padding: 14px 12px;
+  overflow-y: auto;
+}
+
+.group {
+  padding: 0 0 16px;
+  margin: 0 0 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.group:last-child {
+  border-bottom: 0;
+  margin-bottom: 0;
+}
+
+.group__title {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.group__note {
+  margin: 8px 0 0;
+}
+
+/* ── Theme presets ──────────────────────────────────────────────────── */
+
+.themes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.theme {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.theme:hover {
+  background: var(--bg-hover);
+}
+
+.theme[aria-pressed='true'] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.theme__dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex: none;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 12%);
+}
+
+/*
+ * Four looks, each a block of token overrides and nothing else — no per-theme
+ * markup, no per-theme logic. Attribute selectors on purpose: `:root[data-theme]`
+ * outranks both the base block and the `prefers-color-scheme` one whatever the
+ * source order, so a chosen preset is not quietly undone by the system setting.
+ * That is also why each preset states its whole palette.
+ */
+
+/* Ink — deep desaturated indigo, for a panel that reads as a tool rather than
+   as part of the page beside it. */
+:root[data-theme='ink'] {
+  color-scheme: dark;
+  --bg: #14141c;
+  --bg-alt: #171722;
+  --bg-raised: #1c1c27;
+  --bg-hover: #242431;
+  --text: #e9e9f2;
+  --text-muted: #9c9cb4;
+  --border: #2e2e3d;
+  --accent: #a99bff;
+  --accent-text: #12121a;
+  --mark: #4b3f8f;
+}
+
+/* Paper — warm and low-contrast, closest to a document. */
+:root[data-theme='paper'] {
+  color-scheme: light;
+  --bg: #f3ece1;
+  --bg-alt: #efe6d8;
+  --bg-raised: #fdfaf4;
+  --bg-hover: #e7dccb;
+  --text: #2b2418;
+  --text-muted: #7c6f5c;
+  --border: #e3d8c6;
+  --accent: #b4622e;
+  --accent-text: #fffdf8;
+  --mark: #f0d9a8;
+}
+
+/* Forest — a cool green ground; the one preset whose accent is also its hue. */
+:root[data-theme='forest'] {
+  color-scheme: dark;
+  --bg: #0f1714;
+  --bg-alt: #131d19;
+  --bg-raised: #16211d;
+  --bg-hover: #1d2b26;
+  --text: #e6f0ea;
+  --text-muted: #93a89e;
+  --border: #24352f;
+  --accent: #57d6a3;
+  --accent-text: #0d1512;
+  --mark: #2c5c46;
+}
+
+/* ── Overflow menu ──────────────────────────────────────────────────────
+   Anchored to the foot of the rail, opening upward and inward — the corner it
+   belongs to is the corner it came from. */
+
+.menu {
+  position: fixed;
+  right: 48px;
+  bottom: 44px;
+  z-index: 50;
+  min-width: 190px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-raised);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 28%), 0 2px 6px rgb(0 0 0 / 16%);
+}
+
+.menu[hidden] {
+  display: none;
+}
+
+.menu__item {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu__item:hover {
+  background: var(--bg-hover);
+}
+
+/* ── The gate ───────────────────────────────────────────────────────────
+   Shown when the panel is open somewhere it cannot work. Centred, with the
+   mark, one line of weight, and the button that resolves it. */
+
+.state--gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 100%;
+  padding: 24px 20px 44px;
+  text-align: center;
+}
+
+.gate__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 11px;
+}
+
+.gate__title {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.gate__body {
+  margin: 0;
+  max-width: 32ch;
+  color: var(--text-muted);
+}
+
+.gate__action {
+  margin-top: 2px;
+}
+
+/* ── Export buttons ─────────────────────────────────────────────────────
+   Icon over label: four actions of equal weight, each still named. */
+
+.exports {
+  gap: 4px;
+}
+
+.export {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 4px 5px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.export:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+.export:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.export svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Copy leads: it is the one most people want, and the only one with no file. */
+#copy {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+#copy:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+/* ── The playing line ───────────────────────────────────────────────────
+   The line the player is inside. Deliberately quiet: it moves every few
+   seconds, and anything louder would strobe. */
+
+.line {
+  position: relative;
+}
+
+.line--playing {
+  box-shadow: inset 2px 0 0 var(--text-muted);
+}
+
+.line--playing .line__time {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── Notes screen ───────────────────────────────────────────────────────
+   TinyMDE brings its own stylesheet for the Markdown syntax colouring; what
+   follows only re-grounds it in this panel's tokens, so the editor follows the
+   colour preset like everything else. */
+
+.notes__bar {
+  flex: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-raised);
+}
+
+.notes__editor {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.notes__foot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+}
+
+.notes__foot .btn {
+  flex: none;
+}
+
+/* The editor surface itself. */
+.TinyMDE {
+  min-height: 100%;
+  padding: 12px;
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.6 'Roboto', -apple-system, 'Segoe UI', sans-serif;
+  outline: none;
+  caret-color: var(--accent);
+}
+
+.TinyMDE:focus {
+  outline: none;
+}
+
+/* Markdown punctuation — the ##, the **, the backticks. Dimmed rather than
+   hidden: this is a source editor, and quiet syntax still teaches it. */
+.TMMark {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.TMH1,
+.TMH2,
+.TMH3,
+.TMH4,
+.TMH5,
+.TMH6 {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.TMH1 {
+  font-size: 1.35em;
+}
+
+.TMH2 {
+  font-size: 1.2em;
+}
+
+.TMCode,
+.TMFencedCodeBacktick,
+.TMIndentedCode {
+  background: var(--bg-raised);
+  border-radius: 4px;
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+}
+
+.TMBlockquote {
+  color: var(--text-muted);
+  border-left: 2px solid var(--border);
+  padding-left: 8px;
+  font-style: normal;
+}
+
+.TMLink,
+.TMAutolink,
+.TMLinkDestination {
+  color: var(--accent);
+}
+
+.TMMark_TMCode {
+  color: var(--text-muted);
+}
+
+/* The command bar. TinyMDE's default is a light strip; this makes it part of
+   the panel instead of a visitor in it. */
+.TMCommandBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 4px 6px;
+  background: var(--bg-raised);
+  border: 0;
+}
+
+.TMCommandButton {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  color: var(--text-muted);
+  fill: currentColor;
+  cursor: pointer;
+}
+
+.TMCommandButton:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.TMCommandButton_Active {
+  color: var(--accent);
+  background: var(--bg-hover);
+}
+
+.TMCommandDivider {
+  width: 1px;
+  margin: 4px 4px;
+  background: var(--border);
+}
+
+.check--block {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.check--block:first-of-type {
+  margin-top: 0;
+}
+
+.group code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--bg-hover);
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  font-size: 11px;
+}
+
+/* ── The library ────────────────────────────────────────────────────────
+   Where work accumulates. One row per document: what it was about, the first
+   thing you actually wrote, and when. */
+
+.library {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.library__item {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.library__open {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.library__open:hover {
+  background: var(--bg-hover);
+}
+
+.library__open strong {
+  font-size: 13px;
+  font-weight: 600;
+  /* Two lines, then ellipsis — video titles are long by nature. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.library__preview {
+  color: var(--text-muted);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.library__when {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.library__delete {
+  flex: none;
+  width: 30px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.library__delete:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+/* ── Modals ─────────────────────────────────────────────────────────────
+   A dialog rather than another screen: picking a prompt is a detour from what
+   you were doing, and a detour should hand you back where you were. */
+
+.modal {
+  width: min(340px, calc(100vw - 32px));
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+.modal::backdrop {
+  background: rgb(10 12 16 / 55%);
+}
+
+.modal h2 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.modal__label {
+  display: block;
+  margin: 10px 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.modal__select {
+  width: 100%;
+}
+
+.modal__text {
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.modal__text:focus,
+.modal__select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.modal__actions .btn {
+  flex: 1;
+  min-width: 84px;
+}
+
+/* The heading inside the assistants menu: which prompt is about to be used. */
+.menu__heading {
+  margin: 2px 4px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.menu__item--sep {
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+  border-radius: 0 0 7px 7px;
+}
+
+/* ── The prompt list, in Settings ───────────────────────────────────── */
+
+.prompts {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.prompts__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-raised);
+}
+
+.prompts__pick {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.prompts__pick span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prompts__pick input {
+  accent-color: var(--accent);
+  flex: none;
+}
+
+.prompts__act {
+  flex: none;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.prompts__act:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.prompts__act:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ── Bulk selection in the library ──────────────────────────────────── */
+
+.library__bulk {
+  justify-content: space-between;
+}
+
+.library__tick {
+  flex: none;
+  align-self: center;
+  accent-color: var(--accent);
+}
+
+/* ── The readable view ──────────────────────────────────────────────────
+   The same document as prose. A view, not a mode: nothing is edited here. */
+
+.notes__preview {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 14px 24px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.notes__preview[hidden] {
+  display: none;
+}
+
+.notes__preview h1,
+.notes__preview h2,
+.notes__preview h3 {
+  margin: 18px 0 8px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.notes__preview h1 {
+  margin-top: 0;
+  font-size: 17px;
+}
+
+.notes__preview h2 {
+  font-size: 15px;
+}
+
+.notes__preview h3 {
+  font-size: 14px;
+}
+
+.notes__preview p,
+.notes__preview ul,
+.notes__preview ol {
+  margin: 0 0 10px;
+}
+
+.notes__preview ul,
+.notes__preview ol {
+  padding-left: 20px;
+}
+
+.notes__preview li {
+  margin-bottom: 3px;
+}
+
+.notes__preview blockquote {
+  margin: 0 0 10px;
+  padding: 2px 0 2px 10px;
+  border-left: 2px solid var(--accent);
+  color: var(--text-muted);
+}
+
+.notes__preview a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.notes__preview code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--bg-raised);
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  font-size: 12px;
+}
+
+.notes__preview pre {
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--bg-raised);
+  overflow-x: auto;
+}
+
+.notes__preview hr {
+  margin: 16px 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.notes__preview img {
+  max-width: 100%;
+}
+
+/* A wider search, for a screen you arrive at knowing what you are looking for. */
+.search--lg {
+  width: 100%;
+  height: 34px;
+  font-size: 13px;
+}
+
+/* ── Header toolbar ─────────────────────────────────────────────────────
+   One strip of equal-weight icon buttons, so the header reads as a set of
+   tools rather than a row of unrelated glyphs. */
+
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--bg-raised);
+}
+
+.tools__gap {
+  width: 1px;
+  align-self: stretch;
+  margin: 3px 3px;
+  background: var(--border);
+}
+
+.tool {
+  width: 28px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.tool:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.tool:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.tool:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.tool__icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The view toggle carries both icons and shows whichever describes the
+   destination — an eye while editing, a pencil while reading. */
+.tool__icon--on {
+  display: none;
+}
+
+.tool[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.tool[aria-pressed='true'] .tool__icon--off {
+  display: none;
+}
+
+.tool[aria-pressed='true'] .tool__icon--on {
+  display: block;
+}
+
+/* ── The notes action row ───────────────────────────────────────────────
+   Same shape as the transcript's export row, so the two screens are one
+   product: header states what you are looking at, a row of actions sits under
+   it behind its own rule, then the work. */
+
+.notes__bar {
+  padding: 2px 6px;
+}
+
+/* The Read/Edit toggle carries both icons and shows whichever names the
+   destination — an eye while editing, a pencil while reading. */
+#notes-view .tool__icon--on {
+  display: none;
+}
+
+#notes-view[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+#notes-view[aria-pressed='true'] .tool__icon--off {
+  display: none;
+}
+
+#notes-view[aria-pressed='true'] .tool__icon--on {
+  display: block;
+}
+
+/* The export buttons style their own `svg` children; these are the toggle's
+   two, which carry classes rather than being bare. */
+#notes-view svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Every band the panel stacks gets the same hairline under it, so the screens
+   read as sections rather than as one column of things. */
+.notes__bar,
+.notes__editor,
+.notes__preview {
+  border-top: 1px solid var(--border);
+}
+
+.notes__editor,
+.notes__preview {
+  border-top: 0;
+}
+
+
+
+/*
+ * `hidden` has to win, everywhere.
+ *
+ * The browser's own `[hidden] { display: none }` is a plain element rule, so
+ * any class that sets `display` silently beats it — and nearly every band in
+ * this panel sets one. That cost five separate bugs: a search box over an
+ * empty list, a rail on a gated panel, an editor toolbar with no editor, and
+ * finally the gate itself rendering *underneath* the screen it was meant to
+ * replace.
+ *
+ * One rule, stated once, rather than a new selector each time the next
+ * element catches it. `!important` is load-bearing here: the whole point is
+ * to outrank the class that set `display` in the first place.
+ */
+[hidden] {
+  display: none !important;
+}

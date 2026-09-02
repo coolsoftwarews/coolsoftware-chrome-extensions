@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Transcript Export — guide</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <a class="brand" href="#top">
+          <img class="brand__mark" src="../icons/icon-128.png" alt="" width="30" height="30" />
+          <span class="brand__name">Transcript to PDF &amp; Markdown<span>for YouTube</span></span>
+        </a>
+        <nav class="topbar__nav" aria-label="Sections">
+          <a href="#watch">Watch</a>
+          <a href="#start">Quick start</a>
+          <a href="#features">What it does</a>
+          <a href="#look">A closer look</a>
+          <a href="#limits">Limits</a>
+          <a href="#trouble">Help</a>
+          <a href="#privacy">Privacy</a>
+        </nav>
+        <button id="open-youtube-top" type="button" class="btn btn--brand btn--sm">
+          Open YouTube
+        </button>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- ── Hook ─────────────────────────────────────────────────────── -->
+      <section class="hero">
+        <div class="hero__inner">
+          <p class="eyebrow">The transcript is already there</p>
+          <h1>
+            Every word of the video.<br />
+            <span class="hero__accent">Out of that little scrolling box.</span>
+          </h1>
+          <p class="lede">
+            Read it beside the player, search it, click a line to jump. Then take it — as
+            Markdown, plain text or a PDF, or straight into ChatGPT, Claude or Gemini with a
+            prompt of your own. No account, no upload, no speech recognition.
+          </p>
+          <div class="hero__actions">
+            <button id="open-youtube-hero" type="button" class="btn btn--brand">
+              Open YouTube
+            </button>
+            <a class="btn" href="#features">What it does</a>
+          </div>
+          <ul class="chips">
+            <li>Markdown, text, PDF</li>
+            <li>Send to an AI</li>
+            <li>Edit before export</li>
+            <li>Chapters &amp; timestamps</li>
+            <li>Nothing leaves your device</li>
+          </ul>
+
+          <!-- The product, above the fold. A page the browser opens on install
+               has one job before anything else: show what the thing looks like. -->
+          <figure class="showcase">
+            <div class="frame">
+              <div class="frame__bar">
+                <span></span><span></span><span></span>
+                <span class="frame__url">youtube.com/watch</span>
+              </div>
+              <img
+                src="img/shot-panel.webp"
+                alt="A YouTube video with the transcript panel open beside it, listing every line with its timestamp above the export buttons."
+                loading="eager"
+              />
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ── Walkthrough ──────────────────────────────────────────────── -->
+      <section id="watch" class="band band--tight">
+        <div class="wrap">
+          <h2 class="section-title">Watch it work</h2>
+          <p class="section-lede">
+            Under a minute, start to finish — open a video, find the line you want, take the
+            transcript with you.
+          </p>
+          <div class="player" id="player"></div>
+        </div>
+      </section>
+
+      <!-- ── The idea ─────────────────────────────────────────────────── -->
+      <section class="band band--quote">
+        <div class="wrap">
+          <p class="pull">
+            A three-hour podcast has one paragraph you actually needed. YouTube knows every
+            word of it and shows you four lines at a time.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── Quick start ──────────────────────────────────────────────── -->
+      <section id="start" class="band">
+        <div class="wrap">
+          <h2 class="section-title">Quick start</h2>
+          <p class="section-lede">Four steps. The first two are the only ones that matter.</p>
+          <ol class="steps">
+            <li>
+              <h3>Open a YouTube video</h3>
+              <p>
+                Any video with captions — manual or auto-generated. The panel only enables
+                itself on YouTube, so the toolbar icon stays quiet everywhere else.
+              </p>
+            </li>
+            <li>
+              <h3>Open the panel</h3>
+              <p>
+                Click the toolbar icon, or press <kbd>Alt</kbd> + <kbd>Shift</kbd> +
+                <kbd>T</kbd>. It opens beside the video rather than over it, so the video keeps
+                playing while you read.
+              </p>
+            </li>
+            <li>
+              <h3>Read, search, jump</h3>
+              <p>
+                The transcript loads as a list of lines. Type in the search box to filter it,
+                and click any line to jump the video to that moment.
+              </p>
+            </li>
+            <li>
+              <h3>Take it with you</h3>
+              <p>
+                <strong>Copy</strong>, <strong>.md</strong>, <strong>.txt</strong> and
+                <strong>.pdf</strong> each hand you the transcript.
+                <strong>Prompt</strong> sends it to an AI instead. The tick boxes above decide
+                what is in it.
+              </p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ── Features ─────────────────────────────────────────────────── -->
+      <section id="features" class="band band--alt">
+        <div class="wrap">
+          <h2 class="section-title">What it does</h2>
+          <p class="section-lede">Six things, and nothing else.</p>
+          <div class="cards">
+            <article class="card" data-accent="blue">
+              <span class="card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h11M4 18h7"/><circle cx="18" cy="17" r="3.2"/><path d="m20.4 19.4 1.8 1.8"/></svg>
+              </span>
+              <h3>Read it beside the video</h3>
+              <p>
+                Every line, with its timestamp. Search filters the list and marks the hits;
+                clicking a line seeks the player to that second — so the panel is a way to
+                navigate a long talk, not just a way to export one.
+              </p>
+            </article>
+
+            <article class="card" data-accent="violet">
+              <span class="card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3.5 13.8 9l5.5 1.8-5.5 1.8L12 18l-1.8-5.4L4.7 10.8 10.2 9Z"/><path d="M18.5 15.5 19.3 18l2.5.8-2.5.8-.8 2.5-.8-2.5-2.5-.8 2.5-.8Z"/></svg>
+              </span>
+              <h3>Send it straight to an AI</h3>
+              <p>
+                <strong>Prompt</strong> opens the transcript in ChatGPT, Claude, Gemini or
+                anywhere else you name, with your instruction already in front of it. Keep as
+                many prompts as you like — Summarise, Study notes, Pull quotes — and pick a
+                default.
+              </p>
+            </article>
+
+            <article class="card" data-accent="amber">
+              <span class="card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.4 3.6a2.1 2.1 0 0 1 3 3L7.5 18.5 3.5 19.5l1-4Z"/></svg>
+              </span>
+              <h3>Edit it before you export</h3>
+              <p>
+                <strong>Read</strong> turns the transcript into a document you can work on —
+                headings, bold, lists, quotes — with a Markdown toolbar and a live preview.
+                Your edits are saved against that video, so the export is your version, not
+                the raw captions.
+              </p>
+            </article>
+
+            <article class="card" data-accent="green">
+              <span class="card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 7V5h9v2M8.5 5v14M6.5 19h4"/><path d="M15 12h5M15 16h5M15 8h5"/></svg>
+              </span>
+              <h3>It keeps the structure</h3>
+              <p>
+                Where a video has chapters, they become headings — so a three-hour transcript
+                is navigable instead of a wall. Timestamps become links back to that second of
+                the video, and tidying turns YouTube's <code>&gt;&gt;</code> speaker markers
+                into breaks. Nothing is reworded.
+              </p>
+            </article>
+
+            <article class="card" data-accent="rose">
+              <span class="card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 4v10"/><path d="m8 11 4 4 4-4"/><path d="M5 19h14"/></svg>
+              </span>
+              <h3>Four ways out</h3>
+              <p>
+                <strong>Copy</strong> to the clipboard, <strong>.md</strong> for Obsidian or
+                Notion, <strong>.txt</strong> for anything that eats text, and
+                <strong>.pdf</strong> written on your machine by the extension itself — no
+                service in the middle.
+              </p>
+            </article>
+
+            <article class="card" data-accent="teal">
+              <span class="card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.2 4.6v4.2h4.2"/><path d="M12 8v4.4l3 1.8"/></svg>
+              </span>
+              <h3>It remembers</h3>
+              <p>
+                Every transcript you open is kept in <strong>History</strong>, searchable by
+                video and deletable one at a time or all at once. Your preferences, prompts
+                and panel theme — System, Ink, Paper or Forest — stay on this device.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── A closer look ────────────────────────────────────────────── -->
+      <section id="look" class="band">
+        <div class="wrap">
+          <h2 class="section-title">A closer look</h2>
+          <p class="section-lede">The four tabs down the right-hand rail.</p>
+          <div class="shots" id="shots"></div>
+
+          <div class="details">
+            <div class="detail">
+              <h3>Timestamps, header, paragraphs</h3>
+              <p>
+                Three tick boxes, remembered between videos.
+                <strong>Timestamps</strong> keeps the clock against each line — useful for
+                citing a moment, noise if you are quoting prose. <strong>Header</strong> puts
+                the video title, channel and URL at the top, so a file found six months later
+                still says where it came from. <strong>Paragraphs</strong> merges the raw
+                caption lines into roughly minute-long blocks.
+              </p>
+            </div>
+
+            <div class="detail">
+              <h3>Every language the video has</h3>
+              <p>
+                The dropdown lists the caption tracks YouTube offers: manual tracks,
+                auto-generated ones, and auto-translations. Switching language refetches that
+                track rather than translating locally, so what you export is what YouTube has.
+                It hides itself when there is only one track to pick.
+              </p>
+            </div>
+
+            <div class="detail">
+              <h3>Your prompts, not a fixed menu</h3>
+              <p>
+                Settings holds the prompt list. Add, edit, delete, and mark one default — the
+                instruction that rides in front of the transcript when you press
+                <strong>Prompt</strong>. "Other…" lets you send it somewhere that is not one of
+                the three named tools.
+              </p>
+            </div>
+
+            <div class="detail">
+              <h3>It does not transcribe</h3>
+              <p>
+                There is no speech recognition here. This reads the caption track YouTube
+                already generated, which is why it is instant, free, and works on a three-hour
+                podcast without heating up your laptop. It is also why a video with captions
+                switched off has nothing to export.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Limits ───────────────────────────────────────────────────── -->
+      <section id="limits" class="band band--alt">
+        <div class="wrap">
+          <h2 class="section-title">Known limits</h2>
+          <p class="section-lede">
+            Worth knowing before they surprise you. None of them are bugs.
+          </p>
+          <ul class="limits">
+            <li>
+              <strong>No captions, no transcript.</strong> If the creator disabled captions and
+              YouTube generated none, there is nothing to read. The panel says so rather than
+              spinning.
+            </li>
+            <li>
+              <strong>Live streams and premieres.</strong> A stream that has not finished has
+              no settled transcript yet. Come back when it has ended.
+            </li>
+            <li>
+              <strong>Age-restricted and sign-in-required videos.</strong> Their caption tracks
+              are not readable the way this reads them.
+            </li>
+            <li>
+              <strong>Auto-generated captions are approximate.</strong> Names, jargon and
+              accents are where they slip. The export is faithful to the captions, which are
+              not always faithful to the speech.
+            </li>
+            <li>
+              <strong>The PDF uses standard fonts.</strong> Latin scripts are covered well,
+              others poorly. For non-Latin transcripts, export Markdown or text and print from
+              an application with the right fonts.
+            </li>
+            <li>
+              <strong>Sending to an AI leaves your device.</strong> That is the one thing here
+              that does. It opens the tool you chose in a tab with the transcript — where it
+              goes after that is their policy, not ours.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ── Help ─────────────────────────────────────────────────────── -->
+      <section id="trouble" class="band">
+        <div class="wrap wrap--narrow">
+          <h2 class="section-title">Troubleshooting</h2>
+          <p class="section-lede">The five things that actually go wrong.</p>
+
+          <div class="faq">
+            <details>
+              <summary>Nothing happened after I installed it</summary>
+              <p>
+                Reload the YouTube tab. Extensions are not injected into tabs that were already
+                open when they were installed or updated.
+              </p>
+            </details>
+
+            <details>
+              <summary>The toolbar icon does nothing</summary>
+              <p>
+                The panel deliberately only enables itself on YouTube tabs. On any other site
+                the icon stays inert. Open a video first.
+              </p>
+            </details>
+
+            <details>
+              <summary>"Request to YouTube failed" or an empty panel</summary>
+              <p>
+                Usually a transient network hiccup or a rate limit. Press the reload arrow at
+                the top of the panel. If it persists, reload the YouTube tab itself.
+              </p>
+            </details>
+
+            <details>
+              <summary>The transcript stops partway through</summary>
+              <p>
+                Long videos render in chunks so the panel stays responsive; give it a moment to
+                finish. If it genuinely truncates, press reload — a partial caption fetch is
+                retried from scratch rather than patched.
+              </p>
+            </details>
+
+            <details>
+              <summary>My edits disappeared</summary>
+              <p>
+                Edits are saved per video, on this device. Clearing the extension's storage, or
+                deleting that video from History, takes them with it. Export before you clear
+                anything you want to keep.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Privacy ──────────────────────────────────────────────────── -->
+      <section id="privacy" class="band band--alt">
+        <div class="wrap">
+          <h2 class="section-title">Privacy</h2>
+          <p class="section-lede">
+            Everything happens in this browser. There is no account and no server of ours —
+            the only thing that ever leaves is a transcript you explicitly send to an AI.
+          </p>
+
+          <div class="perms">
+            <div class="perm">
+              <h3>Access to youtube.com</h3>
+              <p>
+                To read the caption track of the video you are watching, and to seek the player
+                when you click a line.
+              </p>
+            </div>
+            <div class="perm">
+              <h3>Storage</h3>
+              <p>
+                To keep your preferences, your prompts, your edits, your transcript history and
+                a small counter of how often exports succeed. On this device, never uploaded.
+              </p>
+            </div>
+            <div class="perm">
+              <h3>Downloads</h3>
+              <p>To save the file you asked for to your normal downloads folder.</p>
+            </div>
+            <div class="perm">
+              <h3>Scripting</h3>
+              <p>
+                To run this extension's own code on the YouTube page in order to read the
+                caption data. Only on youtube.com, and only our code.
+              </p>
+            </div>
+            <div class="perm">
+              <h3>Side panel</h3>
+              <p>To show the transcript beside the video instead of covering it.</p>
+            </div>
+          </div>
+
+          <p class="note">
+            The usage counter is visible from the panel's Settings tab. It counts outcomes,
+            never videos.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── Close ────────────────────────────────────────────────────── -->
+      <section class="band band--cta">
+        <div class="wrap cta">
+          <img class="cta__mark" src="../icons/icon-128.png" alt="" width="56" height="56" />
+          <h2>Ready when you are.</h2>
+          <p>Open a video, press the icon, and take the transcript with you.</p>
+          <button id="open-youtube" type="button" class="btn btn--brand">Open YouTube</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot__inner">
+        <span id="version" class="muted"></span>
+        <span class="foot__links">
+          <button id="report" type="button" class="link-btn">Report a bug</button>
+          <button id="studio" type="button" class="link-btn">CoolSoftware</button>
+        </span>
+      </div>
+    </footer>
+
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

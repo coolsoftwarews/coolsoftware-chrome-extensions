@@ -1,0 +1,24 @@
+{
+  "name": "youtube-subscription-groups",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Chrome MV3 extension — group your YouTube subscriptions and watch one group at a time. No account, no server.",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "icons": "node ./scripts/gen-icons.mjs",
+    "build": "node ./scripts/build.mjs",
+    "build:prod": "node ./scripts/build.mjs --env production",
+    "build:watch": "node ./scripts/build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "node ./scripts/test.mjs",
+    "zip": "node ./scripts/build.mjs --env production && node ./scripts/zip.mjs"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.258",
+    "esbuild": "^0.21.5",
+    "typescript": "^5.4.5"
+  }
+}

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Subs &amp; Stats — guide</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <!-- The brand mark, defined once and referenced wherever it is needed. -->
+    <svg class="sprite" aria-hidden="true">
+      <defs>
+        <linearGradient id="mark-tile" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#FF3324" />
+          <stop offset="1" stop-color="#BF000C" />
+        </linearGradient>
+        <mask id="mark-folder">
+          <rect x="15.5" y="36.5" width="69" height="42.5" rx="5.5" fill="#fff" />
+          <rect x="15.5" y="24.5" width="32" height="17.5" rx="5" fill="#fff" />
+          <rect x="26.5" y="60.5" width="11" height="11" fill="#000" />
+          <rect x="44.25" y="53.5" width="11" height="18" fill="#000" />
+          <rect x="62" y="46.5" width="11" height="25" fill="#000" />
+        </mask>
+        <symbol id="mark" viewBox="0 0 100 100">
+          <rect width="100" height="100" rx="21.5" fill="url(#mark-tile)" />
+          <rect width="100" height="100" fill="#fff" mask="url(#mark-folder)" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <header class="topbar">
+      <div class="topbar__inner">
+        <a class="brand" href="#top">
+          <svg class="brand__mark" viewBox="0 0 100 100" aria-hidden="true">
+            <use href="#mark" />
+          </svg>
+          <span class="brand__name"
+            >Subscription Groups &amp; Stats<span>for YouTube</span></span
+          >
+        </a>
+        <nav class="topbar__nav" aria-label="Sections">
+          <a href="#watch">Watch</a>
+          <a href="#start">Quick start</a>
+          <a href="#features">What it does</a>
+          <a href="#look">A closer look</a>
+          <a href="#limits">Limits</a>
+          <a href="#trouble">Help</a>
+          <a href="#privacy">Privacy</a>
+        </nav>
+        <button id="open-panel-top" type="button" class="btn btn--brand btn--sm">
+          Open the panel
+        </button>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- ── Hook ───────────────────────────────────────────────────── -->
+      <section class="hero">
+        <div class="hero__inner">
+          <p class="eyebrow">Your subscriptions, on your terms</p>
+          <h1>
+            A hundred channels.<br />
+            <span class="hero__accent">The handful you meant to watch.</span>
+          </h1>
+          <p class="lede">
+            Sort your subscriptions into groups, show one group at a time in your feed, and
+            see who is actually filling it. No account, no sync, nothing leaves your device.
+          </p>
+          <div class="hero__actions">
+            <button id="open-panel" type="button" class="btn btn--brand">
+              Open the panel
+            </button>
+            <button id="open-feed" type="button" class="btn">Open subscription feed</button>
+          </div>
+          <ul class="chips">
+            <li>Unlimited groups</li>
+            <li>One-group feed</li>
+            <li>Upload &amp; view charts</li>
+            <li>CSV export</li>
+            <li>Stays in this browser</li>
+          </ul>
+
+          <!-- The product, before any explanation of it. -->
+          <figure class="showcase">
+            <div class="frame">
+              <div class="frame__bar">
+                <span></span><span></span><span></span>
+                <span class="frame__url">youtube.com/feed/subscriptions</span>
+              </div>
+              <img
+                src="img/shot-groups.webp"
+                alt="The YouTube subscription feed with the extension's panel open beside it, showing three groups and the channels filed under Marketing."
+                width="1720"
+                height="853"
+              />
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ── Walkthrough ────────────────────────────────────────────── -->
+      <section id="watch" class="band band--tight">
+        <div class="wrap">
+          <h2 class="section-title">Watch it work</h2>
+          <p class="section-lede">
+            A minute, start to finish — grouping your subscriptions, filtering the feed, and
+            reading the charts.
+          </p>
+          <div class="player" id="player"></div>
+          <div id="video-list" class="cards cards--video"></div>
+          <a id="video-more" class="more" target="_blank" rel="noreferrer" hidden
+            >All walkthroughs on YouTube →</a
+          >
+        </div>
+      </section>
+
+      <!-- ── The idea ───────────────────────────────────────────────── -->
+      <section class="band band--quote">
+        <div class="wrap">
+          <p class="pull">
+            The subscription feed stopped being a feed of things you chose the moment one
+            channel started posting fifteen times a week. Grouping puts the choosing back in
+            your hands — without unsubscribing from anyone.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── Quick start ────────────────────────────────────────────── -->
+      <section id="start" class="band">
+        <div class="wrap">
+          <h2 class="section-title">Quick start</h2>
+          <p class="section-lede">Four steps. The first two are the only ones that matter.</p>
+          <ol class="steps">
+            <li>
+              <h3>Open the panel</h3>
+              <p>
+                Click the extension icon in the toolbar. The panel opens beside YouTube and
+                stays open while you browse, so you can file channels as you go.
+              </p>
+            </li>
+            <li>
+              <h3>Press Refresh</h3>
+              <p>
+                This reads your subscription list, then each channel's public feed for its
+                recent uploads. The second part takes a minute the first time and powers the
+                new-upload dots, the sorting, the charts and the export.
+              </p>
+            </li>
+            <li>
+              <h3>Make a group and tick some channels</h3>
+              <p>
+                Use <strong>+</strong> in the toolbar to name a group, then tick channels in
+                the list below it. A channel can belong to several groups.
+              </p>
+            </li>
+            <li>
+              <h3>Press the eye</h3>
+              <p>
+                The eye beside a group shows only that group in your subscription feed, and
+                takes you there. Press it again — or the eye on <em>All subscriptions</em> —
+                to go back to everything.
+              </p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ── Features ───────────────────────────────────────────────── -->
+      <section id="features" class="band band--alt">
+        <div class="wrap">
+          <h2 class="section-title">What it does</h2>
+          <p class="section-lede">Six things, and nothing else.</p>
+          <div class="cards" id="features-list"></div>
+        </div>
+      </section>
+
+      <!-- ── A closer look ──────────────────────────────────────────── -->
+      <section id="look" class="band">
+        <div class="wrap">
+          <h2 class="section-title">A closer look</h2>
+          <p class="section-lede">The three screens you will spend your time in.</p>
+
+          <div class="look">
+            <div class="look__text">
+              <span class="look__tag look__tag--red">The filtered feed</span>
+              <h3>One group, and the feed goes quiet</h3>
+              <p>
+                Press the eye beside a group and your Subscriptions page shows only those
+                channels. It is the same YouTube page, rendered by YouTube — the extension
+                only decides what stays on it.
+              </p>
+            </div>
+            <figure class="frame">
+              <div class="frame__bar">
+                <span></span><span></span><span></span>
+                <span class="frame__url">youtube.com/feed/subscriptions</span>
+              </div>
+              <img
+                src="img/shot-feed.webp"
+                alt="The subscription feed filtered to the Marketing group, showing only videos from its four channels."
+                width="1720"
+                height="853"
+                loading="lazy"
+              />
+            </figure>
+          </div>
+
+          <div class="look look--flip">
+            <div class="look__text">
+              <span class="look__tag look__tag--blue">Charts</span>
+              <h3>Who is posting, and how often</h3>
+              <p>
+                Uploads per day stacked by group, and your most active channels ranked.
+                The channel posting fifteen times a week stops being a feeling and starts
+                being a bar.
+              </p>
+            </div>
+            <figure class="frame frame--plain">
+              <img
+                src="img/shot-charts.webp"
+                alt="The insights window showing videos, views and likes for the last seven days, a stacked uploads-per-day chart and a ranked list of the most active channels."
+                width="1440"
+                height="1011"
+                loading="lazy"
+              />
+            </figure>
+          </div>
+
+          <div class="look">
+            <div class="look__text">
+              <span class="look__tag look__tag--teal">The table</span>
+              <h3>Every video, sortable and exportable</h3>
+              <p>
+                Date, channel, title, views, likes and groups — sort by any of them, filter
+                to a group or a period, then send the whole thing to CSV.
+              </p>
+            </div>
+            <figure class="frame frame--plain">
+              <img
+                src="img/shot-table.webp"
+                alt="The insights window showing a sortable table of every held video with its date, channel, title, views, likes and groups."
+                width="1440"
+                height="1011"
+                loading="lazy"
+              />
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Limits ─────────────────────────────────────────────────── -->
+      <section id="limits" class="band">
+        <div class="wrap">
+          <h2 class="section-title">Known limits</h2>
+          <p class="section-lede">
+            Worth knowing before they surprise you. None of them are bugs.
+          </p>
+          <ul class="limits" id="limits-list"></ul>
+        </div>
+      </section>
+
+      <!-- ── Troubleshooting ────────────────────────────────────────── -->
+      <section id="trouble" class="band band--alt">
+        <div class="wrap wrap--narrow">
+          <h2 class="section-title">Troubleshooting</h2>
+          <p class="section-lede">The five things that actually go wrong.</p>
+          <div class="faq" id="faq-list"></div>
+        </div>
+      </section>
+
+      <!-- ── Privacy ────────────────────────────────────────────────── -->
+      <section id="privacy" class="band">
+        <div class="wrap">
+          <h2 class="section-title">Privacy</h2>
+          <p class="section-lede">The short version: there is nowhere for your data to go.</p>
+          <div class="privacy">
+            <article>
+              <h3>No account, no server</h3>
+              <p>
+                Your groups live in this browser, in the extension's own storage. There is no
+                sign-up and no sync — nothing is sent anywhere, and nobody but you can read
+                them.
+              </p>
+            </article>
+            <article>
+              <h3>No API key, no OAuth</h3>
+              <p>
+                It reads your subscription list the same way the YouTube page you are already
+                signed into does, using your existing session. Upload dates come from each
+                channel's public feed, which needs no sign-in at all.
+              </p>
+            </article>
+            <article>
+              <h3>One site, and yours to take</h3>
+              <p>
+                It can see and change data on <code>youtube.com</code> — that is what
+                filtering the feed means — and nothing else. Export your grouping to a JSON
+                file at any time from <strong>Settings → Backup</strong>.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Close ──────────────────────────────────────────────────── -->
+      <section class="band band--cta">
+        <div class="wrap closer">
+          <svg class="closer__mark" viewBox="0 0 100 100" aria-hidden="true">
+            <use href="#mark" />
+          </svg>
+          <h2>Ready when you are.</h2>
+          <p>Open the panel, press Refresh, and make your first group.</p>
+          <button id="open-panel-end" type="button" class="btn btn--brand">
+            Open the panel
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot__inner">
+        <span id="version"></span>
+      </div>
+    </footer>
+
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

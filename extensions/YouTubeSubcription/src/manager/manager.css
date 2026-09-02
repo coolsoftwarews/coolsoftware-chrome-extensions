@@ -1,0 +1,1790 @@
+/* Styles for the group manager. Imported as text and injected into whatever
+   root hosts it — the side panel, the options page, or the in-page overlay's
+   shadow root. Nothing here may rely on page styles, because inside a shadow
+   root there aren't any.
+
+   Layout contract: the shell is a flex column of fixed-height parts plus one
+   growing body, and inside each screen exactly one list scrolls. No ancestor of
+   that list may be `overflow: visible` with an auto height, or the panel gets a
+   second scrollbar and the toolbar scrolls away. */
+
+/* Colour is stated as roles, not hues, so the two modes are two sets of values
+   for one design rather than two designs. The palette is deliberately soft: a
+   faintly cool off-white ground with white cards on it, hairlines that separate
+   without drawing, and elevation carried by shadow instead of by borders. */
+.ysg-mgr {
+  position: relative;
+  --ysg-bg: #f4f5f7;
+  --ysg-panel: #fff;
+  /* A card that sits *on* a panel — menus, hovered rows — needs a third step,
+     because white on white has nothing left to say. */
+  --ysg-raised: #fbfbfc;
+  --ysg-text: #14161a;
+  --ysg-muted: #656a73;
+  --ysg-line: #e7e9ee;
+  --ysg-accent: #3663d6;
+  --ysg-danger: #c5372f;
+  --ysg-hover: rgb(20 22 26 / 5%);
+  --ysg-shadow-1: 0 1px 2px rgb(16 20 30 / 6%);
+  --ysg-shadow-2: 0 8px 24px rgb(16 20 30 / 12%), 0 2px 6px rgb(16 20 30 / 6%);
+  --ysg-radius: 10px;
+  --ysg-ease: 140ms cubic-bezier(0.33, 0, 0.15, 1);
+  --ysg-rail: 44px;
+
+  color: var(--ysg-text);
+  background: var(--ysg-bg);
+  font: 14px/1.5 'Segoe UI Variable Text', 'Segoe UI', 'Roboto', system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  .ysg-mgr {
+    --ysg-bg: #131417;
+    --ysg-panel: #1c1e23;
+    --ysg-raised: #24262c;
+    --ysg-text: #eceef2;
+    --ysg-muted: #9ba1ac;
+    --ysg-line: #2c2f36;
+    --ysg-accent: #7ba7f5;
+    --ysg-danger: #f38279;
+    --ysg-hover: rgb(255 255 255 / 6%);
+    --ysg-shadow-1: 0 1px 2px rgb(0 0 0 / 30%);
+    --ysg-shadow-2: 0 10px 30px rgb(0 0 0 / 48%), 0 2px 6px rgb(0 0 0 / 32%);
+  }
+}
+
+/* One focus treatment everywhere. Fluent's ring is a halo around the control,
+   not a browser outline hugging its glyphs. */
+.ysg-mgr :focus-visible {
+  outline: 2px solid var(--ysg-accent);
+  outline-offset: 1px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ysg-mgr * {
+    transition: none !important;
+  }
+}
+
+.ysg-mgr *,
+.ysg-mgr *::before,
+.ysg-mgr *::after {
+  box-sizing: border-box;
+}
+
+/* ── Toolbar ──────────────────────────────────────────────────────────── */
+
+.ysg-mgr__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--ysg-line);
+  background: var(--ysg-panel);
+  flex: none;
+}
+
+.ysg-mgr__title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  margin: 0;
+  flex: none;
+}
+
+.ysg-mgr__status {
+  color: var(--ysg-muted);
+  font-size: 11px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ysg-mgr__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  flex: none;
+}
+
+.ysg-mgr__actions[hidden] {
+  display: none;
+}
+
+/* ── Body: screens + rail ─────────────────────────────────────────────── */
+
+.ysg-body {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+}
+
+.ysg-screens {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+}
+
+.ysg-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  /* `min-width: 0` is load-bearing: a flex item defaults to `min-width: auto`,
+     so it refuses to shrink below its content and the screen slides out under
+     the rail instead of narrowing. */
+  min-width: 0;
+  flex: 1;
+  padding: 10px 12px 12px;
+  gap: 8px;
+}
+
+.ysg-screen[hidden] {
+  display: none;
+}
+
+/* The rail sits on the right, matching the host browser's own panel controls
+   and leaving the left edge — where the eye starts — for content. */
+.ysg-rail {
+  width: var(--ysg-rail);
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0;
+  border-left: 1px solid var(--ysg-line);
+  background: var(--ysg-panel);
+}
+
+.ysg-rail__btn {
+  appearance: none;
+  border: none;
+  background: none;
+  color: var(--ysg-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition:
+    background var(--ysg-ease),
+    color var(--ysg-ease);
+}
+
+.ysg-rail__btn:hover {
+  background: var(--ysg-hover);
+  color: var(--ysg-text);
+}
+
+.ysg-rail__btn:active {
+  transform: scale(0.94);
+}
+
+/* The overflow button sits at the foot of the rail, away from navigation. */
+.ysg-rail__btn--foot {
+  margin-top: auto;
+}
+
+.ysg-rail__btn[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--ysg-accent) 13%, transparent);
+  color: var(--ysg-accent);
+}
+
+/* The selected-tab pill, on the rail's own edge. Fluent marks the current
+   destination with a bar rather than relying on the tint alone — which matters
+   here, because the tint is deliberately faint. */
+.ysg-rail__btn[aria-pressed='true']::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--ysg-accent);
+}
+
+/* ── Overflow menu ────────────────────────────────────────────────────── */
+
+.ysg-menu {
+  position: absolute;
+  right: calc(var(--ysg-rail) + 6px);
+  bottom: 34px;
+  z-index: 20;
+  min-width: 210px;
+  padding: 5px;
+  background: var(--ysg-raised);
+  border: 1px solid var(--ysg-line);
+  border-radius: 12px;
+  box-shadow: var(--ysg-shadow-2);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.ysg-menu[hidden] {
+  display: none;
+}
+
+.ysg-menu__item {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  border: none;
+  background: none;
+  color: var(--ysg-text);
+  border-radius: 7px;
+  padding: 7px 9px;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ysg-menu__item {
+  transition:
+    background var(--ysg-ease),
+    color var(--ysg-ease);
+}
+
+.ysg-menu__item:hover {
+  background: var(--ysg-hover);
+  color: var(--ysg-accent);
+}
+
+.ysg-menu__item svg {
+  flex: none;
+  opacity: 0.75;
+}
+
+.ysg-menu__item--danger:hover {
+  background: color-mix(in srgb, var(--ysg-danger) 10%, transparent);
+  color: var(--ysg-danger);
+}
+
+/* ── Per-row menu ─────────────────────────────────────────────────────── */
+
+/* Positioned from script against the row's button, and `fixed` so the group
+   list's own scrolling box cannot clip it. */
+.ysg-menu--row {
+  position: fixed;
+  right: auto;
+  bottom: auto;
+  min-width: 190px;
+  /* Bounded, so the confirmation's sentence wraps instead of running the menu
+     off the side of a 380px panel. */
+  max-width: 250px;
+}
+
+/* Its two faces — the actions, and the delete confirmation — never both. */
+.ysg-menu__face[hidden] {
+  display: none;
+}
+
+.ysg-confirm {
+  padding: 4px 5px 5px;
+}
+
+.ysg-confirm__text {
+  margin: 0 0 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ysg-text);
+}
+
+.ysg-confirm__row {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+/* A filled red button, not a red word: this is the click that cannot be taken
+   back by pressing Escape, so it should not look like the one that can. */
+.ysg-btn.ysg-btn--danger-solid {
+  background: var(--ysg-danger);
+  border-color: transparent;
+  color: #fff;
+}
+
+.ysg-btn.ysg-btn--danger-solid:hover:not(:disabled) {
+  background: color-mix(in srgb, #000 12%, var(--ysg-danger));
+  border-color: transparent;
+  color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* The dark danger step is a light salmon; white on it is unreadable. */
+  .ysg-btn.ysg-btn--danger-solid,
+  .ysg-btn.ysg-btn--danger-solid:hover:not(:disabled) {
+    color: #1a1011;
+  }
+
+  .ysg-btn.ysg-btn--danger-solid:hover:not(:disabled) {
+    background: color-mix(in srgb, #fff 14%, var(--ysg-danger));
+  }
+}
+
+/* The kebab is always present but never loud — it is the row's least-used
+   control sitting next to the number people actually read. */
+.ysg-btn--kebab {
+  opacity: 0.6;
+}
+
+.ysg-group:hover .ysg-btn--kebab,
+.ysg-btn--kebab[aria-expanded='true'] {
+  opacity: 1;
+}
+
+.ysg-btn--kebab[aria-expanded='true'] {
+  background: var(--ysg-hover);
+}
+
+/* ── Footer ───────────────────────────────────────────────────────────── */
+
+.ysg-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 5px;
+  border-top: 1px solid var(--ysg-line);
+  background: var(--ysg-panel);
+  color: var(--ysg-muted);
+  font-size: 10px;
+  flex: none;
+}
+
+/* The account id makes this line long enough to matter in a 380px panel, and
+   the studio link on the right must not be the thing that gives way. */
+.ysg-foot__version {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ysg-foot__link {
+  appearance: none;
+  border: none;
+  background: none;
+  color: var(--ysg-muted);
+  font: inherit;
+  cursor: pointer;
+  margin-left: auto;
+  padding: 0;
+}
+
+.ysg-foot__link:hover {
+  color: var(--ysg-accent);
+}
+
+/* ── Controls ─────────────────────────────────────────────────────────── */
+
+.ysg-btn {
+  appearance: none;
+  border: 1px solid var(--ysg-line);
+  background: var(--ysg-panel);
+  color: var(--ysg-text);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: var(--ysg-shadow-1);
+  transition:
+    background var(--ysg-ease),
+    border-color var(--ysg-ease),
+    color var(--ysg-ease),
+    box-shadow var(--ysg-ease);
+}
+
+/* Hover tints the fill rather than repainting the label: a button whose text
+   changes colour reads as a state change, and hover is not a state. */
+.ysg-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--ysg-accent) 7%, var(--ysg-panel));
+  border-color: color-mix(in srgb, var(--ysg-accent) 40%, var(--ysg-line));
+}
+
+.ysg-btn:active:not(:disabled) {
+  box-shadow: none;
+  transform: translateY(0.5px);
+}
+
+.ysg-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+  box-shadow: none;
+}
+
+.ysg-btn--primary {
+  background: var(--ysg-accent);
+  border-color: transparent;
+  color: #fff;
+}
+
+.ysg-btn--primary:hover:not(:disabled) {
+  background: color-mix(in srgb, #000 12%, var(--ysg-accent));
+  border-color: transparent;
+  color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* The dark accent is a light blue, so white-on-accent would be unreadable;
+     the primary button inverts its ink instead of its fill. */
+  .ysg-btn--primary,
+  .ysg-btn--primary:hover:not(:disabled) {
+    color: #10131a;
+  }
+
+  .ysg-btn--primary:hover:not(:disabled) {
+    background: color-mix(in srgb, #fff 14%, var(--ysg-accent));
+  }
+}
+
+/* An icon button that is pressed. `--on` is set from script for menus that are
+   open; `aria-pressed` is set for controls that carry a lasting state — Charts
+   and Table, which say which view the overlay is showing. Both should look the
+   same, and until this rule existed the second one looked like nothing at all. */
+.ysg-btn.ysg-btn--toggle[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--ysg-accent) 16%, transparent);
+  color: var(--ysg-accent);
+}
+
+/* A toggle that is *on*.
+
+   Compound selector on purpose: `.ysg-btn--icon` sets `background: none`, and a
+   single-class rule at the same specificity loses to whichever is declared
+   later — which is exactly how this state silently failed to paint. */
+.ysg-btn.ysg-btn--on {
+  background: color-mix(in srgb, var(--ysg-accent) 18%, transparent);
+  border-color: var(--ysg-accent);
+  color: var(--ysg-accent);
+}
+
+/* Icon buttons: a square hit target, no chrome until hovered. */
+.ysg-btn--icon {
+  border: none;
+  background: none;
+  box-shadow: none;
+  color: var(--ysg-muted);
+  font-size: 11px;
+  padding: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+/* Compound selector on purpose. `.ysg-btn:hover:not(:disabled)` above outranks
+   a single class + `:hover`, so a plain `.ysg-btn--icon:hover` would lose and
+   these bare icons would pick up the filled button's tint. */
+.ysg-btn.ysg-btn--icon:hover {
+  background: var(--ysg-hover);
+  color: var(--ysg-accent);
+}
+
+.ysg-btn.ysg-btn--danger:hover {
+  color: var(--ysg-danger);
+  background: color-mix(in srgb, var(--ysg-danger) 10%, transparent);
+}
+
+.ysg-btn--close {
+  font-size: 15px;
+  line-height: 1;
+  padding: 2px 6px;
+}
+
+/* One height for every control on the channels line. A `<select>` and an
+   `<input>` size themselves differently from identical padding, so the height
+   is stated rather than inferred. */
+.ysg-input,
+.ysg-sort {
+  height: 28px;
+  border: 1px solid var(--ysg-line);
+  background: var(--ysg-panel);
+  color: var(--ysg-text);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 12px;
+  min-width: 0;
+  box-shadow: var(--ysg-shadow-1);
+  transition:
+    border-color var(--ysg-ease),
+    box-shadow var(--ysg-ease);
+}
+
+.ysg-input:hover,
+.ysg-sort:hover {
+  border-color: color-mix(in srgb, var(--ysg-accent) 35%, var(--ysg-line));
+}
+
+/* A field takes focus with its own border plus a soft halo, so the ring reads
+   as part of the control rather than a rectangle drawn around it. */
+.ysg-input:focus-visible,
+.ysg-sort:focus-visible {
+  outline: none;
+  border-color: var(--ysg-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ysg-accent) 20%, transparent);
+}
+
+.ysg-input::placeholder {
+  color: var(--ysg-muted);
+}
+
+.ysg-input {
+  padding: 0 9px;
+}
+
+.ysg-sort {
+  padding: 0 4px;
+  flex: none;
+}
+
+/* The channel header's controls: square, and bare like the "+" on the groups
+   card — the two card headers now sit one above the other, and a row of boxed
+   buttons beside a borderless one made them look like different products.
+
+   Pressed is a tint (`--on`), the same signal the rail's current tab uses. */
+.ysg-btn--toggle {
+  height: 28px;
+  width: 28px;
+  border: none;
+  background: none;
+  box-shadow: none;
+  flex: none;
+}
+
+/* The period control is a row in the group list, between "All subscriptions"
+   and the groups — see the note where it is built. It is a statement of scope,
+   not an item you can pick, so it takes no hover and no cursor. */
+/* A statement, not an item: no hover, no pointer, and only as tall as the one
+   line of text it holds now that the control moved up to the row above. */
+.ysg-period-row {
+  cursor: default;
+  padding: 0 7px 6px;
+  border-bottom: 1px solid var(--ysg-line);
+  border-radius: 0;
+  margin-bottom: 3px;
+}
+
+.ysg-period-row:hover {
+  background: none;
+}
+
+/* The readout, matching "Sort by: …" on the card below — the icon changes the
+   setting, the sentence states it. */
+.ysg-period-row__label {
+  color: var(--ysg-muted);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The search-field picker: a summary button, a checkbox list under it. */
+.ysg-fields {
+  position: relative;
+}
+
+.ysg-fields__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  height: 28px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+
+.ysg-fields__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ysg-fields__menu {
+  position: absolute;
+  z-index: 15;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  min-width: 160px;
+  padding: 5px;
+  background: var(--ysg-panel);
+  border: 1px solid var(--ysg-line);
+  border-radius: 9px;
+  box-shadow: 0 8px 22px rgb(0 0 0 / 20%);
+}
+
+.ysg-fields__menu[hidden] {
+  display: none;
+}
+
+/* An icon-sized trigger cannot anchor a menu on its own left edge — the menu
+   is eight times its width. This one hangs from the right instead, so it opens
+   inward over the list rather than off the panel. */
+.ysg-fields--icon {
+  flex: none;
+}
+
+.ysg-fields__menu--right {
+  left: auto;
+  right: 0;
+  min-width: 170px;
+}
+
+/* Placed from script against its button, and taken out of the flow entirely,
+   so the scrolling list it opens from cannot clip it. */
+.ysg-fields__menu--fixed {
+  position: fixed;
+  top: auto;
+  left: auto;
+  right: auto;
+  z-index: 25;
+  min-width: 170px;
+}
+
+/* The chosen ordering, marked with a tick in a reserved column so the labels
+   still line up on the rows without one. */
+.ysg-menu__item--check {
+  padding-left: 26px;
+  position: relative;
+}
+
+.ysg-menu__item--check[aria-checked='true'] {
+  color: var(--ysg-accent);
+  font-weight: 600;
+}
+
+.ysg-menu__item--check[aria-checked='true']::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  width: 5px;
+  height: 9px;
+  margin-top: -6px;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.ysg-menu__item--check:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ysg-fields__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 7px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ysg-fields__item:hover {
+  background: var(--ysg-bg);
+}
+
+.ysg-fields__item input {
+  accent-color: var(--ysg-accent);
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}
+
+.ysg-fieldset {
+  border: 1px solid var(--ysg-line);
+  border-radius: var(--ysg-radius);
+  padding: 9px 10px 10px;
+  background: var(--ysg-panel);
+  box-shadow: var(--ysg-shadow-1);
+}
+
+.ysg-fieldset + .ysg-fieldset {
+  margin-top: 8px;
+}
+
+.ysg-fieldset__title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ysg-muted);
+}
+
+.ysg-fieldset__help {
+  margin: 2px 0 8px;
+  font-size: 11px;
+  color: var(--ysg-muted);
+}
+
+/* ── Banner ───────────────────────────────────────────────────────────── */
+
+/* Status tones as a pair of tokens per tone, so dark mode restates them rather
+   than inheriting a pastel wash that belongs on a white page. */
+.ysg-banner {
+  --tone-bg: #fff6e8;
+  --tone-ink: #7a4a05;
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 12px;
+  background: var(--tone-bg);
+  color: var(--tone-ink);
+  border-bottom: 1px solid color-mix(in srgb, var(--tone-ink) 16%, transparent);
+  flex: none;
+}
+
+.ysg-banner[data-tone='error'] {
+  --tone-bg: #fdedec;
+  --tone-ink: #a3271f;
+}
+
+.ysg-banner[data-tone='ok'] {
+  --tone-bg: #eaf5ec;
+  --tone-ink: #1e5e2c;
+}
+
+@media (prefers-color-scheme: dark) {
+  .ysg-banner {
+    --tone-bg: #2b220f;
+    --tone-ink: #f0c67a;
+  }
+
+  .ysg-banner[data-tone='error'] {
+    --tone-bg: #2e1817;
+    --tone-ink: #f2a09a;
+  }
+
+  .ysg-banner[data-tone='ok'] {
+    --tone-bg: #16261a;
+    --tone-ink: #90d3a1;
+  }
+}
+
+/* ── Groups screen ────────────────────────────────────────────────────── */
+
+/* Renaming and creating happen in the row itself. Native `prompt`/`confirm`
+   were doing this job until the browser's "prevent additional dialogs" guard
+   turned out to disable them silently — buttons that stop working with no
+   error is a worse failure than any dialog. */
+.ysg-group__edit {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--ysg-accent);
+  background: var(--ysg-panel);
+  color: var(--ysg-text);
+  border-radius: 6px;
+  padding: 2px 6px;
+  font: inherit;
+  font-size: 13px;
+}
+
+.ysg-banner__action {
+  appearance: none;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0 4px;
+  margin-left: 8px;
+}
+
+
+.ysg-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Groups are few and each one matters, so the list gets an equal half of the
+   panel rather than the scraps left by the channel list — see the split below.
+   The `max-height` is the fallback for hosts that are not the flex column. */
+.ysg-list--groups {
+  flex: none;
+  max-height: 34vh;
+  overflow-y: auto;
+  border: 1px solid var(--ysg-line);
+  border-radius: var(--ysg-radius);
+  background: var(--ysg-panel);
+  box-shadow: var(--ysg-shadow-1);
+  padding: 5px;
+}
+
+/* The channels card: a head and a body, matching the groups card above it.
+   The card carries the chrome; the list inside it just scrolls. */
+.ysg-pcard {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1 1 0;
+  border: 1px solid var(--ysg-line);
+  border-radius: var(--ysg-radius);
+  background: var(--ysg-panel);
+  box-shadow: var(--ysg-shadow-1);
+}
+
+/* The head is a block, not a line: the title and its controls, then what the
+   list below is sorted by. Both sit above the card's rule, so everything under
+   the rule is the list itself. */
+.ysg-pcard__head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: none;
+  padding: 7px 8px 7px 11px;
+  border-bottom: 1px solid var(--ysg-line);
+}
+
+.ysg-pcard__headrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ysg-pcard__head .ysg-hint--note {
+  margin: 0;
+}
+
+/* While searching, the field takes the header. The title is restated by the
+   group row that is selected, and comes back the moment the search is empty. */
+.ysg-pcard__head--searching .ysg-section-title {
+  display: none;
+}
+
+/* A stated rule between two cards. They answer different questions, and
+   without it the second reads as a continuation of the first.
+
+   Drawn from the muted ink rather than `--ysg-line`: a hairline the colour of
+   the card borders is invisible out here on the panel's own ground, which is
+   very nearly that colour already. */
+.ysg-divider {
+  flex: none;
+  height: 1px;
+  background: color-mix(in srgb, var(--ysg-muted) 30%, transparent);
+  margin: 3px 6px;
+}
+
+/* The one scrolling region on this screen. */
+.ysg-list--channels {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 5px;
+}
+
+/* Thin, self-coloured scrollbars. The default Windows bar is wider than the
+   4px gutter these lists have to spare and paints a grey slab down the card. */
+.ysg-list--groups,
+.ysg-list--channels {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--ysg-muted) 40%, transparent) transparent;
+}
+
+/* Controls sit on the title's line now. They fit because they are three icons
+   rather than a select and a search field — the arrangement that once pushed
+   the group name down to two characters and an ellipsis. */
+.ysg-section-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  margin-left: auto;
+}
+
+/* Search: a 28px button, or a field that takes the rest of the line. */
+.ysg-searchbox {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.ysg-searchbox--open {
+  flex: 1;
+}
+
+.ysg-searchbox .ysg-search {
+  width: 100%;
+  min-width: 0;
+}
+
+/* The header's controls take the whole line while the field is open, so the
+   field has somewhere to grow into. */
+.ysg-pcard__head--searching .ysg-section-controls {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Set exactly like "All subscriptions" in the card above — same size, same
+   weight, same ink. The two cards are peers, and a bolder heading on one of
+   them made it look like the more important of the two. */
+.ysg-section-title {
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ysg-search {
+  flex: 1;
+  min-width: 0;
+}
+
+.ysg-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 7px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: background var(--ysg-ease);
+  /* The row is a button in all but name, and a button's label does not
+     highlight when you click it twice. */
+  user-select: none;
+}
+
+.ysg-group:hover {
+  background: var(--ysg-hover);
+}
+
+/* Selection — "this is the group whose channels are listed below" — is the
+   quieter of the two states, an edge bar and nothing more.
+
+   It used to carry a tint as well, which made it indistinguishable from the
+   row the feed was showing: with "All subscriptions" active and Marketing open
+   for editing, two rows lit up and neither said what it was. The heading under
+   the list already names this one in words — `Channels in "Marketing"` — so
+   the bar is a pointer to that, not an announcement of its own. */
+
+/* Selection gets the same edge bar as the rail's current tab: one vocabulary
+   for "this is the thing you are looking at", and it survives a faint tint. */
+.ysg-group[aria-selected='true']::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  border-radius: 2px;
+  background: var(--ysg-accent);
+}
+
+/* "All subscriptions" is not a group: it cannot be renamed, deleted or filled,
+   so it is set apart from the list rather than pretending to be one of it.
+   The rule it used to draw for itself now belongs to the period row directly
+   under it — two hairlines 30px apart read as a box around nothing. */
+.ysg-group--all {
+  border-radius: 8px 8px 0 0;
+  padding-bottom: 5px;
+}
+
+/* The group the feed is currently showing.
+
+   Deliberately *not* a tint. Selection is a tint, and these two states are
+   different things that regularly land on different rows — click "All
+   subscriptions" while editing Marketing and both were lit, with nothing to
+   say which was which. So watching gets a word instead: one row at a time
+   wears "Showing", and colour is left to mean selection alone. */
+.ysg-group--on {
+  color: var(--ysg-accent);
+  font-weight: 600;
+}
+
+.ysg-showing {
+  flex: none;
+  padding: 0 6px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ysg-accent) 16%, transparent);
+  color: var(--ysg-accent);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 16px;
+}
+
+/* A group holding nothing cannot be shown, so its row says so before you click
+   rather than after: clicking it selects it and leaves the feed alone. */
+.ysg-group--empty .ysg-group__name {
+  opacity: 0.6;
+}
+
+.ysg-group__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The total on "All subscriptions": a badge against the label rather than a
+   number in the groups' count column, because it is their sum, not a peer. */
+.ysg-count-badge {
+  flex: none;
+  /* Takes the slack, so the label + badge stay together on the left and the
+     row's buttons stay pinned right. */
+  margin-right: auto;
+  padding: 0 6px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ysg-muted) 16%, transparent);
+  color: var(--ysg-muted);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The label no longer takes the slack — the badge does, so it can sit beside
+   the words instead of drifting to the far edge. */
+.ysg-group--all .ysg-group__name {
+  flex: none;
+}
+
+/* "Something new here." A dot rather than a count, because in a channel row
+   the only question is whether to look, and YouTube's own sidebar has already
+   taught everyone what a dot beside a channel means. */
+.ysg-channel__metric {
+  color: var(--ysg-muted);
+  font-size: 11px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ysg-channel__metric[hidden] {
+  display: none;
+}
+
+.ysg-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ysg-accent);
+  justify-self: end;
+  flex: none;
+}
+
+.ysg-dot[hidden] {
+  display: none;
+}
+
+/* The group tally, "new videos / channels".
+
+   Quiet by default — most groups have nothing new most of the time, and a row
+   of blue pills is a row of nothing said. It fills in only when there is
+   something to go and watch. */
+.ysg-tally {
+  padding: 0 6px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ysg-muted) 16%, transparent);
+  color: var(--ysg-muted);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 16px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  flex: none;
+}
+
+.ysg-tally--new {
+  background: var(--ysg-accent);
+  color: #fff;
+}
+
+.ysg-tally[hidden] {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Same reason as the primary button: the dark accent is a light blue. */
+  .ysg-tally--new {
+    color: #10131a;
+  }
+}
+
+.ysg-muted {
+  color: var(--ysg-muted);
+  padding: 6px;
+  font-size: 13px;
+}
+
+/* Checkbox, avatar, name. Handle and counts live in the hover tooltip: at
+   panel width they cost a line each and are read once per channel at most,
+   while the name is read every time. */
+.ysg-channel {
+  display: grid;
+  grid-template-columns: auto 24px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 7px;
+  border-radius: 8px;
+  transition: background var(--ysg-ease);
+}
+
+.ysg-channel:hover {
+  background: var(--ysg-hover);
+}
+
+.ysg-channel[hidden] {
+  display: none;
+}
+
+.ysg-channel input[type='checkbox'] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--ysg-accent);
+  cursor: pointer;
+  margin: 0;
+}
+
+.ysg-channel img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--ysg-line);
+}
+
+/* The one part of a row that opens the details card. Small, so it says so —
+   an outline on hover is the only thing marking it apart from a decoration. */
+.ysg-cardable {
+  cursor: help;
+}
+
+.ysg-cardable:hover {
+  outline: 2px solid var(--ysg-accent);
+  outline-offset: 1px;
+}
+
+.ysg-channel__name {
+  display: block;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ysg-hint {
+  color: var(--ysg-muted);
+  margin: 0;
+  font-size: 12px;
+  flex: none;
+}
+
+.ysg-hint[hidden] {
+  display: none;
+}
+
+/* The provenance line: quieter than an instruction, always true. */
+.ysg-hint--note {
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+/* ── Channel hover card ───────────────────────────────────────────────── */
+
+.ysg-card {
+  position: fixed;
+  z-index: 10;
+  width: 260px;
+  padding: 12px;
+  border: 1px solid var(--ysg-line);
+  border-radius: 14px;
+  background: var(--ysg-raised);
+  box-shadow: var(--ysg-shadow-2);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ysg-card[hidden] {
+  display: none;
+}
+
+.ysg-card__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.ysg-card__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--ysg-line);
+  flex: none;
+}
+
+.ysg-card__text {
+  min-width: 0;
+}
+
+.ysg-card__name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ysg-card__handle,
+.ysg-card__stats,
+.ysg-card__latest {
+  margin: 0;
+  font-size: 11px;
+  color: var(--ysg-muted);
+}
+
+.ysg-card__handle[hidden] {
+  display: none;
+}
+
+/* The latest title can be long; two lines, then clipped. */
+.ysg-card__latest {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ysg-card__view {
+  margin-top: 4px;
+  width: 100%;
+  text-align: center;
+}
+
+/* ── Settings screen ──────────────────────────────────────────────────── */
+
+.ysg-screen > .ysg-setting:first-of-type {
+  margin-top: 2px;
+}
+
+.ysg-setting {
+  background: var(--ysg-panel);
+  border: 1px solid var(--ysg-line);
+  border-radius: var(--ysg-radius);
+  padding: 10px 12px;
+  flex: none;
+  box-shadow: var(--ysg-shadow-1);
+}
+
+.ysg-setting__label {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.ysg-setting__value {
+  margin: 0;
+  font-size: 13px;
+}
+
+.ysg-setting__help {
+  margin: 6px 0 0;
+  color: var(--ysg-muted);
+  font-size: 11px;
+}
+
+.ysg-export {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  flex: none;
+}
+
+/* On its own screen the controls have the full width, so they stack into a
+   readable column rather than wrapping into an unpredictable grid. */
+.ysg-screen > .ysg-export {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* The scope picker on Charts & data: the groups card again, read-only. It is
+   one filter among several, so it is capped and scrolls rather than pushing
+   the rest of the fieldset off the screen. */
+.ysg-list--picker {
+  /* Its own block in its own fieldset, so it simply fills the width. It used
+     to be a flex item beside the selects, where `flex: 1 0 100%` resolved
+     against the wrong axis and pushed the whole card past the panel edge. */
+  min-width: 0;
+  /* Taller than the groups list on the other screen: this card is the whole
+     screen's content now, so the space is there and a list you can see ten
+     groups in beats one you scroll four at a time. */
+  max-height: 340px;
+  overflow-y: auto;
+  border: 1px solid var(--ysg-line);
+  border-radius: var(--ysg-radius);
+  background: var(--ysg-panel);
+  box-shadow: var(--ysg-shadow-1);
+  padding: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--ysg-muted) 40%, transparent) transparent;
+}
+
+/* "All subscriptions" is the scope line here, so it keeps its rule — the row
+   under it holds the settings that qualify it, then the groups begin.
+
+   It also carries six controls, so it is given room to breathe and its label
+   yields the slack to them rather than the other way round. */
+.ysg-list--picker .ysg-group--all {
+  border-radius: 8px 8px 0 0;
+  padding: 6px 7px 7px;
+  gap: 4px;
+}
+
+.ysg-list--picker .ysg-group--all .ysg-group__name {
+  flex: none;
+}
+
+/* Charts / Table / Export sit apart from the clock: one sets what you are
+   looking at, the others take you to it. */
+.ysg-list--picker .ysg-group--all .ysg-section-controls {
+  gap: 2px;
+  padding-left: 4px;
+  margin-left: 0;
+  border-left: 1px solid var(--ysg-line);
+}
+
+/* The settings line: the window in words on the left, search and its field
+   list on the right. */
+.ysg-scope-row {
+  gap: 6px;
+  padding-top: 2px;
+}
+
+.ysg-scope-row .ysg-section-controls {
+  margin-left: auto;
+}
+
+/* Searching takes the line — the window is stated again on every row of the
+   table it filters, so it is the half that can go. */
+.ysg-scope-row--searching .ysg-period-row__label {
+  display: none;
+}
+
+.ysg-scope-row--searching .ysg-section-controls {
+  flex: 1;
+  min-width: 0;
+}
+
+/* A fieldset holds a stack of controls, so it always takes the whole row —
+   dropped into one of the two columns it cannot shrink to fit and takes the
+   card past the panel edge instead. */
+.ysg-screen > .ysg-export > .ysg-fieldset,
+.ysg-screen > .ysg-export > .ysg-list--picker,
+.ysg-screen > .ysg-export .ysg-export__search,
+.ysg-screen > .ysg-export .ysg-seg,
+.ysg-screen > .ysg-export .ysg-btn--primary {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.ysg-export__select {
+  flex: 1 1 auto;
+  min-width: 110px;
+}
+
+/* The search box wants the whole line to itself — sharing a row with two
+   selects leaves it too narrow to read what you typed. */
+.ysg-export__search {
+  flex: 1 0 100%;
+  height: 28px;
+}
+
+/* Charts | Table. A segmented control rather than two buttons because the two
+   are one choice: the same videos, read two ways, never both at once. */
+/* A track with a raised thumb, rather than one filled half. The filled version
+   read as a primary button and kept inviting a click on the tab already open. */
+.ysg-seg {
+  display: inline-flex;
+  border: 1px solid var(--ysg-line);
+  border-radius: 9px;
+  overflow: hidden;
+  height: 28px;
+  flex: none;
+  background: var(--ysg-bg);
+  padding: 2px;
+  gap: 2px;
+}
+
+.ysg-seg button {
+  appearance: none;
+  border: none;
+  background: none;
+  color: var(--ysg-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 0 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition:
+    background var(--ysg-ease),
+    color var(--ysg-ease);
+}
+
+.ysg-seg button:hover {
+  color: var(--ysg-text);
+}
+
+.ysg-seg button[aria-pressed='true'] {
+  background: var(--ysg-panel);
+  color: var(--ysg-text);
+  box-shadow: var(--ysg-shadow-1);
+}
+
+.ysg-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.ysg-toggle input {
+  accent-color: var(--ysg-accent);
+  width: 15px;
+  height: 15px;
+  margin: 0;
+}
+
+/* ── Wide hosts (options page, overlay) ───────────────────────────────── */
+
+/* Given room, put groups and channels side by side rather than stretching a
+   phone-shaped column across a monitor. */
+@media (min-width: 720px) {
+  .ysg-screen {
+    padding: 12px 16px 16px;
+  }
+
+  /* Two cards side by side. Each is now a self-contained head-and-body, so the
+     wide layout is two columns rather than a grid of loose parts. */
+  .ysg-screen:first-child {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 0 14px;
+  }
+
+  .ysg-screen[hidden] {
+    display: none;
+  }
+
+  .ysg-list--groups {
+    max-height: none;
+  }
+
+  /* Side by side, the rule between them would be a rule across nothing. */
+  .ysg-divider {
+    display: none;
+  }
+
+  .ysg-setting {
+    max-width: 640px;
+  }
+}
+
+/* A plain note hung off an (i) button. Same card as the row menu, without the
+   menu — it holds one sentence and takes no action. */
+.ysg-note-pop {
+  padding: 9px 11px;
+  max-width: 260px;
+}
+
+.ysg-note-pop .ysg-confirm__text {
+  margin: 0;
+  color: var(--ysg-muted);
+}
+
+/* The channel picker under the group picker: same card, plus an avatar so a
+   list of a hundred names is scannable by face as well as by word. */
+.ysg-list--channels-pick {
+  max-height: 260px;
+}
+
+.ysg-pick__avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ysg-line);
+  flex: none;
+  margin-right: 2px;
+}
+
+/* A channel with nothing in the window stays listed rather than vanishing
+   mid-read — greyed, and its tally reads 0. */
+.ysg-list--channels-pick .ysg-group--empty .ysg-pick__avatar {
+  opacity: 0.5;
+}
+
+/* ── Charts & data: two cards, one column ─────────────────────────────── */
+
+/* Each takes half of whatever height the panel has. `min-height: 0` on both
+   the stack and its children is what makes that true rather than aspirational:
+   a flex item defaults to `min-height: auto`, refuses to shrink below its
+   content, and two long lists would then push the second card off the bottom
+   instead of scrolling inside their own halves. */
+.ysg-data-stack {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 6px;
+}
+
+.ysg-data-stack > .ysg-list--picker {
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: none;
+}
+
+/* ── Groups screen: two cards, one column ─────────────────────────────── */
+
+/* The same half-and-half split as Charts & data. The groups list was capped at
+   34vh and the channel card took everything left, so on a tall panel the
+   groups had a third of the room and on a short one they had all of it.
+
+   Scoped to a direct child of the screen, because the identical list class is
+   also used by the scope picker on Charts & data, which lives inside its own
+   stack and sizes itself there. */
+.ysg-screen > .ysg-list--groups {
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: none;
+}
+
+/* ── Presets ──────────────────────────────────────────────────────────── */
+
+/* Four looks, each a block of token overrides and nothing else. There is no
+   per-theme markup and no per-theme logic: everything in the panel already
+   draws from these roles, so a new preset is a block here plus one line in
+   `THEMES`.
+
+   Attribute selectors on purpose — `.ysg-mgr[data-theme='ink']` outranks both
+   the base block and the `prefers-color-scheme` one whatever the source order,
+   so a chosen preset is not quietly undone by the system setting. That is also
+   why each fixed preset states its *whole* palette: half a palette would leave
+   the rest to be filled in by whichever mode the browser happens to be in. */
+
+/* Ink — a deep desaturated indigo, for a panel that should read as a tool
+   rather than as part of the page it sits beside. */
+.ysg-mgr[data-theme='ink'] {
+  color-scheme: dark;
+  --ysg-bg: #14141c;
+  --ysg-panel: #1c1c27;
+  --ysg-raised: #24243180;
+  --ysg-text: #e9e9f2;
+  --ysg-muted: #9c9cb4;
+  --ysg-line: #2e2e3d;
+  --ysg-accent: #a99bff;
+  --ysg-danger: #ff8087;
+  --ysg-hover: rgb(255 255 255 / 7%);
+  --ysg-shadow-1: 0 1px 2px rgb(0 0 0 / 40%);
+  --ysg-shadow-2: 0 12px 32px rgb(0 0 0 / 55%), 0 2px 8px rgb(0 0 0 / 35%);
+}
+
+/* Paper — warm, low-contrast, closest to a document. The accent is the ink of
+   a red pen, so "showing" and "selected" still carry across the warmth. */
+.ysg-mgr[data-theme='paper'] {
+  color-scheme: light;
+  --ysg-bg: #f3ece1;
+  --ysg-panel: #fdfaf4;
+  --ysg-raised: #fffdf8;
+  --ysg-text: #2b2418;
+  --ysg-muted: #7c6f5c;
+  --ysg-line: #e3d8c6;
+  --ysg-accent: #b4622e;
+  --ysg-danger: #a8332a;
+  --ysg-hover: rgb(80 60 30 / 7%);
+  --ysg-shadow-1: 0 1px 2px rgb(90 70 40 / 8%);
+  --ysg-shadow-2: 0 10px 26px rgb(90 70 40 / 16%), 0 2px 6px rgb(90 70 40 / 10%);
+}
+
+/* Forest — a cool green ground; the one preset whose accent is also its hue,
+   which is why its rows lean on the edge bar more than on tint. */
+.ysg-mgr[data-theme='forest'] {
+  color-scheme: dark;
+  --ysg-bg: #0f1714;
+  --ysg-panel: #16211d;
+  --ysg-raised: #1d2b26;
+  --ysg-text: #e6f0ea;
+  --ysg-muted: #93a89e;
+  --ysg-line: #24352f;
+  --ysg-accent: #57d6a3;
+  --ysg-danger: #ff8f7a;
+  --ysg-hover: rgb(255 255 255 / 6%);
+  --ysg-shadow-1: 0 1px 2px rgb(0 0 0 / 35%);
+  --ysg-shadow-2: 0 12px 30px rgb(0 0 0 / 50%), 0 2px 8px rgb(0 0 0 / 30%);
+}
+
+/* A light accent needs dark ink on top of it, in every preset that has one. */
+.ysg-mgr[data-theme='ink'] .ysg-btn--primary,
+.ysg-mgr[data-theme='ink'] .ysg-tally--new,
+.ysg-mgr[data-theme='forest'] .ysg-btn--primary,
+.ysg-mgr[data-theme='forest'] .ysg-tally--new {
+  color: #12121a;
+}
+
+/* ── The preset picker ────────────────────────────────────────────────── */
+
+.ysg-themes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ysg-theme {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--ysg-line);
+  background: var(--ysg-panel);
+  color: var(--ysg-text);
+  border-radius: 999px;
+  padding: 4px 10px 4px 5px;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: var(--ysg-shadow-1);
+  transition:
+    background var(--ysg-ease),
+    border-color var(--ysg-ease);
+}
+
+.ysg-theme:hover {
+  border-color: color-mix(in srgb, var(--ysg-accent) 45%, var(--ysg-line));
+}
+
+.ysg-theme[aria-pressed='true'] {
+  border-color: var(--ysg-accent);
+  background: color-mix(in srgb, var(--ysg-accent) 12%, transparent);
+  color: var(--ysg-accent);
+  font-weight: 600;
+}
+
+/* The swatch is the preset's own accent, painted from script — the one place
+   a theme's colour appears outside its own block, because a button cannot
+   show you a palette it is not wearing. */
+.ysg-theme__dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex: none;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 12%);
+}
+
+/* ── Signed-out scrim ──────────────────────────────────────────────────────
+   Covers the manager rather than sitting above it: with no subscription list
+   there is nothing behind this worth reading, and a dimmed screen says that
+   without a word. The card carries its own light palette in both modes — the
+   point is that one thing is lit and the rest is not. */
+
+.ysg-signin {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgb(10 12 16 / 62%);
+  backdrop-filter: blur(2px);
+}
+
+.ysg-signin[hidden] {
+  display: none;
+}
+
+.ysg-signin__card {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 300px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #fff;
+  color: #14161a;
+  text-align: center;
+  box-shadow: 0 12px 34px rgb(0 0 0 / 34%);
+}
+
+.ysg-signin__title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.ysg-signin__body {
+  margin: 0 0 16px;
+  color: #656a73;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ysg-signin__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.ysg-signin__go,
+.ysg-signin__retry {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 140ms cubic-bezier(0.33, 0, 0.15, 1);
+}
+
+.ysg-signin__go {
+  border: 0;
+  background: #3663d6;
+  color: #fff;
+}
+
+.ysg-signin__go:hover {
+  background: #2f57bd;
+}
+
+.ysg-signin__retry {
+  border: 1px solid #d9dde5;
+  background: #fff;
+  color: #14161a;
+}
+
+.ysg-signin__retry:hover {
+  background: #f1f3f7;
+}

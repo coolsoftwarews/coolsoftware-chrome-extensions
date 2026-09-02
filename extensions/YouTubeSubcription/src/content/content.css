@@ -1,0 +1,86 @@
+/* Injected into youtube.com. Every rule is namespaced under .ysg-* so we can
+   never collide with YouTube's own styles.
+
+   Deliberately small: the only things this extension puts *in* the page are the
+   "add to group" button and the feed filter's hiding rule. Group switching and
+   management live in the side panel, which cannot be reshuffled by a YouTube
+   redesign. */
+
+/* The standing "add to group" button, injected beside Subscribe. Styled to
+   read as one of YouTube's own pills without impersonating a real one —
+   every property is set explicitly, since it lives in YouTube's light DOM. */
+
+button#ysg-add-btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  /* Sits in YouTube's actions row, which is a flex container: never grow, never
+     stretch, and stay short enough not to force the row to wrap. */
+  flex: 0 0 auto;
+  align-self: center;
+  /* Render last in the row, whatever the DOM order turns out to be.
+     We and PocketTube both append to the same actions row on load, so which of
+     us lands first is a race — and on a fresh reload it changed every time.
+     Ordering visually rather than structurally settles it without either
+     extension having to move the other's node, which would be a fight neither
+     wins. YouTube's own controls sit at the default order: 0. */
+  order: 99;
+  height: 32px;
+  margin: 0 0 0 8px;
+  padding: 0 12px;
+  border: 1px solid var(--yt-spec-10-percent-layer, rgba(0, 0, 0, 0.1));
+  border-radius: 16px;
+  background: transparent;
+  color: var(--yt-spec-text-primary, #0f0f0f);
+  font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 30px;
+  white-space: nowrap;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+button#ysg-add-btn:hover {
+  background: var(--yt-spec-badge-chip-background, rgba(0, 0, 0, 0.05));
+}
+
+/* Where the chosen period runs out. Sits in the grid as its own full-width
+   row, so it reads as part of the feed rather than as an overlay on it. */
+#ysg-end {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 8px 0 28px;
+  padding: 14px 18px;
+  border-top: 1px solid var(--yt-spec-10-percent-layer, rgba(0, 0, 0, 0.1));
+  color: var(--yt-spec-text-secondary, #606060);
+  font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  width: 100%;
+}
+
+.ysg-end__btn {
+  appearance: none;
+  border: 1px solid var(--yt-spec-10-percent-layer, rgba(0, 0, 0, 0.1));
+  background: transparent;
+  color: var(--yt-spec-call-to-action, #065fd4);
+  border-radius: 18px;
+  padding: 7px 14px;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ysg-end__btn:hover {
+  background: var(--yt-spec-badge-chip-background, rgba(0, 0, 0, 0.05));
+}
+
+/* The filter itself. `display: none` rather than visibility so the grid
+   reflows and does not leave holes. */
+.ysg-filtering .ysg-hidden {
+  display: none !important;
+}

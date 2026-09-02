@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Transcript to PDF &amp; Markdown for YouTube</title>
+    <link rel="stylesheet" href="tiny-mde.min.css" />
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <!-- Everything except the rail. The rail sits outside so it spans the full
+         height of the panel rather than scrolling with a screen. -->
+    <div class="shell">
+      <div class="screens">
+        <!-- ── Transcript ───────────────────────────────────────────── -->
+        <section id="screen-transcript" class="screen">
+          <header class="bar" id="transcript-bar">
+            <div class="bar__title">
+              <h1 id="video-title">Transcript</h1>
+              <p id="video-meta" class="muted"></p>
+            </div>
+            <div class="tools">
+              <button id="reload" class="tool" title="Reload transcript" aria-label="Reload transcript">
+                <svg class="tool__icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20 12a8 8 0 1 1-2.5-5.8" />
+                  <path d="M20 4v4.5h-4.5" />
+                </svg>
+              </button>
+            </div>
+          </header>
+
+          <section id="controls" class="controls" hidden>
+            <div class="row">
+              <input
+                id="search"
+                type="search"
+                class="search"
+                placeholder="Search transcript"
+                autocomplete="off"
+                aria-label="Search transcript"
+              />
+              <select id="language" class="select" aria-label="Caption language"></select>
+            </div>
+
+            <div class="row options">
+              <label class="check"><input type="checkbox" id="opt-timestamps" /> Timestamps</label>
+              <label class="check"><input type="checkbox" id="opt-header" /> Header</label>
+              <label class="check"><input type="checkbox" id="opt-paragraphs" /> Paragraphs</label>
+            </div>
+
+            <!-- Icons with a label underneath: four buttons of equal weight,
+                 each named, none of them a wall of text. -->
+            <div class="row exports">
+              <button id="copy" class="export" title="Copy to clipboard" aria-label="Copy to clipboard">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="8" y="4" width="11" height="16" rx="2" />
+                  <path d="M8 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-2" />
+                </svg>
+                <span>Copy</span>
+              </button>
+              <button id="dl-md" class="export" title="Download Markdown" aria-label="Download Markdown">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 17V7l4.2 5.2L11.4 7v10" />
+                  <path d="M17.6 7v7.4" />
+                  <path d="m14.4 11.8 3.2 3.4 3.2-3.4" />
+                </svg>
+                <span>.md</span>
+              </button>
+              <button id="dl-txt" class="export" title="Download plain text" aria-label="Download plain text">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 6h16M4 10h16M4 14h11M4 18h7" />
+                </svg>
+                <span>.txt</span>
+              </button>
+              <button
+                id="copy-prompt"
+                class="export"
+                title="Copy with a summarise prompt, ready to paste into an AI tool"
+                aria-label="Copy as prompt"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m12 3 1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9Z" />
+                  <path d="M18 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8Z" />
+                </svg>
+                <span>Prompt</span>
+              </button>
+              <button id="dl-pdf" class="export" title="Download PDF" aria-label="Download PDF">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
+                  <path d="M14 3v5h5" />
+                  <path d="M9 13h6M9 16.5h4" />
+                </svg>
+                <span>.pdf</span>
+              </button>
+            </div>
+
+            <p id="search-status" class="muted small" hidden></p>
+          </section>
+
+          <main id="body" class="body">
+            <div id="state" class="state">
+              <p class="state__text">Open a YouTube video to load its transcript.</p>
+            </div>
+            <ol id="transcript" class="transcript" hidden></ol>
+            <div id="sentinel" class="sentinel" hidden></div>
+          </main>
+        </section>
+
+        <!-- ── Notes ────────────────────────────────────────────────── -->
+        <section id="screen-notes" class="screen" hidden>
+          <!-- Same header as the transcript screen: what you are looking at,
+               and nothing else. The actions live in their own row below it. -->
+          <header class="bar">
+            <div class="bar__title">
+              <h1 id="notes-title">Notes</h1>
+              <p id="notes-meta" class="muted"></p>
+            </div>
+          </header>
+
+          <section class="controls" id="notes-actions">
+            <div class="row exports">
+              <button id="notes-view" class="export" title="Read it" aria-pressed="false">
+                <!-- Swaps to a pencil while reading: the icon shows where the
+                     button goes, not where you are. -->
+                <svg class="tool__icon--off" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg class="tool__icon--on" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 20h4l10-10a2.8 2.8 0 0 0-4-4L4 16v4Z" />
+                  <path d="m13.5 6.5 4 4" />
+                </svg>
+                <span id="notes-view-label">Read</span>
+              </button>
+              <button id="notes-copy" class="export" title="Copy your notes">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="8" y="4" width="11" height="16" rx="2" />
+                  <path d="M8 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-2" />
+                </svg>
+                <span>Copy</span>
+              </button>
+              <button id="notes-download" class="export" title="Download as Markdown">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 17V7l4.2 5.2L11.4 7v10" />
+                  <path d="M17.6 7v7.4" />
+                  <path d="m14.4 11.8 3.2 3.4 3.2-3.4" />
+                </svg>
+                <span>.md</span>
+              </button>
+              <button id="notes-pdf" class="export" title="Download as PDF">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
+                  <path d="M14 3v5h5" />
+                  <path d="M9 13h6M9 16.5h4" />
+                </svg>
+                <span>.pdf</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- No transcript in front of the panel means nothing to write about,
+               so the editor and its tools stand down and this says why. -->
+          <div id="notes-gate" class="state state--gate" hidden>
+            <img class="gate__icon" src="icons/icon-128.png" alt="" />
+            <strong class="gate__title">Open a video first</strong>
+            <p class="gate__body">
+              Notes are kept per video, started from its transcript. Open one and this becomes a
+              document you can write in.
+            </p>
+            <button id="notes-gate-open" type="button" class="btn btn--primary gate__action">
+              Open YouTube
+            </button>
+          </div>
+
+          <div id="notes-bar" class="notes__bar"></div>
+          <div id="notes-editor" class="notes__editor"></div>
+          <article id="notes-preview" class="notes__preview" hidden></article>
+
+          <div class="notes__foot" id="notes-foot">
+            <button id="notes-reset" type="button" class="btn btn--sm">Reload transcript</button>
+            <span id="notes-status" class="muted small"></span>
+          </div>
+        </section>
+
+        <!-- ── History ──────────────────────────────────────────────── -->
+        <section id="screen-library" class="screen" hidden>
+          <header class="bar">
+            <div class="bar__title">
+              <h1>Transcript history</h1>
+              <p id="library-count" class="muted"></p>
+            </div>
+          </header>
+
+          <section class="controls" id="library-controls">
+            <input
+              id="library-search"
+              type="search"
+              class="search search--lg"
+              placeholder="Search video by name"
+              autocomplete="off"
+              aria-label="Search video by name"
+            />
+            <div class="row library__bulk">
+              <label class="check">
+                <input type="checkbox" id="library-all" /> Select all
+              </label>
+              <button id="library-delete" type="button" class="btn btn--sm" disabled>
+                Delete selected
+              </button>
+            </div>
+          </section>
+
+          <main class="body body--pad">
+            <ul id="library-list" class="library"></ul>
+            <div id="library-empty" class="state state--gate" hidden>
+              <img class="gate__icon" src="icons/icon-128.png" alt="" />
+              <strong class="gate__title">Nothing here yet</strong>
+              <p class="gate__body">
+                Every transcript you copy or download is listed here, so you can find your way
+                back to a video by what you took from it.
+              </p>
+            </div>
+          </main>
+        </section>
+
+        <!-- ── Settings ─────────────────────────────────────────────── -->
+        <section id="screen-settings" class="screen" hidden>
+          <header class="bar">
+            <div class="bar__title">
+              <h1>Settings</h1>
+              <p class="muted">Kept on this device.</p>
+            </div>
+          </header>
+
+          <main class="body body--pad">
+            <section class="group">
+              <h2 class="group__title">Guide &amp; help</h2>
+              <button id="guide" type="button" class="btn">Open the guide</button>
+              <p class="group__note muted small">
+                How it works, known limits and troubleshooting — the page the browser opens on
+                first run.
+              </p>
+            </section>
+
+            <section class="group">
+              <h2 class="group__title">Transcript &amp; exports</h2>
+              <label class="check check--block">
+                <input type="checkbox" id="opt-clean" /> Tidy the captions
+              </label>
+              <p class="group__note muted small">
+                Turns YouTube's <code>&gt;&gt;</code> speaker markers into breaks and restores
+                sentence capitals. Nothing is reworded.
+              </p>
+              <label class="check check--block">
+                <input type="checkbox" id="opt-links" /> Clickable timestamps in Markdown
+              </label>
+              <p class="group__note muted small">
+                Each timestamp becomes a link back to that second of the video.
+              </p>
+              <label class="check check--block">
+                <input type="checkbox" id="opt-chapters" /> Use the video's chapters
+              </label>
+              <p class="group__note muted small">
+                Where a video has chapters, they become headings — so a long transcript is
+                navigable instead of a wall.
+              </p>
+            </section>
+
+            <section class="group">
+              <h2 class="group__title">Prompts</h2>
+              <ul id="prompt-list" class="prompts"></ul>
+              <button id="prompt-add" type="button" class="btn btn--sm">Add a prompt</button>
+              <p class="group__note muted small">
+                The instruction that goes in front of the transcript. The one marked default is
+                what the Prompt button uses.
+              </p>
+            </section>
+
+            <section class="group">
+              <h2 class="group__title">Appearance</h2>
+              <div id="themes" class="themes"></div>
+              <p class="group__note muted small">How the panel looks. Nothing else changes.</p>
+            </section>
+
+            <section class="group">
+              <h2 class="group__title">Usage</h2>
+              <button id="stats-toggle" type="button" class="btn">Local counters</button>
+              <p class="group__note muted small">
+                How often exports succeed or fail, counted on this device. It counts outcomes,
+                never videos.
+              </p>
+            </section>
+          </main>
+        </section>
+      </div>
+
+      <footer class="footer">
+        <span id="status" class="muted small"></span>
+        <span class="footer__end">
+          <span id="version" class="muted small"></span>
+          <button id="studio" class="link-btn">CoolSoftware</button>
+        </span>
+      </footer>
+    </div>
+
+    <!-- The rail. Screens at the top, settings pinned to the bottom — the one
+         destination you reach for rarely and want in the same place always. -->
+    <nav class="rail" id="rail" aria-label="Panel sections">
+      <button
+        id="rail-transcript"
+        class="rail__btn"
+        type="button"
+        title="Transcript"
+        aria-label="Transcript"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 6h16M4 10h16M4 14h11M4 18h7" />
+        </svg>
+      </button>
+      <button id="rail-notes" class="rail__btn" type="button" title="Notes" aria-label="Notes">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 5h11l5 5v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" />
+          <path d="M15 5v5h5" />
+          <path d="M8 14h7M8 17h4" />
+        </svg>
+      </button>
+
+      <button
+        id="rail-library"
+        class="rail__btn"
+        type="button"
+        title="Transcript history"
+        aria-label="Transcript history"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1" />
+          <path d="M3.5 4.5V9H8" />
+          <path d="M12 7.5V12l3 2" />
+        </svg>
+      </button>
+
+      <!-- Sliders, not a cog — the cog below leads out to help and legal, and
+           two gears in one 44px strip would read as the same control twice.
+           Sliders also describe this screen better: it is where you adjust how
+           the extension behaves. -->
+      <button id="rail-settings" class="rail__btn" type="button" title="Settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7h10M18 7h2M4 17h4M12 17h8M16 4v6M8 14v6" />
+        </svg>
+      </button>
+
+      <!-- Everything behind this is a destination rather than a setting: one
+           click, one tab, no state to manage. -->
+      <button
+        id="rail-menu"
+        class="rail__btn rail__btn--end"
+        type="button"
+        title="More"
+        aria-label="More"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.2" />
+          <path
+            d="M12 3.5v2M12 18.5v2M4.9 7.8l1.7 1M17.4 15.2l1.7 1M4.9 16.2l1.7-1M17.4 8.8l1.7-1"
+          />
+        </svg>
+      </button>
+    </nav>
+
+    <div id="menu" class="menu" hidden></div>
+
+    <!-- Opens under the Prompt button. -->
+    <div id="assistants" class="menu" hidden></div>
+
+    <!-- "Other…": pick a prompt, then choose where it goes. -->
+    <dialog id="prompt-picker" class="modal">
+      <h2>Send the transcript somewhere</h2>
+      <label class="modal__label" for="prompt-choice">Prompt</label>
+      <select id="prompt-choice" class="select modal__select"></select>
+      <textarea
+        id="prompt-preview"
+        class="modal__text"
+        rows="7"
+        aria-label="The prompt that will be used"
+      ></textarea>
+      <p class="muted small">
+        Edits here apply to this one send. Change a prompt for good under Settings.
+      </p>
+      <div id="prompt-targets" class="modal__actions"></div>
+      <div class="modal__actions">
+        <button id="prompt-copy" type="button" class="btn">Copy only</button>
+        <button id="prompt-close" type="button" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <!-- Add or edit one prompt. -->
+    <dialog id="prompt-editor" class="modal">
+      <h2 id="prompt-editor-title">Edit prompt</h2>
+      <label class="modal__label" for="prompt-name">Name</label>
+      <input id="prompt-name" class="search modal__select" type="text" maxlength="60" />
+      <label class="modal__label" for="prompt-body">Instruction</label>
+      <textarea
+        id="prompt-body"
+        class="modal__text"
+        rows="9"
+        placeholder="What should the assistant do with the transcript?"
+      ></textarea>
+      <p class="muted small">
+        The transcript is appended underneath this, with the video's title, channel and URL.
+      </p>
+      <div class="modal__actions">
+        <button id="prompt-cancel" type="button" class="btn">Cancel</button>
+        <button id="prompt-save" type="button" class="btn btn--primary">Save</button>
+      </div>
+    </dialog>
+
+
+    <dialog id="stats" class="stats">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="stats__body"></pre>
+      <div class="row">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
