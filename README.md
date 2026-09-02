@@ -7,10 +7,10 @@ you're already on.
 
 ## Extensions
 
-| Extension | Folder | What it does |
-| :-- | :-- | :-- |
-| **Subscription Groups & Stats for YouTube** | [`extensions/YouTubeSubcription`](extensions/YouTubeSubcription) | Groups your YouTube subscriptions so you can watch or filter your feed one group at a time. Tracks new uploads per channel, and charts views/likes/upload activity across a group — all from a side panel, no account or server involved. |
-| **Transcript to PDF & Markdown for YouTube** | [`extensions/YouTubeTranscription`](extensions/YouTubeTranscription) | Turns any YouTube video's transcript into a clean, searchable document — Markdown, TXT or PDF — in two clicks, with click-to-seek timestamps. |
+| Extension | Folder | What it does | Chrome Web Store |
+| :-- | :-- | :-- | :-- |
+| **Subscription Groups & Stats for YouTube** | [`extensions/YouTubeSubcription`](extensions/YouTubeSubcription) | Groups your YouTube subscriptions so you can watch or filter your feed one group at a time. Tracks new uploads per channel, and charts views/likes/upload activity across a group — all from a side panel, no account or server involved. | [Install](https://chromewebstore.google.com/detail/fieibjaefapkfhlgmehmbbmnhajokikl) |
+| **Transcript to PDF & Markdown for YouTube** | [`extensions/YouTubeTranscription`](extensions/YouTubeTranscription) | Turns any YouTube video's transcript into a clean, searchable document — Markdown, TXT or PDF — in two clicks, with click-to-seek timestamps. | [Install](https://chromewebstore.google.com/detail/pplpnnknipccjagnacpeepiojkcdgeke) |
 
 Each extension's own README has the full design writeup (architecture, DOM
 assumptions, trade-offs); this file just orients you across the repo.
