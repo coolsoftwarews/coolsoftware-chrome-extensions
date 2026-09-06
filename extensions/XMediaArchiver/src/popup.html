@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>X Media Archiver</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="xma-popup">
+      <h1>X Media Archiver</h1>
+      <p class="xma-tagline">Save photos and videos from your own X posts. Own content only — enforced automatically.</p>
+
+      <section aria-labelledby="xma-log-heading">
+        <h2 id="xma-log-heading">Saved media (<span id="xma-count">0</span>)</h2>
+        <div class="xma-log-wrap">
+          <table class="xma-log" id="xma-log-table">
+            <thead>
+              <tr>
+                <th>Handle</th>
+                <th>Type</th>
+                <th>Filename</th>
+                <th>Saved</th>
+              </tr>
+            </thead>
+            <tbody id="xma-log-body"></tbody>
+          </table>
+          <p class="xma-empty" id="xma-empty" hidden>Nothing saved yet — look for the Save button on your own posts.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="xma-data-heading">
+        <h2 id="xma-data-heading">Your data</h2>
+        <p class="xma-note">
+          This log records what you've saved — post URL, date, media type, filename. The media
+          files themselves already live in your Downloads folder; nothing is stored beyond this
+          record.
+        </p>
+        <div class="xma-actions">
+          <button type="button" id="xma-export-csv" class="xma-btn">Export CSV</button>
+          <button type="button" id="xma-export-json" class="xma-btn">Export JSON</button>
+          <button type="button" id="xma-clear-btn" class="xma-btn xma-btn-danger">Clear all</button>
+        </div>
+        <p class="xma-status" id="xma-status" role="status"></p>
+      </section>
+
+      <footer>
+        <p>On x.com or twitter.com, look for the Save button near a post you authored.</p>
+      </footer>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
