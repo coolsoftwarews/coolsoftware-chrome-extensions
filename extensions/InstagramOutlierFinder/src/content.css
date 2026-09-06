@@ -1,0 +1,209 @@
+/*
+ * Injected styles. Everything is namespaced under .iof- and every property is
+ * explicit — Instagram's own cascade is hostile and its dark mode is the
+ * page default, so colours are declared for both rather than inherited.
+ */
+
+.iof-bar {
+  --iof-bg: #ffffff;
+  --iof-fg: #262626;
+  --iof-muted: #8e8e8e;
+  --iof-border: #dbdbdb;
+  --iof-chip: #efefef;
+  --iof-accent: #e1306c;
+  --iof-accent-fg: #ffffff;
+
+  box-sizing: border-box;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--iof-border);
+  border-radius: 12px;
+  background: var(--iof-bg);
+  color: var(--iof-fg);
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+html[style*="color-scheme: dark"] .iof-bar,
+body.iof-dark .iof-bar {
+  --iof-bg: #121212;
+  --iof-fg: #f5f5f5;
+  --iof-muted: #a8a8a8;
+  --iof-border: #363636;
+  --iof-chip: #262626;
+  --iof-accent: #f27a3c;
+  --iof-accent-fg: #121212;
+}
+
+@media (prefers-color-scheme: dark) {
+  .iof-bar {
+    --iof-bg: #121212;
+    --iof-fg: #f5f5f5;
+    --iof-muted: #a8a8a8;
+    --iof-border: #363636;
+    --iof-chip: #262626;
+    --iof-accent: #f27a3c;
+    --iof-accent-fg: #121212;
+  }
+}
+
+.iof-bar *,
+.iof-bar *::before,
+.iof-bar *::after {
+  box-sizing: border-box;
+}
+
+.iof-bar__header {
+  margin-bottom: 10px;
+}
+
+.iof-header__median {
+  font-weight: 600;
+}
+
+.iof-header__median--greyed {
+  color: var(--iof-muted);
+  font-weight: 500;
+}
+
+.iof-header__reliability {
+  margin-top: 2px;
+  color: var(--iof-muted);
+  font-size: 12px;
+}
+
+.iof-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.iof-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.iof-field--sort {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.iof-field--export {
+  flex-direction: row;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.iof-label {
+  color: var(--iof-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.iof-segmented {
+  display: flex;
+  gap: 4px;
+}
+
+.iof-seg {
+  padding: 5px 10px;
+  border: 1px solid var(--iof-border);
+  border-radius: 14px;
+  background: var(--iof-chip);
+  color: var(--iof-fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.iof-seg[aria-pressed="true"] {
+  background: var(--iof-accent);
+  border-color: var(--iof-accent);
+  color: var(--iof-accent-fg);
+  font-weight: 600;
+}
+
+.iof-select,
+.iof-btn {
+  padding: 5px 10px;
+  border: 1px solid var(--iof-border);
+  border-radius: 14px;
+  background: var(--iof-chip);
+  color: var(--iof-fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.iof-notice {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--iof-chip);
+  color: var(--iof-fg);
+  font-size: 12px;
+}
+
+.iof-notice[hidden] {
+  display: none;
+}
+
+.iof-status {
+  margin-top: 8px;
+  color: var(--iof-muted);
+  font-size: 12px;
+}
+
+.iof-status:empty {
+  display: none;
+}
+
+/* ── Grid tiles ──────────────────────────────────────────────────────── */
+
+.iof-hidden {
+  display: none !important;
+}
+
+.iof-badge-host {
+  position: relative;
+}
+
+.iof-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 2;
+  padding: 3px 7px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.78);
+  color: #ffffff;
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.iof-badge--fire5 {
+  background: rgba(220, 45, 45, 0.9);
+}
+
+.iof-badge--fire2 {
+  background: rgba(242, 122, 60, 0.88);
+}
+
+.iof-badge--up {
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.iof-badge--flat {
+  background: rgba(0, 0, 0, 0.55);
+  font-weight: 500;
+}
+
+.iof-badge--pinned {
+  border: 1px dashed rgba(255, 255, 255, 0.7);
+}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Instagram Outlier Finder</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div id="gate" class="gate" hidden>
+      <img class="gate__icon" src="icons/icon-128.png" alt="" width="48" height="48" />
+      <strong>Open an Instagram profile to get started</strong>
+      <p>
+        This badges each grid post with how it compares to the account's own recent median — open
+        any profile and scroll its grid.
+      </p>
+      <button id="open-instagram" type="button" class="btn btn--primary">Open Instagram</button>
+    </div>
+
+    <div id="intro">
+      <h1>Instagram Outlier Finder</h1>
+      <p class="muted">Open a profile grid on Instagram to see badges, filters and export.</p>
+    </div>
+
+    <section>
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is ever sent anywhere.</p>
+      <dl id="metrics"></dl>
+      <button id="reset-metrics" class="btn">Reset counters</button>
+    </section>
+
+    <section>
+      <h2>Your data</h2>
+      <p class="muted small">
+        Cached medians and your last-used filter live in this browser's local storage. No account,
+        no cloud.
+      </p>
+      <div class="row">
+        <button id="export-data" class="btn">Export all data</button>
+        <button id="import-data" class="btn">Import</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <button id="clear-data" class="btn btn--danger">Clear all data</button>
+      <p id="status" class="muted small" role="status"></p>
+    </section>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
