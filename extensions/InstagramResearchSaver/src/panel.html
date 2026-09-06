@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Instagram Research Saver</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1>Research library</h1>
+        <p id="summary" class="muted small"></p>
+      </div>
+      <button id="new-collection" class="icon-btn" title="New collection" aria-label="New collection">&#43;</button>
+    </header>
+
+    <div class="search-row">
+      <input id="search" type="search" placeholder="Search caption, handle or note…" aria-label="Search saved posts" />
+    </div>
+
+    <form id="new-collection-form" class="new-collection-form" hidden>
+      <input id="new-collection-name" type="text" placeholder="Collection name" aria-label="New collection name" />
+      <button type="submit" class="btn btn--primary">Add</button>
+      <button type="button" id="new-collection-cancel" class="btn">Cancel</button>
+    </form>
+
+    <main id="body" class="body">
+      <div id="loading" class="state">
+        <p class="state__text">Loading your library…</p>
+      </div>
+      <div id="state" class="state" hidden></div>
+      <div id="collections" class="collections" hidden></div>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small" role="status" aria-live="polite"></span>
+      <span class="footer__actions">
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Everything lives in this browser's local storage. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="export-csv" class="btn">Export CSV</button>
+        <button id="export-md" class="btn">Export Markdown</button>
+        <button id="export-json" class="btn">Export JSON (backup)</button>
+      </div>
+      <div class="row wrap">
+        <button id="data-import" class="btn">Import backup</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>

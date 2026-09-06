@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Instagram Research Saver — first run</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #ffffff;
+        --card: #f6f6f6;
+        --text: #1a1a1a;
+        --muted: #5f6368;
+        --border: #e0e0e0;
+        --accent: #0a84ff;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1f1f1f;
+          --card: #2b2b2b;
+          --text: #e8eaed;
+          --muted: #9aa0a6;
+          --border: #3c4043;
+          --accent: #4da3ff;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 48px 20px 72px;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.6 -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      main { max-width: 40rem; margin: 0 auto; }
+      h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 8px; }
+      .lede { color: var(--muted); margin: 0 0 32px; }
+      ol { padding-left: 1.2rem; margin: 0 0 32px; }
+      li { margin-bottom: 14px; }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+      }
+      .card h2 { font-size: 1rem; margin: 0 0 6px; }
+      .card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+      .cta {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 10px 18px;
+        border-radius: 999px;
+      }
+      footer { margin-top: 40px; color: var(--muted); font-size: 0.85rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>A swipe file built into Instagram.</h1>
+      <p class="lede">Three things to know, then you're done reading this page forever.</p>
+
+      <ol>
+        <li>
+          <strong>Hover a post or Reel</strong> in any grid, or open one, and click
+          <strong>+ Save to Research</strong>. It's saved immediately — no navigation, no sign-in.
+        </li>
+        <li>
+          <strong>A small card appears</strong> right after saving — pick a collection and add a note
+          if you want one. Both are optional; the save already happened.
+        </li>
+        <li>
+          <strong>Click the toolbar icon</strong> to open your library: search, move between
+          collections, and export everything as CSV, Markdown or JSON whenever you want.
+        </li>
+      </ol>
+
+      <p><a class="cta" href="https://www.instagram.com/">Try it on Instagram →</a></p>
+
+      <div class="card" style="margin-top: 32px">
+        <h2>No account. No cloud. No network.</h2>
+        <p>
+          Every saved post lives in this browser's local storage and is never uploaded — this
+          extension makes no network requests at all, which you're welcome to verify in devtools.
+          The flip side: your library is on <em>this</em> device only. Use
+          <strong>Data → Export all data</strong> in the panel to keep a backup, and
+          <strong>Import</strong> to bring it to another machine.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Why it only asks for access to Instagram</h2>
+        <p>
+          The save button and the numbers it captures only exist on instagram.com — this extension
+          has no reason to run anywhere else, and doesn't ask to.
+        </p>
+      </div>
+
+      <footer>Tip: carousels save the first slide and note how many there are.</footer>
+    </main>
+  </body>
+</html>
