@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YouTube Focus Timer</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <h1>YouTube Focus Timer</h1>
+    </header>
+
+    <main class="body">
+      <section class="section">
+        <div class="totals">
+          <div class="total">
+            <span class="total__value" id="today-total">0m</span>
+            <span class="total__label">today</span>
+          </div>
+          <div class="total">
+            <span class="total__value" id="week-total">0m</span>
+            <span class="total__label">this week</span>
+          </div>
+        </div>
+        <div class="chart" id="chart" role="img" aria-label="Minutes watched per day, last 7 days"></div>
+      </section>
+
+      <section class="section">
+        <h2>Hide on YouTube</h2>
+        <ul class="toggles" id="toggles">
+          <li>
+            <label>
+              <input type="checkbox" id="toggle-recommendations" />
+              Recommendations sidebar
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" id="toggle-home" />
+              Homepage feed
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" id="toggle-shorts" />
+              Shorts
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" id="toggle-endscreen" />
+              End-screen suggestions
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="checkbox" id="toggle-comments" />
+              Comments
+            </label>
+          </li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>Reminder</h2>
+        <label class="row" for="reminder-select">
+          <span>Remind me after</span>
+          <select id="reminder-select">
+            <option value="0">Off</option>
+            <option value="20">20 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="45">45 minutes</option>
+            <option value="60">60 minutes</option>
+            <option value="90">90 minutes</option>
+          </select>
+        </label>
+        <p class="muted small">Dismissible, never blocking. Counts continuous focused time on a single tab.</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <span class="footer__actions">
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Your daily totals and settings live in this browser's local storage. Nothing is uploaded, and there is no
+        account. Full policy: PRIVACY.md, packaged with this extension.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="export-csv" class="btn">Export CSV (last 90 days)</button>
+      </div>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data (JSON)</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <dl id="metrics" class="metrics"></dl>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__POPUP_JS__"></script>
+  </body>
+</html>

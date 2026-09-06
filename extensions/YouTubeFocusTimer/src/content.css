@@ -1,0 +1,47 @@
+/**
+ * Declarative hiding rules. Loaded via manifest content_scripts (matches
+ * youtube.com), independent of content.js's run_at — this is what lets the
+ * attribute-gated rules below apply before first paint and avoid a flash of
+ * the surface they're about to hide.
+ *
+ * Each toggle sets/clears one data attribute on <html> (content.ts). Every
+ * selector here is best-effort against YouTube's current markup and fails
+ * soft by construction: an attribute selector matching nothing simply hides
+ * nothing, it can never break the rest of the page. YouTube's DOM is not
+ * publicly documented and was not verified against a live page in this build
+ * environment — see README.md's "Selectors need live verification" note
+ * before shipping.
+ */
+
+/* Recommendations sidebar (watch page). */
+html[data-ft-hide-recs] #secondary,
+html[data-ft-hide-recs] ytd-watch-next-secondary-results-renderer {
+  display: none !important;
+}
+
+/* Homepage feed — the browse grid on the / and /feed/subscriptions-style home surfaces. */
+html[data-ft-hide-home] ytd-browse[page-subtype='home'] ytd-rich-grid-renderer,
+html[data-ft-hide-home] ytd-two-column-browse-results-renderer[page-subtype='home'] {
+  display: none !important;
+}
+
+/* Shorts: the homepage/subscriptions shelf, the left-nav entry, and the /shorts surface itself. */
+html[data-ft-hide-shorts] ytd-reel-shelf-renderer,
+html[data-ft-hide-shorts] ytd-rich-shelf-renderer[is-shorts],
+html[data-ft-hide-shorts] ytd-guide-entry-renderer a[title='Shorts'],
+html[data-ft-hide-shorts] ytd-mini-guide-entry-renderer[aria-label='Shorts'],
+html[data-ft-hide-shorts] #shorts-container,
+html[data-ft-hide-shorts] ytd-shorts {
+  display: none !important;
+}
+
+/* End-screen suggestion cards overlaid as a video finishes. */
+html[data-ft-hide-endscreen] .html5-endscreen,
+html[data-ft-hide-endscreen] .ytp-ce-element {
+  display: none !important;
+}
+
+/* Comments section under a video. */
+html[data-ft-hide-comments] #comments {
+  display: none !important;
+}
