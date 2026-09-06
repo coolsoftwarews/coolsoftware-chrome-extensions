@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pinterest Opportunity Finder</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1>Pinterest Opportunity Finder</h1>
+        <p id="query-line" class="muted"></p>
+      </div>
+      <button id="rescan" class="icon-btn" title="Re-scan the current results" aria-label="Re-scan">&#8635;</button>
+    </header>
+
+    <div id="state" class="state">
+      <p class="state__text">Open a Pinterest search to get started.</p>
+    </div>
+
+    <main id="body" class="body" hidden>
+      <section class="baseline">
+        <p id="baseline-line" class="baseline__line"></p>
+      </section>
+
+      <section class="filters">
+        <div class="row wrap">
+          <label class="field field--inline">
+            <span class="field__label">Min ratio</span>
+            <input id="f-min-ratio" type="number" min="1" step="0.1" placeholder="2.0" />
+          </label>
+          <label class="field field--inline">
+            <span class="field__label">Domain</span>
+            <input id="f-domain" type="text" placeholder="example.com" />
+          </label>
+          <label class="field field--inline">
+            <span class="field__label">Text overlay</span>
+            <select id="f-overlay">
+              <option value="">Any</option>
+              <option value="true">Has overlay</option>
+              <option value="false">Plain image</option>
+            </select>
+          </label>
+          <label class="field field--inline">
+            <span class="field__label">Last N</span>
+            <input id="f-last-n" type="number" min="1" step="1" placeholder="All loaded" />
+          </label>
+          <button id="f-clear" class="link-btn">Clear filters</button>
+        </div>
+      </section>
+
+      <div class="tabs" role="tablist" aria-label="Panel view">
+        <button id="tab-pins" class="tab tab--on" type="button" role="tab" aria-selected="true">Pins</button>
+        <button id="tab-keywords" class="tab" type="button" role="tab" aria-selected="false">Keywords</button>
+      </div>
+
+      <section id="view-pins" class="view">
+        <ol id="pin-list" class="list"></ol>
+      </section>
+
+      <section id="view-keywords" class="view" hidden>
+        <p id="keyword-empty" class="muted small" hidden>Not enough outlier pins were found to build a keyword table yet.</p>
+        <h2 class="section__title">Keyword table</h2>
+        <table id="keyword-table" class="table"></table>
+        <h2 class="section__title">Domains among outliers</h2>
+        <table id="domain-table" class="table"></table>
+        <h2 class="section__title">Formats among outliers</h2>
+        <div id="format-body" class="format"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <span class="footer__actions">
+        <button id="export-pins" class="link-btn" disabled>Pins .csv</button>
+        <button id="export-keywords" class="link-btn" disabled>Keywords .csv</button>
+        <button id="export-report" class="link-btn" disabled>Report .md</button>
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Everything lives in this browser's local storage: your filter preferences and a cached
+        median per search. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
