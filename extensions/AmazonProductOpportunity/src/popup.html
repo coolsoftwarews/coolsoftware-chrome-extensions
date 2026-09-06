@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Amazon Product Opportunity</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <h1>Amazon Product Opportunity</h1>
+      <button id="refresh" class="icon-btn" title="Refresh this page's read" aria-label="Refresh">&#8635;</button>
+    </header>
+
+    <main class="body">
+      <section id="page-section" class="section">
+        <h2>This page</h2>
+        <div id="page-state" class="state"></div>
+      </section>
+
+      <section class="section">
+        <div class="section__head">
+          <h2>Watchlist</h2>
+          <div class="section__actions">
+            <button id="export-watch-csv" class="link-btn">CSV</button>
+            <button id="export-watch-md" class="link-btn">Markdown</button>
+          </div>
+        </div>
+        <div id="watchlist" class="watchlist"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <span class="footer__actions">
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Watchlist snapshots live in this browser's local storage. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__POPUP_JS__"></script>
+  </body>
+</html>
