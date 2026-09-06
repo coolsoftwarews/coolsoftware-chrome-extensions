@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Table Scraper</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <h1>Table/List → CSV</h1>
+    </header>
+
+    <main id="body" class="body">
+      <div id="state" class="state">
+        <p class="state__text">Checking this page…</p>
+      </div>
+
+      <section id="controls" class="controls" hidden>
+        <p class="muted">
+          Hover a table or a repeated list on the page. Click it to preview, then export CSV or JSON.
+        </p>
+        <button id="pick" class="btn btn--primary btn--block" type="button">Pick a table or list</button>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <button id="stats-toggle" class="link-btn">Usage</button>
+    </footer>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__POPUP_JS__"></script>
+  </body>
+</html>
