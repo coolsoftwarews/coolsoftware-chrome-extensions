@@ -16,6 +16,14 @@ chrome.runtime.onMessage.addListener((message: SaveMediaRequest, _sender, sendRe
 
   void (async () => {
     try {
+      // Instagram's CDN hotlink-protects some media edges/shards, rejecting a
+      // request with no Referer as a plain network failure rather than a
+      // readable HTTP error — but chrome.downloads.download()'s `headers`
+      // option refuses to set Referer at all ("Unsafe request header name",
+      // confirmed live): it's on the same forbidden-header list ordinary
+      // page-level network calls enforce. There is no way to attach it from
+      // here; when a media edge enforces this, the failure is a real dead
+      // end for this API, not something this extension can route around.
       const downloadId = await chrome.downloads.download({
         url: message.mediaUrl,
         filename: message.filename,
@@ -27,10 +35,9 @@ chrome.runtime.onMessage.addListener((message: SaveMediaRequest, _sender, sendRe
       const response: SaveMediaResponse = { ok: true };
       sendResponse(response);
     } catch (error) {
-      const response: SaveMediaResponse = {
-        ok: false,
-        error: error instanceof Error ? error.message : 'Download failed.',
-      };
+      const errorMessage = error instanceof Error ? error.message : 'Download failed.';
+      console.error('[Instagram Media Archiver] download failed:', errorMessage, message.mediaUrl);
+      const response: SaveMediaResponse = { ok: false, error: errorMessage };
       sendResponse(response);
     }
   })();

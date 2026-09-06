@@ -80,9 +80,14 @@ export function readLoggedInHandle(root: ParentNode = document): string | null {
  * handle belonging to a different post on the same page.
  */
 export function readPostAuthorHandle(root: ParentNode): string | null {
-  const header = root.querySelector('header');
-  if (!header) return null;
-  const candidates = Array.from(header.querySelectorAll<HTMLAnchorElement>('a[href]'));
+  // The photo-grid layout renders the byline inside a <header>; Reels often
+  // don't have one, so fall back to the container itself. handleFromHref
+  // still only accepts profile-shaped paths (isProfilePath), and this reads
+  // the *first* matching link in document order — the byline is always the
+  // first profile link Instagram renders in either layout — so widening the
+  // search scope doesn't widen what counts as a match, only where it looks.
+  const scope = root.querySelector('header') ?? root;
+  const candidates = Array.from(scope.querySelectorAll<HTMLAnchorElement>('a[href]'));
   for (const anchor of candidates) {
     const handle = handleFromHref(anchor.getAttribute('href'));
     if (handle) return handle;
@@ -90,11 +95,47 @@ export function readPostAuthorHandle(root: ParentNode): string | null {
   return null;
 }
 
+/**
+ * The single Reel tile actually on screen, in a feed that preloads several
+ * neighbouring Reels into the DOM at once for smooth scrolling (confirmed:
+ * naively falling back to the whole `<main>` region pulled in media and
+ * controls from multiple adjacent Reels, not just the visible one). Anchors
+ * on whichever `<video>` is actually playing (virtualized neighbours are
+ * paused/off-screen), then climbs to the first ancestor roughly one
+ * viewport tall — this vertical feed snaps one full-height tile at a time,
+ * so that height is a reliable tile boundary where no class name is. */
+function findActiveReelTile(root: ParentNode): HTMLElement | null {
+  const videos = Array.from(root.querySelectorAll<HTMLVideoElement>('video'));
+  const active =
+    videos.find(v => !v.paused && v.readyState > 0) ??
+    videos.find(v => {
+      const rect = v.getBoundingClientRect();
+      return rect.top < window.innerHeight && rect.bottom > 0;
+    });
+  if (!active) return null;
+
+  let node: HTMLElement = active;
+  for (let i = 0; i < 8 && node.parentElement; i++) {
+    node = node.parentElement;
+    if (node.getBoundingClientRect().height >= window.innerHeight * 0.85) return node;
+  }
+  return active.parentElement ?? active;
+}
+
 /** All post/Reel containers currently rendered on the page (feed, an open
  *  dialog, a permalink page) — never a background fetch, only whatever
- *  Instagram already put in the DOM (PRD §6: "foreground only"). */
+ *  Instagram already put in the DOM (PRD §6: "foreground only").
+ *
+ *  The photo-grid layout wraps every post in `<article>`; Reels don't
+ *  reliably get one, so this falls back to just the one tile actually on
+ *  screen (findActiveReelTile) — never the whole page, which would merge
+ *  several preloaded Reels' media/controls together. */
 export function findPostContainers(root: ParentNode = document): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>('article'));
+  const articles = Array.from(root.querySelectorAll<HTMLElement>('article'));
+  if (articles.length) return articles;
+
+  const tile = findActiveReelTile(root);
+  return tile ? [tile] : [];
 }
 
 export interface MediaItem {
@@ -145,6 +186,17 @@ export function findMediaItems(root: ParentNode): MediaItem[] {
  *  anchored next to it, never inserted inside it. See content.ts's header
  *  comment for why nothing here writes into Instagram's own tree. */
 export function findActionRow(root: ParentNode): Element | null {
+  // Anchor on the actual Like control, found by its own aria-label/text
+  // rather than by page position — the photo-grid's action row and the
+  // Reels layout's action column sit in very different places on screen, but
+  // both always render something labelled "Like"/"Unlike" (the same
+  // aria-label-matching trick InstagramResearchSaver's metrics reader
+  // already relies on for this exact cross-layout difference).
+  const likeEl = Array.from(root.querySelectorAll<HTMLElement>('[aria-label], span, a')).find(node =>
+    /like/i.test(node.getAttribute('aria-label') ?? '')
+  );
+  if (likeEl) return likeEl.closest('button, a, div[role="button"]') ?? likeEl;
+
   const header = root.querySelector('header');
   const sections = Array.from(root.querySelectorAll('section'));
   const withIcon = sections.find(sec => sec.querySelector('svg'));
