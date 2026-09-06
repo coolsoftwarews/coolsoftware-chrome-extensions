@@ -101,13 +101,20 @@ export function evaluateMediaOwnership(tweet: Pick<ScrapedTweet, 'mainAuthor' | 
  * PRD §7: "save the highest-bitrate source the page loaded, not a
  * preview/poster frame." Width × height stands in for bitrate since that's
  * the only signal X's markup reliably exposes across `<source>` variants.
- * `blob:` URLs (X's MSE-streamed videos) are never eligible — they can't be
- * downloaded outside the page that created them, so a post whose only
- * source is a blob URL yields no candidate at all rather than falling back
- * to a poster image.
+ *
+ * A `blob:` URL is returned when it's the only source X rendered, but *not*
+ * because it can be saved — it can't; it's an MSE handle with no file behind
+ * it. It's returned as a marker meaning "this post has a video", which
+ * content.ts#withRealVideoUrls then swaps for the real MP4 that
+ * mainworld.ts read out of X's own tweet data (or drops, if none was found).
+ * Reject blobs here and that swap has nothing to act on, so the video would
+ * never be offered even when the real URL is known.
  */
 export function chooseHighestBitrateVideoSource(candidates: VideoSourceCandidate[]): VideoSourceCandidate | null {
-  const eligible = candidates.filter(c => c.url && !c.url.startsWith('blob:'));
+  // blob: sources carry no width/height in the URL, so they score 0 and lose
+  // to any real, dimensioned candidate — they only win when nothing else was
+  // rendered. Only an empty/missing URL is actually ineligible.
+  const eligible = candidates.filter(c => c.url);
   if (!eligible.length) return null;
   return eligible.reduce((best, current) => {
     const bestScore = (best.width ?? 0) * (best.height ?? 0);

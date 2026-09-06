@@ -74,7 +74,7 @@ async function copyStaticAssets() {
 // hostnames. No <all_urls>, no "tabs", no "scripting", no "sidePanel" —
 // content_scripts below is declarative, downloads is called from the
 // background worker only.
-async function writeManifest(backgroundScript, contentScript) {
+async function writeManifest(backgroundScript, contentScript, mainWorldScript) {
   const manifest = {
     manifest_version: 3,
     name: EXTENSION_NAME,
@@ -104,6 +104,20 @@ async function writeManifest(backgroundScript, contentScript) {
         js: [contentScript],
         run_at: 'document_idle',
         all_frames: false,
+      },
+      {
+        // MAIN world: the only place X's real MP4 URLs are readable. X plays
+        // video from a blob: MSE handle with no downloadable file behind it,
+        // while the real progressive MP4s sit in X's own tweet payload on
+        // React's internal props — invisible to an isolated-world content
+        // script, which has a separate JS object graph. mainworld.ts reads
+        // them there and posts them to content.ts. It uses no chrome.* API
+        // (MAIN world has none) and makes no network request of its own.
+        matches: CONTENT_SCRIPT_MATCHES,
+        js: [mainWorldScript],
+        run_at: 'document_start',
+        all_frames: false,
+        world: 'MAIN',
       },
     ],
     content_security_policy: {
@@ -142,6 +156,12 @@ function buildOptions() {
       format: 'iife', // content scripts cannot be modules
       entryNames: '[name]',
     },
+    mainworld: {
+      ...shared,
+      entryPoints: [path.join(srcDir, 'mainworld.ts')],
+      format: 'iife', // runs in the page's own world; same module restriction
+      entryNames: '[name]',
+    },
     popup: {
       ...shared,
       entryPoints: [path.join(srcDir, 'popup.ts')],
@@ -154,12 +174,13 @@ function buildOptions() {
 async function finalize(metas) {
   const backgroundScript = outputNameFor(metas.background, path.join(srcDir, 'background.ts'));
   const contentScript = outputNameFor(metas.content, path.join(srcDir, 'content.ts'));
+  const mainWorldScript = outputNameFor(metas.mainworld, path.join(srcDir, 'mainworld.ts'));
   const popupScript = outputNameFor(metas.popup, path.join(srcDir, 'popup.ts'));
 
   await copyStaticAssets();
   await copyIcons();
   await writePopupHtml(popupScript);
-  await writeManifest(backgroundScript, contentScript);
+  await writeManifest(backgroundScript, contentScript, mainWorldScript);
 }
 
 async function reportSize() {
@@ -179,14 +200,16 @@ async function reportSize() {
 async function buildOnce() {
   await cleanDist();
   const opts = buildOptions();
-  const [background, content, popup] = await Promise.all([
+  const [background, content, mainworld, popup] = await Promise.all([
     build(opts.background),
     build(opts.content),
+    build(opts.mainworld),
     build(opts.popup),
   ]);
   await finalize({
     background: background.metafile,
     content: content.metafile,
+    mainworld: mainworld.metafile,
     popup: popup.metafile,
   });
   console.log(`Build complete (${ENV_NAME}).`);
@@ -208,7 +231,7 @@ async function buildAndWatch() {
             b.onEnd(async result => {
               if (result.errors?.length || !result.metafile) return;
               metas[name] = result.metafile;
-              if (metas.background && metas.content && metas.popup) {
+              if (metas.background && metas.content && metas.mainworld && metas.popup) {
                 try {
                   await finalize(metas);
                   console.log('Rebuilt.');
@@ -225,6 +248,7 @@ async function buildAndWatch() {
   const contexts = await Promise.all([
     makeContext('background', opts.background),
     makeContext('content', opts.content),
+    makeContext('mainworld', opts.mainworld),
     makeContext('popup', opts.popup),
   ]);
 

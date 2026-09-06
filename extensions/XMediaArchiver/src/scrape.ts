@@ -111,10 +111,20 @@ function dimensionsFromUrl(url: string): { width: number | null; height: number 
 function readMedia(article: Element, quoteContainer: Element | null): ScrapedMedia[] {
   const media: ScrapedMedia[] = [];
 
+  // `[data-testid="videoPlayer"]` and `[data-testid="videoComponent"]` can
+  // both match wrapper elements around the *same* underlying <img>/<video> —
+  // one nested inside the other (confirmed live: without this, a single
+  // video produced two identical "Save 1" buttons, one per matched
+  // wrapper). Deduped by the actual media element, not the wrapper, so two
+  // wrappers around one element only ever produce one entry.
+  const seenPhotoEls = new Set<HTMLImageElement>();
+  const seenVideoEls = new Set<HTMLVideoElement>();
+
   const photos = Array.from(article.querySelectorAll<HTMLElement>('[data-testid="tweetPhoto"]'));
   for (const photo of photos) {
     const img = photo.querySelector<HTMLImageElement>('img');
-    if (!img?.src) continue;
+    if (!img?.src || seenPhotoEls.has(img)) continue;
+    seenPhotoEls.add(img);
     media.push({ url: img.src, kind: 'image', source: quoteContainer?.contains(photo) ? 'quoted' : 'main' });
   }
 
@@ -123,7 +133,8 @@ function readMedia(article: Element, quoteContainer: Element | null): ScrapedMed
   );
   for (const player of players) {
     const video = player.querySelector<HTMLVideoElement>('video');
-    if (!video) continue;
+    if (!video || seenVideoEls.has(video)) continue;
+    seenVideoEls.add(video);
 
     const candidates: VideoSourceCandidate[] = [];
     for (const source of Array.from(video.querySelectorAll<HTMLSourceElement>('source'))) {

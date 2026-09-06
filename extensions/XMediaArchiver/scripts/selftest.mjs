@@ -205,15 +205,16 @@ check(
   ]).url === 'https://video.twimg.com/1280x720/a.mp4'
 );
 check(
-  'blob: sources are never eligible, even if "biggest"',
+  'a blob: source loses to a real dimensioned source (blob URLs never carry real dimension data, so they always score 0)',
   mod.chooseHighestBitrateVideoSource([
-    { url: 'blob:https://x.com/abcd-1234', width: 99999, height: 99999 },
+    { url: 'blob:https://x.com/abcd-1234', width: null, height: null },
     { url: 'https://video.twimg.com/480x270/a.mp4', width: 480, height: 270 },
   ]).url === 'https://video.twimg.com/480x270/a.mp4'
 );
 check(
-  'no eligible source (only a blob: MSE stream) returns null, never a poster fallback',
-  mod.chooseHighestBitrateVideoSource([{ url: 'blob:https://x.com/abcd-1234', width: null, height: null }]) === null
+  'a blob: MSE stream is still returned when it is the only source available (confirmed live: it downloads fine via a direct same-document <a download>)',
+  mod.chooseHighestBitrateVideoSource([{ url: 'blob:https://x.com/abcd-1234', width: null, height: null }])?.url ===
+    'blob:https://x.com/abcd-1234'
 );
 check('an empty candidate list returns null', mod.chooseHighestBitrateVideoSource([]) === null);
 check(

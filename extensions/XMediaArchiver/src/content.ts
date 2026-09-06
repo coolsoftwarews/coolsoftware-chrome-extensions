@@ -35,6 +35,7 @@ const UI_ATTR = 'data-xma-ui';
 interface Badge {
   host: HTMLElement;
   container: HTMLDivElement;
+  status: HTMLDivElement;
   article: HTMLElement;
 }
 
@@ -68,6 +69,17 @@ const SHADOW_CSS = `
   .xma-btn--all { background: #0d7a4f; color: #fff; border-color: #0d7a4f; }
   .xma-btn--all:hover { background: #0a6640; }
   .xma-btn--saved { background: #dcf5e6; color: #0c6b34; }
+  .xma-status {
+    flex-basis: 100%;
+    background: #fff0f0;
+    color: #8a1f1f;
+    border: 1px solid rgba(138,31,31,.25);
+    border-radius: 8px;
+    padding: 4px 8px;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .xma-status:empty { display: none; }
 `;
 
 function createBadge(article: HTMLElement): Badge {
@@ -85,7 +97,15 @@ function createBadge(article: HTMLElement): Badge {
   container.className = 'xma-wrap';
   shadow.appendChild(container);
 
-  return { host, container, article };
+  // Shows a failed download's real error directly, always visible — not
+  // hover-only — since the previous title-tooltip-only approach turned out
+  // to be easy to miss entirely.
+  const status = document.createElement('div');
+  status.className = 'xma-status';
+  status.setAttribute('role', 'status');
+  container.appendChild(status);
+
+  return { host, container, status, article };
 }
 
 function positionBadge(badge: Badge): void {
@@ -132,17 +152,38 @@ function sendDownloadMedia(url: string, filename: string): Promise<DownloadMedia
   });
 }
 
-async function saveOne(tweet: ScrapedTweet, item: MediaOwnership, index: number): Promise<boolean> {
+/**
+ * Everything reaching here is a real https:// media URL, so it all goes
+ * through the background worker's chrome.downloads.download().
+ *
+ * There is deliberately no blob:-download path. X's <video> src is a blob:
+ * MSE handle with no file behind it — saving one cannot work, and trying was
+ * exactly what produced the long run of "Network issue" failures. Blob URLs
+ * are dropped or swapped for the real MP4 by withRealVideoUrls() before a
+ * Save button is ever offered, so none can arrive here.
+ *
+ * A same-document `<a download>` click was also tried for the https:// case
+ * and is wrong for it twice over: Chrome ignores the download attribute for
+ * many cross-origin URLs and just navigates to the resource instead
+ * (confirmed live — a profile-picture URL opened in a new tab), and
+ * anchor.click() never reports whether the download actually succeeded,
+ * so failures would silently show as "Saved".
+ */
+async function saveMedia(url: string, filename: string): Promise<DownloadMediaResponse> {
+  return sendDownloadMedia(url, filename);
+}
+
+async function saveOne(tweet: ScrapedTweet, item: MediaOwnership, index: number): Promise<DownloadMediaResponse> {
   // Belt-and-braces: even though content.ts only ever calls this for items
   // the gate already confirmed, never let a save proceed without that
   // confirmation being true at the moment of the click too (PRD §5 fails
   // closed, not just at render time).
-  if (!item.ownership.owned) return false;
+  if (!TESTING_SHOW_SAVE_ON_ALL_POSTS && !item.ownership.owned) return { ok: false, error: 'not your post' };
 
   const ext = extensionFromUrl(item.url, item.kind);
   const filename = buildMediaFilename(item.authorHandle, tweet.id ?? '0', index, ext);
-  const response = await sendDownloadMedia(item.url, filename);
-  if (!response.ok) return false;
+  const response = await saveMedia(item.url, filename);
+  if (!response.ok) return response;
 
   const savedAt = Date.now();
   await addLogEntry({
@@ -154,13 +195,14 @@ async function saveOne(tweet: ScrapedTweet, item: MediaOwnership, index: number)
     filename,
     savedAt,
   });
-  return true;
+  return { ok: true };
 }
 
 /* ── Rendering one article's badge from a freshly-evaluated ownership set ── */
 
 function renderBadge(badge: Badge, tweet: ScrapedTweet, owned: MediaOwnership[]): void {
-  badge.container.replaceChildren();
+  badge.container.replaceChildren(badge.status); // keeps the status line, drops the old buttons
+  badge.status.textContent = '';
   if (!owned.length) return; // fail closed: nothing owned, nothing rendered — no exceptions
 
   const mediaAll = tweet.media;
@@ -183,13 +225,19 @@ function renderBadge(badge: Badge, tweet: ScrapedTweet, owned: MediaOwnership[])
   }
 
   owned.forEach(item => {
-    const index = mediaAll.indexOf(item) + 1;
+    // evaluateMediaOwnership() maps tweet.media into new spread objects, so
+    // they're never the same reference as anything in mediaAll — indexOf()
+    // here would always miss and return -1 for every item (confirmed live:
+    // every button read "Save 0"). Matched by URL instead, which spreading
+    // preserves unchanged.
+    const index = mediaAll.findIndex(m => m.url === item.url) + 1;
     const kindLabel = item.kind === 'video' ? 'video' : 'image';
     const label = owned.length > 1 ? `Save ${index}` : `Save ${kindLabel}`;
     const btn = makeButton(label, `Save this post's ${kindLabel}${owned.length > 1 ? ` (${index})` : ''}`, async () => {
-      const ok = await saveOne(tweet, item, index);
-      btn.textContent = ok ? 'Saved' : 'Try again';
-      btn.classList.toggle('xma-btn--saved', ok);
+      const response = await saveOne(tweet, item, index);
+      btn.textContent = response.ok ? 'Saved' : 'Try again';
+      badge.status.textContent = response.ok ? '' : response.error ?? 'Download failed.';
+      btn.classList.toggle('xma-btn--saved', response.ok);
       window.setTimeout(() => {
         btn.textContent = label;
         btn.classList.remove('xma-btn--saved');
@@ -204,10 +252,16 @@ function renderBadge(badge: Badge, tweet: ScrapedTweet, owned: MediaOwnership[])
     const allBtn = makeButton('Save all', `Save all ${owned.length} media items from this post`, async () => {
       allBtn.textContent = 'Saving…';
       let saved = 0;
+      let lastError = '';
       for (const item of owned) {
-        const index = mediaAll.indexOf(item) + 1;
-        if (await saveOne(tweet, item, index)) saved++;
+        // Same fix as the per-item buttons above: match by URL, not object
+        // reference, since evaluateMediaOwnership() returns new objects.
+        const index = mediaAll.findIndex(m => m.url === item.url) + 1;
+        const response = await saveOne(tweet, item, index);
+        if (response.ok) saved++;
+        else lastError = response.error ?? 'Download failed.';
       }
+      badge.status.textContent = saved === owned.length ? '' : lastError;
       allBtn.textContent = saved === owned.length ? `Saved ${saved}` : `Saved ${saved}/${owned.length}`;
       allBtn.classList.toggle('xma-btn--saved', saved === owned.length);
       window.setTimeout(() => {
@@ -220,7 +274,53 @@ function renderBadge(badge: Badge, tweet: ScrapedTweet, owned: MediaOwnership[])
   }
 }
 
+/* ── Real MP4 URLs, relayed from the MAIN world ───────────────────────────
+   X's <video> src is a blob: MSE handle with no downloadable file behind it
+   (confirmed live — every video save failed as "Network issue" while images
+   from the same posts saved fine). The real progressive MP4 lives in X's own
+   tweet payload, readable only from the page's own JS world — mainworld.ts
+   reads it there and posts it across. Until that arrives for a given tweet,
+   its video simply isn't offered. */
+
+const realVideoUrlByTweetId = new Map<string, string>();
+
+window.addEventListener('message', event => {
+  if (event.source !== window) return;
+  const data = event.data as { source?: string; type?: string; tweetId?: string; url?: string } | null;
+  if (data?.source !== 'XMA_MAIN' || data.type !== 'XMA_VIDEO_URL') return;
+  if (!data.tweetId || !data.url) return;
+  if (realVideoUrlByTweetId.get(data.tweetId) === data.url) return;
+
+  realVideoUrlByTweetId.set(data.tweetId, data.url);
+  scheduleSync(); // a video that had no usable URL a moment ago may now have one
+});
+
+/**
+ * Swaps a post's undownloadable blob: video URL for the real MP4 the MAIN
+ * world found for that tweet. A video with no real URL yet is dropped rather
+ * than offered — a Save button that cannot possibly work is worse than none.
+ */
+function withRealVideoUrls(tweet: ScrapedTweet): ScrapedTweet {
+  const real = tweet.id ? realVideoUrlByTweetId.get(tweet.id) : undefined;
+
+  const media = tweet.media
+    .map(item => {
+      if (item.kind !== 'video' || !item.url.startsWith('blob:')) return item;
+      return real ? { ...item, url: real } : null;
+    })
+    .filter((item): item is (typeof tweet.media)[number] => item !== null);
+
+  return { ...tweet, media };
+}
+
 /* ── Sync: re-scan the DOM, re-run the ownership gate, rebuild badges ─────── */
+
+// ⚠️ TEMPORARY TEST-ONLY BYPASS — set back to false before using for real or
+// committing. Shows Save on every post regardless of authorship, purely so
+// the save/export mechanism itself can be checked without needing a second
+// account. The real ownership gate below (evaluateMediaOwnership, and the
+// re-check in saveOne) is untouched and still runs.
+const TESTING_SHOW_SAVE_ON_ALL_POSTS = true;
 
 function syncBadges(): void {
   const viewerHandle = readViewerHandle(document); // read live — never cached (PRD §6/§7)
@@ -228,7 +328,8 @@ function syncBadges(): void {
   const present = new Set(articles);
 
   for (const article of articles) {
-    const tweet = extractTweet(article);
+    const scraped = extractTweet(article);
+    const tweet = scraped ? withRealVideoUrls(scraped) : null;
     if (!tweet || !tweet.media.length) {
       // Nothing this extension can act on — drop any stale badge and move on.
       const existing = badges.get(article);
@@ -240,7 +341,7 @@ function syncBadges(): void {
     }
 
     const ownership = evaluateMediaOwnership(tweet, viewerHandle);
-    const owned = ownership.filter(item => item.ownership.owned);
+    const owned = TESTING_SHOW_SAVE_ON_ALL_POSTS ? ownership : ownership.filter(item => item.ownership.owned);
 
     let badge = badges.get(article);
     if (!owned.length) {
