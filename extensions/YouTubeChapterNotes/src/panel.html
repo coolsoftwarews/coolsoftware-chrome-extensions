@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YouTube Chapter Notes</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1>Chapter Notes</h1>
+        <p id="video-title" class="muted small"></p>
+      </div>
+      <button id="refresh" class="icon-btn" title="Refresh" aria-label="Refresh">&#8635;</button>
+    </header>
+
+    <section class="controls">
+      <label class="field">
+        <span class="sr-only">Search notes</span>
+        <input id="search" type="search" placeholder="Search this video's notes…" />
+      </label>
+
+      <div class="row exports">
+        <button id="dl-md" class="btn btn--primary">.md</button>
+        <button id="dl-csv" class="btn">.csv</button>
+      </div>
+    </section>
+
+    <main class="body">
+      <div id="state" class="state">
+        <p class="state__text">Open a YouTube video to start taking notes.</p>
+      </div>
+      <ol id="list" class="list" hidden></ol>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small" role="status"></span>
+      <span class="footer__actions">
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="usage-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Every note lives in this browser's local storage. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="usage" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="usage-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="usage-clear" class="btn">Reset</button>
+        <button id="usage-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>

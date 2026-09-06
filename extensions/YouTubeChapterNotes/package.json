@@ -1,0 +1,24 @@
+{
+  "name": "youtube-chapter-notes",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Chrome MV3 extension — timestamped chapter notes for any YouTube video, captions or not. Local only.",
+  "scripts": {
+    "icons": "node ./scripts/gen-icons.mjs",
+    "build": "node ./scripts/build.mjs",
+    "build:prod": "node ./scripts/build.mjs --env production",
+    "build:watch": "node ./scripts/build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "node ./scripts/selftest.mjs",
+    "zip": "node ./scripts/build.mjs --env production && node ./scripts/zip.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.258",
+    "esbuild": "^0.21.5",
+    "typescript": "^5.4.5"
+  }
+}
