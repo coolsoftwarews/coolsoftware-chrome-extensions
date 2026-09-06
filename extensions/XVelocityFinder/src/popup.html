@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>X Velocity Finder</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <h1>⚡ X Velocity Finder</h1>
+    </header>
+
+    <main>
+      <p class="formula">Velocity = (likes + reposts + replies) ÷ hours since posting. The ratio compares that to the author's own recent median — no baseline, no ratio shown.</p>
+
+      <section class="card" id="status-card">
+        <h2>This tab</h2>
+        <p id="status-text" class="muted">Open a page on x.com to see live status.</p>
+      </section>
+
+      <section class="card">
+        <h2>Your data</h2>
+        <p class="muted small">
+          Author medians and filter settings live in this browser's local storage. Nothing is
+          uploaded, and there is no account.
+        </p>
+        <div class="row wrap">
+          <button id="data-export" class="btn">Export all data</button>
+          <button id="data-import" class="btn">Import</button>
+          <button id="data-clear" class="btn btn--danger">Clear all data</button>
+        </div>
+        <input id="import-file" type="file" accept="application/json,.json" hidden />
+        <p id="data-status" class="muted small" role="status"></p>
+      </section>
+
+      <section class="card">
+        <h2>Local usage counters</h2>
+        <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+        <pre id="stats-body" class="stats"></pre>
+        <div class="row">
+          <button id="stats-clear" class="btn">Reset counters</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <a href="https://x.com" target="_blank" rel="noopener">Open X</a>
+      <span class="muted small">v1.0.0</span>
+    </footer>
+
+    <script type="module" src="__POPUP_JS__"></script>
+  </body>
+</html>
