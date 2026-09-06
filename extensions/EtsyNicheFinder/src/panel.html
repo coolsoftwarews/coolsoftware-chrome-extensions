@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etsy Niche Opportunity Finder</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1>Etsy Niche Opportunity Finder</h1>
+        <p id="page-meta" class="muted"></p>
+      </div>
+      <button id="refresh" class="icon-btn" title="Reload this page's read" aria-label="Reload">&#8635;</button>
+    </header>
+
+    <main class="body">
+      <section id="page-section">
+        <div id="page-state" class="state">
+          <p class="state__text">Open an Etsy search or category page to see the niche read here.</p>
+        </div>
+        <div id="page-controls" class="controls" hidden>
+          <p id="page-summary" class="summary"></p>
+          <p id="page-delta" class="muted small"></p>
+          <div class="row wrap">
+            <button id="save-snapshot" class="btn btn--primary">+ Save niche</button>
+            <button id="export-csv" class="btn">Export CSV</button>
+            <button id="export-md" class="btn">Export Markdown</button>
+          </div>
+          <p id="page-status" class="muted small"></p>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <h2>Saved niches</h2>
+          <span id="snapshot-count" class="muted small"></span>
+        </div>
+        <ul id="snapshot-list" class="list"></ul>
+        <p id="snapshot-empty" class="muted small">No niches saved yet — use "+ Save niche" on an Etsy search page.</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span class="footer__actions">
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Every saved niche lives in this browser's local storage. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
