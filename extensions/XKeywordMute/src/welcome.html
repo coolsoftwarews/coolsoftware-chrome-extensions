@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Keyword Mute — first run</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #ffffff;
+        --card: #f6f6f6;
+        --text: #1a1a1a;
+        --muted: #5f6368;
+        --border: #e0e0e0;
+        --accent: #1a73e8;
+        --chip-bg: #f3f3f3;
+        --chip-border: #cfcfcf;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1f1f1f;
+          --card: #2b2b2b;
+          --text: #e8eaed;
+          --muted: #9aa0a6;
+          --border: #3c4043;
+          --accent: #8ab4f8;
+          --chip-bg: #2b2b2b;
+          --chip-border: #444;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 48px 20px 72px;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.6 -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      main { max-width: 40rem; margin: 0 auto; }
+      h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 8px; }
+      .lede { color: var(--muted); margin: 0 0 32px; }
+      ol { padding-left: 1.2rem; margin: 0 0 32px; }
+      li { margin-bottom: 14px; }
+      .chip {
+        display: inline-block; background: var(--chip-bg); border: 1px solid var(--chip-border);
+        border-radius: 6px; padding: 2px 10px; font-size: 0.85em; font-family: ui-monospace, Menlo, monospace;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+      }
+      .card h2 { font-size: 1rem; margin: 0 0 6px; }
+      .card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+      footer { margin-top: 40px; color: var(--muted); font-size: 0.85rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Mute the words you never want to see on X again.</h1>
+      <p class="lede">Three things to know, then you're done reading this page forever.</p>
+
+      <ol>
+        <li>
+          <strong>Add a rule — or enable a starter pack.</strong> A rule is a single keyword or
+          phrase, matched case-insensitively by default. Choose <em>substring</em>,
+          <em>whole word</em>, or (for power users) a <em>regex</em> pattern.
+        </li>
+        <li>
+          <strong>Scroll your timeline as normal.</strong> A matching post collapses to one line —
+          <span class="chip">Hidden by filter: "crypto airdrop"</span> — right where it was.
+          Nothing is deleted, and nothing disappears without a trace. Click <strong>Show
+          anyway</strong> any time.
+        </li>
+        <li>
+          <strong>Open the panel</strong> to see every rule's hit count — the number that tells you
+          whether a rule is doing anything, or hiding far more than you expected — and export your
+          whole rule list as a single JSON file any time.
+        </li>
+      </ol>
+
+      <div class="card" style="margin-top: 32px">
+        <h2>A hidden post is never a silent one</h2>
+        <p>
+          Keyword matching is never perfectly accurate — a rule that's too broad can hide things you
+          actually wanted to see. That's why every hidden post stays visible as a labeled
+          placeholder, one click from being shown again, and why every rule shows its own hit count
+          instead of quietly working (or misfiring) in the background.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>No account. No cloud. No network.</h2>
+        <p>
+          Your rule list lives in this browser's local storage and is never uploaded. Starter packs
+          are bundled with the extension, not fetched from a server. Export everything from the
+          panel's <strong>Data</strong> menu any time, or clear it all with one click.
+        </p>
+      </div>
+
+      <footer>Click the toolbar icon on x.com to open the panel.</footer>
+    </main>
+  </body>
+</html>

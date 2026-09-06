@@ -1,0 +1,407 @@
+/* Neutral chrome-like palette, matched to the portfolio's other panels. */
+:root {
+  --bg: #ffffff;
+  --bg-raised: #f3f3f3;
+  --bg-hover: #e8e8e8;
+  --text: #1a1a1a;
+  --text-muted: #5f6368;
+  --border: #dcdcdc;
+  --accent: #1a73e8;
+  --accent-text: #ffffff;
+  --danger: #b3261e;
+  --warn-bg: #fff4cc;
+  --warn-border: #e0b400;
+  --warn-text: #4a3200;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1f1f1f;
+    --bg-raised: #2b2b2b;
+    --bg-hover: #3a3a3a;
+    --text: #e8eaed;
+    --text-muted: #9aa0a6;
+    --border: #3c4043;
+    --accent: #8ab4f8;
+    --accent-text: #1f1f1f;
+    --danger: #f2b8b5;
+    --warn-bg: #3a2f00;
+    --warn-border: #7a5f00;
+    --warn-text: #ffd873;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  /* Popups auto-size to content with no viewport to fill, unlike a side
+   * panel — an explicit width/height keeps the layout stable and the app
+   * section's own overflow:auto (below) does the scrolling. */
+  width: 380px;
+  min-height: 320px;
+  max-height: 600px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+.small {
+  font-size: 12px;
+}
+.error {
+  color: var(--danger);
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+
+.bar {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.bar__title {
+  flex: 1;
+  min-width: 0;
+}
+
+.bar h1 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.bar p {
+  margin: 2px 0 0;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.icon-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.link-btn {
+  border: none;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ── Warning banner ─────────────────────────────────────────────────── */
+
+.warning {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--warn-bg);
+  color: var(--warn-text);
+  border-bottom: 1px solid var(--warn-border);
+  font-size: 12px;
+}
+
+/* ── App body / sections ────────────────────────────────────────────── */
+
+.app {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.panel-section {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-section--about {
+  border-bottom: none;
+}
+
+.panel-section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.panel-section__head h2 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ── Rules ──────────────────────────────────────────────────────────── */
+
+.rule-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rule {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: var(--bg-raised);
+}
+
+.rule--broad {
+  border-color: var(--warn-border);
+}
+
+.rule__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rule__value {
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+}
+
+.rule__mode {
+  display: inline-block;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  padding: 1px 8px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+
+.rule__summary {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.rule__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.starter-packs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.starter-pack {
+  border: 1px dashed var(--border);
+  border-radius: 999px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.starter-pack:hover {
+  background: var(--bg-hover);
+}
+.starter-pack:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────── */
+
+.btn {
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+.btn--danger {
+  color: var(--danger);
+}
+
+.row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.row.wrap {
+  flex-wrap: wrap;
+}
+.row.end {
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+/* ── Forms / fields ─────────────────────────────────────────────────── */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+  border: none;
+  padding: 0;
+}
+.field__label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+input[type="text"],
+textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 8px;
+  resize: vertical;
+}
+.radio,
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+/* ── States ─────────────────────────────────────────────────────────── */
+
+.state {
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.state--gate {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px 20px 44px;
+  text-align: center;
+}
+.gate__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 11px;
+}
+.gate__title {
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--text);
+}
+.gate__body {
+  margin: 0;
+  max-width: 32ch;
+  color: var(--text-muted);
+}
+.gate__action {
+  margin-top: 2px;
+}
+
+/* ── Footer + sheets ────────────────────────────────────────────────── */
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-top: 1px solid var(--border);
+}
+
+.footer__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.sheet {
+  width: min(340px, 92vw);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+}
+.sheet--wide {
+  width: min(420px, 94vw);
+}
+.sheet h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+.sheet__body {
+  max-height: 40vh;
+  overflow: auto;
+  background: var(--bg-raised);
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+.sheet::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
