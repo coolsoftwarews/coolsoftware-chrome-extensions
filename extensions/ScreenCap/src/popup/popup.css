@@ -1,0 +1,135 @@
+:root {
+  --bg: #ffffff;
+  --fg: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --accent: #2563eb;
+  --accent-fg: #ffffff;
+  --danger: #b91c1c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f172a;
+    --fg: #f1f5f9;
+    --muted: #94a3b8;
+    --line: #1e293b;
+    --accent: #3b82f6;
+    --danger: #fca5a5;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  width: 264px;
+  background: var(--bg);
+  color: var(--fg);
+  font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.panel { padding: 12px; }
+
+.mode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 12px;
+  margin-bottom: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mode:hover:not(:disabled) { border-color: var(--accent); }
+.mode:disabled { opacity: 0.5; cursor: default; }
+
+.mode.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+kbd {
+  font: 500 11px/1 ui-monospace, monospace;
+  opacity: 0.85;
+}
+
+.progress { margin-top: 10px; }
+
+.progress-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 120ms linear;
+}
+
+.progress-label {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.error {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--danger);
+}
+
+.footer {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ── The gate ───────────────────────────────────────────────────────────
+   Replaces the mode buttons on a page that can never be captured. Same shape
+   as the empty states in the other extensions in the set. */
+
+.gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 8px 6px;
+  text-align: center;
+}
+
+.gate[hidden] {
+  display: none;
+}
+
+.gate__icon {
+  border-radius: 11px;
+}
+
+.gate__title {
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.gate__body {
+  margin: 0;
+  max-width: 30ch;
+  font-size: 12px;
+  opacity: 0.75;
+}

@@ -1,0 +1,21 @@
+{
+  "name": "screencap-extension",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Screen Capture — full page screenshot, annotate, blur. Nothing leaves your device.",
+  "type": "module",
+  "scripts": {
+    "icons": "node scripts/make-icons.mjs",
+    "build": "npm run icons && tsc --noEmit && vite build",
+    "dev": "npm run icons && vite build --watch",
+    "typecheck": "tsc --noEmit",
+    "zip": "npm run build && node scripts/zip.mjs"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "@types/node": "^22.10.1",
+    "typescript": "^5.5.0",
+    "vite": "^5.4.0"
+  },
+  "dependencies": {}
+}

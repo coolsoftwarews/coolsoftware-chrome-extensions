@@ -1,0 +1,132 @@
+:root {
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --fg: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --accent: #2563eb;
+  --accent-fg: #ffffff;
+  --danger: #b91c1c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #020617;
+    --surface: #0f172a;
+    --fg: #e2e8f0;
+    --muted: #94a3b8;
+    --line: #1e293b;
+    --accent: #3b82f6;
+    --danger: #fca5a5;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.tools, .options, .exports, .option-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.exports { margin-left: auto; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: inherit;
+  padding: 7px 12px;
+}
+
+button:hover { border-color: var(--accent); }
+
+.tool.is-active,
+.size.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+.size { padding: 7px 11px; }
+
+.swatch {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--swatch);
+  border: 2px solid transparent;
+  outline: 1px solid var(--line);
+}
+
+.swatch.is-active { border-color: var(--surface); outline-color: var(--accent); }
+
+.status {
+  margin: 0;
+  padding: 8px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.status.is-error { color: var(--danger); }
+
+.stage {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+canvas {
+  max-width: 100%;
+  height: auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgb(15 23 42 / 0.08);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+canvas[data-tool="select"] { cursor: default; }
+
+.text-input {
+  position: absolute;
+  z-index: 20;
+  padding: 4px 6px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--fg);
+  font: inherit;
+}

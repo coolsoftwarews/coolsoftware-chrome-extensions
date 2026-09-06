@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Screen Capture</title>
+    <link rel="stylesheet" href="editor.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="tools" role="toolbar" aria-label="Annotation tools">
+        <button class="tool is-active" data-tool="select" title="Select (V)">Select</button>
+        <button class="tool" data-tool="crop" title="Crop (C)">Crop</button>
+        <button class="tool" data-tool="rect" title="Rectangle (R)">Rectangle</button>
+        <button class="tool" data-tool="arrow" title="Arrow (A)">Arrow</button>
+        <button class="tool" data-tool="blur" title="Blur (B)">Blur</button>
+        <button class="tool" data-tool="text" title="Text (T)">Text</button>
+      </div>
+
+      <div class="options">
+        <div id="color-options" class="option-group">
+          <button class="swatch is-active" data-color="#ef4444" style="--swatch: #ef4444" title="Red"></button>
+          <button class="swatch" data-color="#f59e0b" style="--swatch: #f59e0b" title="Amber"></button>
+          <button class="swatch" data-color="#22c55e" style="--swatch: #22c55e" title="Green"></button>
+          <button class="swatch" data-color="#2563eb" style="--swatch: #2563eb" title="Blue"></button>
+          <button class="swatch" data-color="#0f172a" style="--swatch: #0f172a" title="Ink"></button>
+        </div>
+        <div id="size-options" class="option-group" hidden>
+          <button class="size" data-size="18">S</button>
+          <button class="size is-active" data-size="28">M</button>
+          <button class="size" data-size="44">L</button>
+        </div>
+        <button id="crop-apply" class="ghost" hidden>Apply crop</button>
+        <button id="undo" class="ghost" title="Undo (Ctrl+Z)">Undo</button>
+      </div>
+
+      <div class="exports">
+        <button id="copy" class="ghost">Copy</button>
+        <button id="png" class="primary">PNG</button>
+        <button id="jpeg" class="ghost">JPEG</button>
+        <button id="pdf" class="ghost">PDF</button>
+      </div>
+    </header>
+
+    <p id="status" class="status" hidden></p>
+
+    <main class="stage">
+      <canvas id="canvas"></canvas>
+    </main>
+
+    <input id="text-input" class="text-input" hidden autocomplete="off" spellcheck="false" />
+
+    <script type="module" src="editor.ts"></script>
+  </body>
+</html>

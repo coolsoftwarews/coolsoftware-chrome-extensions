@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Screen Capture</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="panel">
+      <!-- Shown instead of the buttons when this page can never be captured.
+           Three live-looking buttons that are guaranteed to fail is worse than
+           saying so before the click. -->
+      <div id="gate" class="gate" hidden>
+        <img class="gate__icon" src="/icons/icon-128.png" alt="" width="48" height="48" />
+        <strong class="gate__title">Not this page</strong>
+        <p id="gate-body" class="gate__body"></p>
+      </div>
+
+      <button id="full-page" class="mode primary">
+        <span class="mode-label">Full page</span>
+        <kbd>Alt+Shift+P</kbd>
+      </button>
+      <button id="visible-area" class="mode">
+        <span class="mode-label">Visible area</span>
+      </button>
+      <button id="selected-region" class="mode">
+        <span class="mode-label">Selected region</span>
+      </button>
+
+      <div id="progress" class="progress" hidden>
+        <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+        <p id="progress-label" class="progress-label">Capturing…</p>
+      </div>
+
+      <p id="error" class="error" hidden></p>
+
+      <footer class="footer">Captures never leave your device.</footer>
+    </main>
+    <script type="module" src="popup.ts"></script>
+  </body>
+</html>
