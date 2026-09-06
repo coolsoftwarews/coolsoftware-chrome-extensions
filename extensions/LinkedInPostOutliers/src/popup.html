@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LinkedIn Post Outlier Finder</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div id="gate" class="gate" hidden>
+      <img class="gate__icon" src="icons/icon-128.png" alt="" width="48" height="48" />
+      <strong>Open a LinkedIn profile, hashtag or search page</strong>
+      <p>
+        This badges each post with how it compares to its own author's recent median — open a
+        profile's post history (<code>/in/&lt;handle&gt;/recent-activity</code>), a hashtag page, or a
+        content search result set.
+      </p>
+      <button id="open-linkedin" type="button" class="btn btn--primary">Open LinkedIn</button>
+    </div>
+
+    <div id="intro">
+      <h1>LinkedIn Post Outlier Finder</h1>
+      <p class="muted">
+        Open a profile's post history, a hashtag page, or a content search result set on LinkedIn to
+        see badges, filters and export.
+      </p>
+    </div>
+
+    <section>
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is ever sent anywhere.</p>
+      <dl id="metrics"></dl>
+      <button id="reset-metrics" class="btn">Reset counters</button>
+    </section>
+
+    <section>
+      <h2>Your data</h2>
+      <p class="muted small">
+        Cached per-author medians and your last-used filter live in this browser's local storage. No
+        account, no cloud.
+      </p>
+      <div class="row">
+        <button id="export-data" class="btn">Export all data</button>
+        <button id="import-data" class="btn">Import</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <button id="clear-data" class="btn btn--danger">Clear all data</button>
+      <p id="status" class="muted small" role="status"></p>
+    </section>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

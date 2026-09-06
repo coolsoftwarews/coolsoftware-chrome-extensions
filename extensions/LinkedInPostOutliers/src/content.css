@@ -1,0 +1,174 @@
+/*
+ * Injected styles. Everything is namespaced under .lpo- and every property is
+ * explicit — LinkedIn's own cascade is hostile and its dark mode is a page
+ * default some viewers use, so colours are declared for both rather than
+ * inherited.
+ */
+
+.lpo-bar {
+  --lpo-bg: #ffffff;
+  --lpo-fg: #1a1a1a;
+  --lpo-muted: #666666;
+  --lpo-border: #d9d9d9;
+  --lpo-chip: #f3f6f8;
+  --lpo-accent: #0a66c2;
+  --lpo-accent-fg: #ffffff;
+
+  box-sizing: border-box;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--lpo-border);
+  border-radius: 12px;
+  background: var(--lpo-bg);
+  color: var(--lpo-fg);
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+html[style*="color-scheme: dark"] .lpo-bar,
+body.theme--dark .lpo-bar {
+  --lpo-bg: #1b1f23;
+  --lpo-fg: #f5f5f5;
+  --lpo-muted: #a3a9ae;
+  --lpo-border: #383f45;
+  --lpo-chip: #262b30;
+  --lpo-accent: #4c9aff;
+  --lpo-accent-fg: #0b1220;
+}
+
+@media (prefers-color-scheme: dark) {
+  .lpo-bar {
+    --lpo-bg: #1b1f23;
+    --lpo-fg: #f5f5f5;
+    --lpo-muted: #a3a9ae;
+    --lpo-border: #383f45;
+    --lpo-chip: #262b30;
+    --lpo-accent: #4c9aff;
+    --lpo-accent-fg: #0b1220;
+  }
+}
+
+.lpo-bar *,
+.lpo-bar *::before,
+.lpo-bar *::after {
+  box-sizing: border-box;
+}
+
+.lpo-bar__header {
+  margin-bottom: 10px;
+}
+
+.lpo-header__summary {
+  font-weight: 600;
+}
+
+.lpo-header__summary--greyed {
+  color: var(--lpo-muted);
+  font-weight: 500;
+}
+
+.lpo-header__detail {
+  margin-top: 2px;
+  color: var(--lpo-muted);
+  font-size: 12px;
+}
+
+.lpo-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.lpo-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lpo-field--sort {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.lpo-field--export {
+  flex-direction: row;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.lpo-label {
+  color: var(--lpo-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.lpo-segmented {
+  display: flex;
+  gap: 4px;
+}
+
+.lpo-seg {
+  padding: 5px 10px;
+  border: 1px solid var(--lpo-border);
+  border-radius: 14px;
+  background: var(--lpo-chip);
+  color: var(--lpo-fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.lpo-seg[aria-pressed="true"] {
+  background: var(--lpo-accent);
+  border-color: var(--lpo-accent);
+  color: var(--lpo-accent-fg);
+  font-weight: 600;
+}
+
+.lpo-select,
+.lpo-btn {
+  padding: 5px 10px;
+  border: 1px solid var(--lpo-border);
+  border-radius: 14px;
+  background: var(--lpo-chip);
+  color: var(--lpo-fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.lpo-notice {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--lpo-chip);
+  color: var(--lpo-fg);
+  font-size: 12px;
+}
+
+.lpo-notice[hidden] {
+  display: none;
+}
+
+.lpo-status {
+  margin-top: 8px;
+  color: var(--lpo-muted);
+  font-size: 12px;
+}
+
+.lpo-status:empty {
+  display: none;
+}
+
+/* ── Post rows ───────────────────────────────────────────────────────── */
+
+.lpo-hidden {
+  display: none !important;
+}
+
+.lpo-badge-host {
+  /* No positioning change needed here — the badge itself is an inline
+     shadow-DOM chip inserted directly after an existing inline element
+     (see badges.ts), never absolutely positioned over post content. */
+}
