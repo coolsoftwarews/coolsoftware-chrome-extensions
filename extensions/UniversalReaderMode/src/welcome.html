@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Universal Reader Mode — first run</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #ffffff;
+        --card: #f6f6f6;
+        --text: #1a1a1a;
+        --muted: #5f6368;
+        --border: #e0e0e0;
+        --accent: #1a73e8;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1f1f1f;
+          --card: #2b2b2b;
+          --text: #e8eaed;
+          --muted: #9aa0a6;
+          --border: #3c4043;
+          --accent: #8ab4f8;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 48px 20px 72px;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.6 -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      main { max-width: 40rem; margin: 0 auto; }
+      h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 8px; }
+      .lede { color: var(--muted); margin: 0 0 32px; }
+      ol { padding-left: 1.2rem; margin: 0 0 32px; }
+      li { margin-bottom: 14px; }
+      kbd {
+        border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px;
+        font: 0.85em ui-monospace, Consolas, monospace; background: var(--card);
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+      }
+      .card h2 { font-size: 1rem; margin: 0 0 6px; }
+      .card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+      .cta {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 10px 18px;
+        border-radius: 999px;
+      }
+      @media (prefers-color-scheme: dark) { .cta { color: #1f1f1f; } }
+      footer { margin-top: 40px; color: var(--muted); font-size: 0.85rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Strip the page. Keep the article.</h1>
+      <p class="lede">Two things to know, then you're done reading this page forever.</p>
+
+      <ol>
+        <li>
+          <strong>Open any article</strong> and click the toolbar icon (or press <kbd>Alt+Shift+R</kbd>).
+          Reader mode strips the ads, nav and sidebars and shows just the writing — adjustable font,
+          line width and a light/dark/sepia theme.
+        </li>
+        <li>
+          <strong>Export it</strong> as Markdown, PDF or plain text before you close the tab. That's the
+          whole point: the browser's own reader view disappears when you leave the page — this one
+          leaves you with a file.
+        </li>
+      </ol>
+
+      <p><a class="cta" href="https://en.wikipedia.org/wiki/Reader_mode">Try it on a real article →</a></p>
+
+      <div class="card" style="margin-top: 32px">
+        <h2>No account. No cloud. No network.</h2>
+        <p>
+          Nothing you read or export is uploaded anywhere — this extension makes no network requests at
+          all, which you're welcome to verify in devtools. Reading preferences (font, theme, width) are
+          saved locally so they carry over to the next article; no page content is ever stored.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Why it asks for access to all sites</h2>
+        <p>
+          A reader mode that only works on a list of approved sites isn't a reader mode. That permission
+          is what lets extraction run on whatever article you happen to be reading — nothing leaves your
+          machine because of it, and nothing runs on a page until you click the icon.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>When it says "this doesn't look like an article"</h2>
+        <p>
+          Reader mode only works on article-shaped pages. Rather than guess and hand you a garbled mess
+          on a dashboard, search page or app screen, it says so plainly and leaves the page alone.
+        </p>
+      </div>
+
+      <footer>Tip: Alt+Shift+R toggles reader mode open and closed on the current page.</footer>
+    </main>
+  </body>
+</html>
