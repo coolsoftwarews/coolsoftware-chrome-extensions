@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tab Stash</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1>Tab Stash</h1>
+        <p id="summary" class="muted"></p>
+      </div>
+      <button id="new-stash" class="btn btn--primary" type="button">+ New stash</button>
+    </header>
+
+    <section class="search-row">
+      <input
+        id="search"
+        type="search"
+        placeholder="Search stashed tabs by title or URL…"
+        aria-label="Search stashed tabs"
+      />
+    </section>
+
+    <main id="body" class="body">
+      <div id="state" class="state">
+        <p class="state__text">No stashes yet. Click “New stash” to save your open tabs.</p>
+      </div>
+      <ol id="search-list" class="list" hidden aria-label="Search results"></ol>
+      <ol id="stash-list" class="list" hidden aria-label="Stashes"></ol>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <span class="footer__actions">
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <!-- New stash -->
+    <dialog id="new-stash-dialog" class="sheet sheet--wide">
+      <h2>New stash</h2>
+      <p class="muted small">Tabs in this window. Pinned tabs are unchecked by default.</p>
+
+      <div class="row wrap" style="margin: 6px 0">
+        <button id="select-all" class="link-btn" type="button">Select all</button>
+        <button id="select-none" class="link-btn" type="button">Select none</button>
+      </div>
+
+      <ul id="tab-picker" class="picker" aria-label="Tabs to stash"></ul>
+
+      <label class="field" style="margin-top: 10px">
+        <span class="field__label">Name</span>
+        <input id="stash-name" type="text" placeholder="Auto-named if left blank" />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Notes</span>
+        <textarea id="stash-notes" rows="2" placeholder="What is this for?"></textarea>
+      </label>
+
+      <label class="check" style="margin-top: 8px">
+        <input type="checkbox" id="close-after" /> Close these tabs after stashing
+      </label>
+
+      <div class="row end" style="margin-top: 14px">
+        <button id="new-stash-cancel" class="btn">Cancel</button>
+        <button id="new-stash-save" class="btn btn--primary">Save stash</button>
+      </div>
+    </dialog>
+
+    <!-- Restore confirmation -->
+    <dialog id="restore-confirm" class="sheet">
+      <h2>Restore this many tabs?</h2>
+      <p id="restore-confirm-body" class="muted small"></p>
+      <div class="row end">
+        <button id="restore-confirm-cancel" class="btn">Cancel</button>
+        <button id="restore-confirm-go" class="btn btn--primary">Open all</button>
+      </div>
+    </dialog>
+
+    <!-- Data -->
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Everything lives in this browser's local storage. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data (JSON)</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <p class="muted small" style="margin-top: 10px">Reading list, every stash</p>
+      <div class="row wrap">
+        <button id="export-all-md" class="btn">All stashes as .md</button>
+        <button id="export-all-csv" class="btn">All stashes as .csv</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <!-- Usage -->
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
