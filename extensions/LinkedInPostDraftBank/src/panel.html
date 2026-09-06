@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LinkedIn Post Draft Bank</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1>Post Draft Bank</h1>
+        <p id="composer-status" class="muted small"></p>
+      </div>
+    </header>
+
+    <section class="controls">
+      <input id="search" class="search" type="search" placeholder="Search drafts, templates, published posts…" />
+
+      <div class="row wrap">
+        <div class="segmented" role="group" aria-label="Filter by type">
+          <button id="kind-all" class="seg seg--on" type="button" data-kind="">All</button>
+          <button id="kind-draft" class="seg" type="button" data-kind="draft">Drafts</button>
+          <button id="kind-template" class="seg" type="button" data-kind="template">Templates</button>
+          <button id="kind-published" class="seg" type="button" data-kind="published">Published</button>
+        </div>
+      </div>
+
+      <div class="row wrap">
+        <select id="tag-filter" class="select">
+          <option value="">All tags</option>
+        </select>
+        <button id="new-template" class="btn">+ New template</button>
+      </div>
+    </section>
+
+    <section id="composer" class="composer">
+      <textarea id="composer-text" placeholder="Write the template text…"></textarea>
+      <input id="composer-tags" type="text" placeholder="Tags (comma separated)" />
+      <div class="row end">
+        <button id="composer-cancel" class="btn">Cancel</button>
+        <button id="composer-save" class="btn btn--primary">Save template</button>
+      </div>
+    </section>
+
+    <main id="body" class="body">
+      <div id="state" class="state">
+        <p class="state__text">
+          Nothing here yet. Start a post on LinkedIn to save a draft, or add a template right here.
+        </p>
+      </div>
+      <ul id="list" class="list" hidden></ul>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <span class="footer__actions">
+        <button id="export-toggle" class="link-btn">Export</button>
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="export" class="sheet">
+      <h2>Export</h2>
+      <div class="row wrap">
+        <div class="segmented" role="group" aria-label="Export scope">
+          <button id="scope-visible" class="seg seg--on" type="button">Visible results</button>
+          <button id="scope-all" class="seg" type="button">Entire library</button>
+        </div>
+      </div>
+      <div class="row wrap end">
+        <button id="export-csv" class="btn">.csv</button>
+        <button id="export-md" class="btn">.md</button>
+        <button id="export-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Everything lives in this browser's local storage. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data (.json)</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
