@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YouTube Comment Digest</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1 id="video-title">YouTube Comment Digest</h1>
+        <p id="video-meta" class="muted"></p>
+      </div>
+      <button id="refresh" class="icon-btn" title="Re-scan this page's comments" aria-label="Refresh">&#8635;</button>
+    </header>
+
+    <section id="controls" class="controls" hidden>
+      <div class="row">
+        <label class="field field--grow">
+          <span class="sr-only">Search loaded comments</span>
+          <input id="search" type="search" placeholder="Search loaded comments…" autocomplete="off" />
+        </label>
+        <label class="field">
+          <span class="sr-only">Sort comments</span>
+          <select id="sort">
+            <option value="top">Top (page order)</option>
+            <option value="likes">Most liked</option>
+            <option value="replies">Most replies</option>
+            <option value="newest">Newest first</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="row wrap">
+        <button id="load-more" class="btn">Load more comments</button>
+        <button id="wordfreq-toggle" class="btn" aria-expanded="false" aria-controls="wordfreq">Word frequency</button>
+        <button id="copy-md" class="btn btn--primary">Copy as Markdown</button>
+        <button id="dl-md" class="btn">.md</button>
+        <button id="dl-csv" class="btn">.csv</button>
+      </div>
+
+      <section id="wordfreq" class="wordfreq" hidden aria-live="polite">
+        <p class="muted small">
+          Most-repeated words and phrases across the comments currently loaded — plain counts, not an
+          AI summary. English-only stopword filtering in this version.
+        </p>
+        <div class="wordfreq__group">
+          <h2 class="wordfreq__heading">Words</h2>
+          <ul id="wordfreq-words" class="chips"></ul>
+        </div>
+        <div class="wordfreq__group">
+          <h2 class="wordfreq__heading">Phrases</h2>
+          <ul id="wordfreq-phrases" class="chips"></ul>
+        </div>
+      </section>
+    </section>
+
+    <main id="body" class="body">
+      <div id="state" class="state">
+        <p class="state__text">Open a YouTube video to get started.</p>
+      </div>
+      <ol id="list" class="list" hidden aria-label="Comments"></ol>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small" aria-live="polite"></span>
+      <span class="footer__actions">
+        <button id="settings-toggle" class="link-btn">Settings</button>
+      </span>
+    </footer>
+
+    <dialog id="settings" class="sheet">
+      <h2>Local settings</h2>
+      <p class="muted small">
+        This panel never stores comments — it only mirrors what's loaded on the page right now. The
+        only things saved locally are your sort choice and export format, plus anonymous usage counts
+        (nothing that leaves this device). See the Privacy Policy for details.
+      </p>
+      <div class="row wrap">
+        <button id="settings-clear" class="btn btn--danger">Clear local preferences &amp; usage counts</button>
+      </div>
+      <div class="row end">
+        <button id="settings-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
