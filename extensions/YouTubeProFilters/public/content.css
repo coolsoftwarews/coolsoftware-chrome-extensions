@@ -1,0 +1,285 @@
+/*
+ * Injected styles. Everything is namespaced under .ypf- and every property is
+ * explicit — YouTube's own cascade is hostile and its dark mode is signalled
+ * on <html>, which we read rather than guess at.
+ */
+
+.ypf-bar {
+  --ypf-bg: #fff;
+  --ypf-fg: #0f0f0f;
+  --ypf-muted: #606060;
+  --ypf-border: #d9d9d9;
+  --ypf-chip: #f2f2f2;
+  --ypf-accent: #065fd4;
+  --ypf-accent-fg: #fff;
+
+  box-sizing: border-box;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--ypf-border);
+  border-radius: 12px;
+  background: var(--ypf-bg);
+  color: var(--ypf-fg);
+  font-family: 'Roboto', 'Arial', sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+html[dark] .ypf-bar,
+[dark] .ypf-bar {
+  --ypf-bg: #0f0f0f;
+  --ypf-fg: #f1f1f1;
+  --ypf-muted: #aaa;
+  --ypf-border: #303030;
+  --ypf-chip: #272727;
+  --ypf-accent: #3ea6ff;
+  --ypf-accent-fg: #0f0f0f;
+}
+
+.ypf-bar *,
+.ypf-bar *::before,
+.ypf-bar *::after {
+  box-sizing: border-box;
+}
+
+.ypf-bar__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ypf-bar__toggle {
+  padding: 6px 14px;
+  border: 1px solid var(--ypf-border);
+  border-radius: 18px;
+  background: var(--ypf-chip);
+  color: var(--ypf-fg);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ypf-bar--active .ypf-bar__toggle {
+  background: var(--ypf-accent);
+  border-color: var(--ypf-accent);
+  color: var(--ypf-accent-fg);
+}
+
+.ypf-bar__summary {
+  color: var(--ypf-muted);
+}
+
+.ypf-spacer {
+  flex: 1 1 auto;
+}
+
+/* The panel is collapsed until the toggle opens it. */
+.ypf-panel {
+  display: none;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--ypf-border);
+}
+
+.ypf-bar--open .ypf-panel {
+  display: block;
+}
+
+.ypf-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.ypf-row--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+/* The custom range only appears once the Custom preset is chosen. */
+.ypf-row--custom-date {
+  display: none;
+}
+
+.ypf-bar--custom-date .ypf-row--custom-date {
+  display: flex;
+}
+
+.ypf-presets {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.ypf-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ypf-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: var(--ypf-chip);
+  color: var(--ypf-fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.ypf-chip--on {
+  background: var(--ypf-accent);
+  color: var(--ypf-accent-fg);
+}
+
+.ypf-chip--preset {
+  border-color: var(--ypf-border);
+  background: transparent;
+}
+
+.ypf-chip__remove {
+  border: 0;
+  background: none;
+  color: var(--ypf-muted);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0 0 2px;
+}
+
+.ypf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ypf-field--sort {
+  flex-direction: row;
+  align-items: center;
+}
+
+.ypf-label {
+  color: var(--ypf-muted);
+  white-space: nowrap;
+}
+
+.ypf-pair {
+  display: flex;
+  gap: 6px;
+}
+
+.ypf-input,
+.ypf-select {
+  min-width: 0;
+  padding: 5px 8px;
+  border: 1px solid var(--ypf-border);
+  border-radius: 6px;
+  background: var(--ypf-bg);
+  color: var(--ypf-fg);
+  font: inherit;
+}
+
+.ypf-input--num {
+  width: 100%;
+}
+
+.ypf-input--name {
+  width: 140px;
+}
+
+.ypf-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.ypf-save {
+  display: flex;
+  gap: 6px;
+}
+
+.ypf-btn {
+  padding: 5px 12px;
+  border: 1px solid var(--ypf-border);
+  border-radius: 16px;
+  background: var(--ypf-chip);
+  color: var(--ypf-fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.ypf-btn--ghost {
+  background: transparent;
+}
+
+.ypf-btn--link {
+  border: 0;
+  background: none;
+  color: var(--ypf-accent);
+  padding: 0;
+  text-decoration: underline;
+}
+
+.ypf-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  color: var(--ypf-muted);
+  min-height: 0;
+}
+
+.ypf-status:empty {
+  display: none;
+}
+
+.ypf-status__pending {
+  opacity: 0.75;
+  font-style: italic;
+}
+
+/* ── Result rows ─────────────────────────────────────────────────────── */
+
+.ypf-hidden {
+  display: none !important;
+}
+
+.ypf-badge-host {
+  position: relative;
+}
+
+.ypf-badges {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 2;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  pointer-events: none;
+}
+
+.ypf-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-family: 'Roboto', 'Arial', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  pointer-events: auto;
+}
+
+.ypf-badge--outlier {
+  background: #c4302b;
+}
