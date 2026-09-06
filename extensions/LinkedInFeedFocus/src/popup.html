@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LinkedIn Feed Focus</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <h1>Feed Focus</h1>
+    </header>
+
+    <main class="body">
+      <p class="muted small">
+        Hides what LinkedIn already put on the page. Nothing is read, stored or sent anywhere except these switches.
+      </p>
+      <div id="toggle-list" class="toggle-list" role="group" aria-label="Feed Focus toggles"></div>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small" role="status" aria-live="polite"></span>
+      <button id="reset" class="link-btn" type="button">Reset to defaults</button>
+    </footer>
+
+    <script type="module" src="__POPUP_JS__"></script>
+  </body>
+</html>
