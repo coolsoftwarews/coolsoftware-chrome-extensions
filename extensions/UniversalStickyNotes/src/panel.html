@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sticky Notes</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <h1>Sticky Notes</h1>
+    </header>
+
+    <section class="this-page">
+      <p id="this-gate" class="muted small" hidden>Open a normal web page to add a note here.</p>
+
+      <div id="this-head" class="this-page__head">
+        <div class="this-page__title-wrap">
+          <p id="this-title" class="this-page__title">This page</p>
+          <p id="this-meta" class="muted small"></p>
+        </div>
+        <button id="this-add" class="btn btn--primary" type="button" disabled>+ Note</button>
+      </div>
+
+      <label class="check">
+        <input type="checkbox" id="this-hidden" disabled />
+        Hide notes on this page
+      </label>
+
+      <p id="this-empty" class="muted small" hidden>No notes on this page yet.</p>
+      <ul id="this-list" class="list list--inline" hidden></ul>
+    </section>
+
+    <section class="search-row">
+      <input id="search" type="search" placeholder="Search all notes…" aria-label="Search all notes" />
+    </section>
+
+    <main id="body" class="body">
+      <div id="state" class="state" hidden></div>
+      <div id="all-list" class="all-list"></div>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <span class="footer__actions">
+        <button id="export-md" class="link-btn">Export .md</button>
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Everything lives in this browser's local storage. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>

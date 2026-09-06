@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Universal Sticky Notes — first run</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #ffffff;
+        --card: #f6f6f6;
+        --text: #1a1a1a;
+        --muted: #5f6368;
+        --border: #e0e0e0;
+        --accent: #1a73e8;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1f1f1f;
+          --card: #2b2b2b;
+          --text: #e8eaed;
+          --muted: #9aa0a6;
+          --border: #3c4043;
+          --accent: #8ab4f8;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 48px 20px 72px;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.6 -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      main { max-width: 40rem; margin: 0 auto; }
+      h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 8px; }
+      .lede { color: var(--muted); margin: 0 0 32px; }
+      ol { padding-left: 1.2rem; margin: 0 0 32px; }
+      li { margin-bottom: 14px; }
+      .swatches { display: inline-flex; gap: 6px; vertical-align: middle; margin-left: 4px; }
+      .swatch { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--border); display: inline-block; }
+      kbd {
+        font: 12px/1 -apple-system, "Segoe UI", Roboto, sans-serif;
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        padding: 2px 6px;
+        background: var(--card);
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+      }
+      .card h2 { font-size: 1rem; margin: 0 0 6px; }
+      .card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+      .note-demo {
+        display: inline-block;
+        background: #ffe680;
+        color: #2a2a1f;
+        border-radius: 4px 4px 6px 6px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.22);
+        padding: 6px 10px;
+        font-size: 0.9rem;
+        margin: 4px 0;
+      }
+      footer { margin-top: 40px; color: var(--muted); font-size: 0.85rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Stick a note on any page. It'll be there next time.</h1>
+      <p class="lede">Three things to know, then you're done reading this page forever.</p>
+
+      <ol>
+        <li>
+          <strong>Click the toolbar icon</strong> (or press <kbd>Alt+Shift+N</kbd>) on any page to drop
+          a note where you're looking.
+          <div class="note-demo">Remember to fix this →</div>
+        </li>
+        <li>
+          <strong>Drag it by its header</strong> to move it, resize from the bottom-right corner, and
+          pick a colour.
+          <span class="swatches">
+            <span class="swatch" style="background: #ffe680"></span>
+            <span class="swatch" style="background: #ffc4dd"></span>
+            <span class="swatch" style="background: #b9dcff"></span>
+            <span class="swatch" style="background: #b6f2c4"></span>
+            <span class="swatch" style="background: #dcc7f7"></span>
+          </span>
+        </li>
+        <li>
+          <strong>Open the side panel</strong> (press <kbd>Alt+Shift+P</kbd>, or pick it from Chrome's
+          side panel icon) to search every note you've left across every page, jump straight to one,
+          or export them all as Markdown.
+        </li>
+      </ol>
+
+      <div class="card" style="margin-top: 32px">
+        <h2>No account. No cloud. No network.</h2>
+        <p>
+          Your notes live in this browser's local storage and are never uploaded — this extension makes
+          no network requests at all, which you're welcome to verify in devtools. The flip side: they
+          are on <em>this</em> device only. Use the panel's <strong>Data → Export all data</strong> to
+          keep a backup, and <strong>Import</strong> to bring it to another machine.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Why it asks for access to all sites</h2>
+        <p>
+          A sticky note tool that only works on a list of approved sites isn't a sticky note tool. The
+          permission is what lets the extension put your notes back on whatever you're looking at —
+          nothing leaves your machine because of it.
+        </p>
+      </div>
+
+      <footer>A note's position drifts a little if a page's layout changes a lot — its text never does.</footer>
+    </main>
+  </body>
+</html>
