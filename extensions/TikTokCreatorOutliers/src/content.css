@@ -1,0 +1,206 @@
+/*
+ * Injected styles. Everything is namespaced under .tco- and every property is
+ * explicit — TikTok's own cascade is not something this extension can rely on.
+ */
+
+.tco-panel {
+  --tco-bg: #fff;
+  --tco-fg: #161823;
+  --tco-muted: #75757a;
+  --tco-border: #e2e2e6;
+  --tco-chip: #f1f1f2;
+  --tco-accent: #fe2c55;
+  --tco-accent-fg: #fff;
+  --tco-cyan: #25f4ee;
+
+  box-sizing: border-box;
+  margin: 16px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--tco-border);
+  border-radius: 12px;
+  background: var(--tco-bg);
+  color: var(--tco-fg);
+  font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tco-panel {
+    --tco-bg: #14141a;
+    --tco-fg: #f1f1f2;
+    --tco-muted: #a3a3a8;
+    --tco-border: #2d2d35;
+    --tco-chip: #22222a;
+  }
+}
+
+.tco-panel *,
+.tco-panel *::before,
+.tco-panel *::after {
+  box-sizing: border-box;
+}
+
+.tco-header {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.tco-header--low-sample {
+  color: var(--tco-muted);
+  font-weight: 500;
+}
+
+.tco-notice {
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--tco-chip);
+  color: var(--tco-muted);
+}
+
+.tco-notice[hidden] {
+  display: none;
+}
+
+.tco-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.tco-row--export {
+  margin-top: 4px;
+}
+
+.tco-label {
+  color: var(--tco-muted);
+  white-space: nowrap;
+}
+
+.tco-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tco-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: var(--tco-chip);
+  color: var(--tco-fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.tco-chip--on {
+  background: var(--tco-accent);
+  color: var(--tco-accent-fg);
+}
+
+.tco-select {
+  padding: 5px 8px;
+  border: 1px solid var(--tco-border);
+  border-radius: 6px;
+  background: var(--tco-bg);
+  color: var(--tco-fg);
+  font: inherit;
+}
+
+.tco-field--sort {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tco-status {
+  color: var(--tco-muted);
+  margin-bottom: 8px;
+}
+
+.tco-btn {
+  padding: 5px 12px;
+  border: 1px solid var(--tco-border);
+  border-radius: 16px;
+  background: var(--tco-chip);
+  color: var(--tco-fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.tco-btn--hook {
+  margin-left: auto;
+}
+
+.tco-hook {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--tco-border);
+}
+
+.tco-hook[hidden] {
+  display: none;
+}
+
+.tco-hook__list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.tco-hook__list li {
+  margin-bottom: 4px;
+}
+
+.tco-hook__empty {
+  margin: 0;
+  color: var(--tco-muted);
+}
+
+/* ── Grid tiles ──────────────────────────────────────────────────────── */
+
+.tco-hidden {
+  display: none !important;
+}
+
+.tco-badge-host {
+  position: relative;
+}
+
+.tco-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 3;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(22, 24, 35, 0.82);
+  color: #fff;
+  font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  pointer-events: auto;
+}
+
+.tco-badge--fire {
+  background: rgba(254, 44, 85, 0.9);
+}
+
+.tco-badge--up {
+  background: rgba(37, 244, 238, 0.28);
+  color: #0b3a38;
+}
+
+.tco-badge--flat {
+  background: rgba(22, 24, 35, 0.55);
+}
+
+.tco-badge--low-sample {
+  opacity: 0.65;
+}

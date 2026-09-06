@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>TikTok Creator Outliers</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <!-- Shown instead of the counters when the popup is opened away from a
+         TikTok profile: telling someone to "scroll the grid above" while
+         they're looking at another site explains nothing. -->
+    <div id="gate" class="gate" hidden>
+      <img class="gate__icon" src="icons/icon-128.png" alt="" width="48" height="48" />
+      <strong>Open a TikTok profile</strong>
+      <p>This adds a badge and median strip above any creator's video grid — open a profile
+        (<code>tiktok.com/@handle</code>) to see it.</p>
+      <button id="open-tiktok" type="button">Open TikTok</button>
+    </div>
+
+    <div id="intro">
+      <h1>TikTok Creator Outliers</h1>
+      <p>Badges and a median strip are live above the video grid on this profile.</p>
+    </div>
+
+    <h2>Usage</h2>
+    <p class="hint">Stored on this device only. Nothing is ever sent anywhere.</p>
+    <dl id="metrics"></dl>
+    <button id="reset-metrics" type="button" class="btn btn--ghost">Reset usage counters</button>
+
+    <h2>Your data</h2>
+    <p class="hint">Cached medians per creator and your last-used filter. Nothing else is stored.</p>
+    <div class="row">
+      <button id="export-data" type="button" class="btn">Export all data</button>
+      <label class="btn" for="import-data">Import</label>
+      <input id="import-data" type="file" accept="application/json" hidden />
+    </div>
+    <button id="clear-data" type="button" class="btn btn--danger">Clear all data</button>
+    <p id="status" class="hint" role="status"></p>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
