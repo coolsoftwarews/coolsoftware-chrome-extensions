@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Meta Ad Winner</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1>Meta Ad Winner</h1>
+        <p class="muted">Your swipe file</p>
+      </div>
+    </header>
+
+    <section class="controls">
+      <input id="search" type="search" placeholder="Search advertiser, ad text, note…" aria-label="Search swipe file" />
+      <div class="row">
+        <select id="collection-filter" aria-label="Filter by collection">
+          <option value="">All collections</option>
+        </select>
+        <button id="new-collection" class="btn" type="button">+ Collection</button>
+      </div>
+      <div class="row exports">
+        <span class="field__label">Export swipe file</span>
+        <button id="dl-csv" class="btn">.csv</button>
+        <button id="dl-md" class="btn">.md</button>
+      </div>
+    </section>
+
+    <main id="body" class="body">
+      <div id="state" class="state">
+        <p class="state__text">
+          Nothing saved yet. Open the
+          <a href="https://www.facebook.com/ads/library/" target="_blank" rel="noopener">Ad Library</a>
+          and click <strong>+ Save ad</strong> on any listing.
+        </p>
+      </div>
+      <ol id="list" class="list" hidden></ol>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <span class="footer__actions">
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Everything lives in this browser's local storage. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
