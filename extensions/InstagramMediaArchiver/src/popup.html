@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Instagram Media Archiver</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <h1>Media Archiver</h1>
+      <p id="summary" class="muted small"></p>
+    </header>
+
+    <main id="body" class="body">
+      <div id="empty" class="state" hidden>
+        <p class="state__title">Nothing saved yet</p>
+        <p class="state__body muted small">
+          Open a post you posted yourself on Instagram — Save appears next to its like/comment/share
+          row only when you're viewing your own post.
+        </p>
+      </div>
+      <ul id="list" class="list" hidden></ul>
+    </main>
+
+    <footer class="footer">
+      <div class="row wrap">
+        <button id="export-csv" class="btn">Export CSV</button>
+        <button id="export-json" class="btn">Export JSON</button>
+        <button id="clear-all" class="btn btn--danger">Clear all</button>
+      </div>
+      <p class="muted small">Local only — nothing here is ever sent anywhere.</p>
+    </footer>
+
+    <script type="module" src="__POPUP_JS__"></script>
+  </body>
+</html>
