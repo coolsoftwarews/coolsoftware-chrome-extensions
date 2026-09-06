@@ -70,8 +70,19 @@ async function copyStaticAssets() {
 // search/organize surface works on any X tab), but the indexing content
 // script below is matched *only* against the Bookmarks page itself — the
 // one place this product actually reads data from (PRD §5).
+//
+// X later folded the dedicated /i/bookmarks page into /i/history (Bookmarks
+// and Likes as sub-tabs on one shared path), so both are matched here or the
+// content script never injects at all on the page X now actually serves.
+// content.ts's onBookmarksPage() is what tells the two tabs apart at runtime
+// — this match list only decides where the script loads, not what it does.
 const HOST_PATTERNS = ['*://*.x.com/*', '*://*.twitter.com/*'];
-const BOOKMARKS_PATTERNS = ['*://*.x.com/i/bookmarks*', '*://*.twitter.com/i/bookmarks*'];
+const BOOKMARKS_PATTERNS = [
+  '*://*.x.com/i/bookmarks*',
+  '*://*.x.com/i/history*',
+  '*://*.twitter.com/i/bookmarks*',
+  '*://*.twitter.com/i/history*',
+];
 
 async function writeManifest(backgroundScript, contentScript) {
   const manifest = {

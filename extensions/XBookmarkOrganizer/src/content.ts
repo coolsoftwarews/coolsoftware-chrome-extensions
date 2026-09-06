@@ -22,7 +22,7 @@
 
 import { beginIndexingSession, indexBookmarks, readCollections } from './storage';
 import { track } from './metrics';
-import { extractVisibleBookmarks } from './scrape';
+import { extractVisibleBookmarks, isBookmarksTabActive } from './scrape';
 import { ContentToPanel, PanelToContent } from './types';
 
 const UI_ATTR = 'data-xbo-ui';
@@ -90,7 +90,16 @@ function showPill(message: string, sticky = false): void {
 
 /* ── Indexing ────────────────────────────────────────────────────────── */
 
+// The old dedicated URL has no tab switcher — it's unambiguous. X later
+// folded Bookmarks into /i/history alongside Likes on one shared path, so
+// there only the DOM (isBookmarksTabActive) can say which tab is showing.
+function onBookmarksPage(): boolean {
+  if (/^\/i\/bookmarks(\/|$)/.test(location.pathname)) return true;
+  return isBookmarksTabActive();
+}
+
 async function indexVisible(): Promise<void> {
+  if (!onBookmarksPage()) return;
   const posts = extractVisibleBookmarks(document);
   if (!posts.length) return;
   try {
@@ -116,8 +125,12 @@ function scheduleScan(delay = 350): void {
 
 let reindexing = false;
 
-async function runAutoScroll(screens: number): Promise<number> {
-  if (reindexing) return 0;
+async function runAutoScroll(screens: number): Promise<{ scrolled: number; wrongTab?: boolean }> {
+  if (reindexing) return { scrolled: 0 };
+  if (!onBookmarksPage()) {
+    showPill('Switch to the Bookmarks tab first', true);
+    return { scrolled: 0, wrongTab: true };
+  }
   reindexing = true;
   const bounded = Math.max(1, Math.min(screens, MAX_AUTOSCROLL_SCREENS));
   void track('reindex_started');
@@ -137,7 +150,7 @@ async function runAutoScroll(screens: number): Promise<number> {
     void track('reindex_completed');
     showPill(`Indexed ${indexedCount} bookmark${indexedCount === 1 ? '' : 's'} so far`);
   }
-  return scrolled;
+  return { scrolled };
 }
 
 function notifyPanel(message: ContentToPanel): void {
@@ -146,7 +159,9 @@ function notifyPanel(message: ContentToPanel): void {
 
 chrome.runtime.onMessage.addListener((message: PanelToContent) => {
   if (message?.type !== 'XBO_START_REINDEX') return;
-  void runAutoScroll(message.screens).then(scrolled => notifyPanel({ type: 'XBO_REINDEX_DONE', scrolled }));
+  void runAutoScroll(message.screens).then(({ scrolled, wrongTab }) =>
+    notifyPanel({ type: 'XBO_REINDEX_DONE', scrolled, wrongTab }),
+  );
 });
 
 /* ── Boot ────────────────────────────────────────────────────────────── */

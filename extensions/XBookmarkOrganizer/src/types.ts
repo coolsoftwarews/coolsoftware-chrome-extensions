@@ -104,4 +104,4 @@ export type PanelToContent =
  *  there, sendMessage simply has no receiver — the panel catches that and
  *  shows its own "open your Bookmarks page" hint rather than needing a
  *  reply message for it. */
-export type ContentToPanel = { type: 'XBO_REINDEX_DONE'; scrolled: number };
+export type ContentToPanel = { type: 'XBO_REINDEX_DONE'; scrolled: number; wrongTab?: boolean };

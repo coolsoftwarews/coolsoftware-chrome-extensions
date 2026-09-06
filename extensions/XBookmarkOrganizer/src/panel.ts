@@ -169,7 +169,7 @@ function render(): void {
   if (!items.length) {
     showEmpty(
       'Nothing indexed yet',
-      'Open your Bookmarks page on X and scroll — bookmarks show up here as X renders them. We index what you’ve scrolled through; scroll further, or click Re-index, to add more.'
+      'Open your Bookmarks page on X (the Bookmarks tab, not Likes) and scroll — bookmarks show up here as X renders them. We index what you’ve scrolled through; scroll further, or click Re-index, to add more.'
     );
     els.count.textContent = '';
     els.list.hidden = true;
@@ -387,7 +387,9 @@ els.reindex.addEventListener('click', () => void startReindex());
 chrome.runtime.onMessage.addListener((message: ContentToPanel) => {
   if (message?.type !== 'XBO_REINDEX_DONE') return;
   els.reindex.disabled = false;
-  els.reindexStatus.textContent = `Re-index complete — scrolled ${message.scrolled} screen${message.scrolled === 1 ? '' : 's'}.`;
+  els.reindexStatus.textContent = message.wrongTab
+    ? 'That tab is on Bookmarks/Likes history, but Likes is the active tab — switch to Bookmarks, then click Re-index.'
+    : `Re-index complete — scrolled ${message.scrolled} screen${message.scrolled === 1 ? '' : 's'}.`;
   void loadAll();
 });
 

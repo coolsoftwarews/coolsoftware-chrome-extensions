@@ -91,6 +91,7 @@ check('isXUrl rejects other sites', !mod.isXUrl('https://example.com'));
 check('isXUrl rejects http', !mod.isXUrl('http://x.com'));
 check('isBookmarksUrl accepts the bookmarks page', mod.isBookmarksUrl('https://x.com/i/bookmarks'));
 check('isBookmarksUrl accepts a bookmarks folder sub-path', mod.isBookmarksUrl('https://x.com/i/bookmarks/12345'));
+check('isBookmarksUrl accepts the folded /i/history page', mod.isBookmarksUrl('https://x.com/i/history'));
 check('isBookmarksUrl rejects the home timeline', !mod.isBookmarksUrl('https://x.com/home'));
 check('isBookmarksUrl rejects a non-X site', !mod.isBookmarksUrl('https://example.com/i/bookmarks'));
 

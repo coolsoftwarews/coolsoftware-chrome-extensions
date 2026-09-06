@@ -21,6 +21,19 @@ import { canonicalStatusUrl, cleanText, normalizeHandle, parseCount, parseStatus
 
 export const TWEET_SELECTOR = 'article[data-testid="tweet"]';
 
+/** X folded the dedicated Bookmarks page into `/i/history`, a combined page
+ *  where Bookmarks and Likes are sub-tabs sharing one URL — so the path alone
+ *  can no longer say which is showing (see parse.ts's isBookmarksUrl). This
+ *  reads the actual tab strip: true only when a `role="tab"` is both
+ *  selected and labelled "Bookmarks". No tab strip at all (the old dedicated
+ *  page, or the strip hasn't rendered yet) returns false — indexing waits
+ *  for the next DOM mutation rather than risk mistaking Likes for bookmarks. */
+export function isBookmarksTabActive(root: ParentNode = document): boolean {
+  const tabs = Array.from(root.querySelectorAll<HTMLElement>('[role="tab"]'));
+  const active = tabs.find(tab => tab.getAttribute('aria-selected') === 'true');
+  return active != null && /bookmark/i.test(active.textContent ?? '');
+}
+
 function text(el: Element | null | undefined): string {
   return (el?.textContent ?? '').trim();
 }

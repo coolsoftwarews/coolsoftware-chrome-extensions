@@ -62,14 +62,22 @@ export function isXUrl(url: string | null | undefined): boolean {
   }
 }
 
-/** True only for X's own Bookmarks page — this is where indexing happens
- *  (PRD §5: "reads the user's own native X Bookmarks page"), narrower than
- *  isXUrl, which the panel/side-panel-enable logic uses for the whole site. */
+/** True for X's own Bookmarks page — this is where indexing happens (PRD §5:
+ *  "reads the user's own native X Bookmarks page"), narrower than isXUrl,
+ *  which the panel/side-panel-enable logic uses for the whole site.
+ *
+ *  X later folded the dedicated `/i/bookmarks` URL into `/i/history`, a
+ *  combined History page with Bookmarks and Likes as sub-tabs that share one
+ *  path — so this URL-only check accepts both paths but cannot tell which
+ *  tab is active on `/i/history`; that disambiguation needs the DOM and
+ *  lives in scrape.ts's `isBookmarksTabActive`, which content.ts consults
+ *  before indexing anything. Both old and new paths are matched here so
+ *  neither URL shape regresses if X reverts or re-splits them. */
 export function isBookmarksUrl(url: string | null | undefined): boolean {
   if (!isXUrl(url)) return false;
   try {
     const parsed = new URL(url as string);
-    return /^\/i\/bookmarks(\/|$)/.test(parsed.pathname);
+    return /^\/i\/(bookmarks|history)(\/|$)/.test(parsed.pathname);
   } catch {
     return false;
   }
