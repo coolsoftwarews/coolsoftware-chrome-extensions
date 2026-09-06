@@ -1,0 +1,31 @@
+/* Every hide operation in content.ts is one of these two classes — nothing
+   in this extension ever removes or rewrites a node, only toggles a class
+   (PRD §5/§6: "hide nothing rather than break the page"). */
+
+.xfd-hidden {
+  display: none !important;
+}
+
+/* Focus mode (PRD §4): widen the reading column and mute non-essential
+   chrome. Purely cosmetic, purely CSS, reversible the instant the toggle
+   flips back off. Selectors here are best-effort against X's current
+   layout and degrade to "no visual change" if they stop matching — see
+   selectors.ts's own header comment on why nothing here can break the page. */
+
+html.xfd-focus-mode [data-testid="primaryColumn"] {
+  max-width: 920px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+html.xfd-focus-mode [data-testid="sidebarColumn"] {
+  opacity: 0.55;
+  filter: grayscale(0.35);
+  transition: opacity 120ms ease, filter 120ms ease;
+}
+
+html.xfd-focus-mode [data-testid="sidebarColumn"]:hover,
+html.xfd-focus-mode [data-testid="sidebarColumn"]:focus-within {
+  opacity: 1;
+  filter: none;
+}

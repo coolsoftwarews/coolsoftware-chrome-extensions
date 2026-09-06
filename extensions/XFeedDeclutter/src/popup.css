@@ -1,0 +1,207 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 340px;
+  margin: 0;
+  font: 13px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #0f1419;
+  background: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #e7e9ea;
+    background: #15181c;
+  }
+}
+
+.bar {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.2);
+}
+
+.bar h1 {
+  margin: 0;
+  font-size: 15px;
+}
+
+main {
+  padding: 10px 14px 14px;
+}
+
+.muted {
+  color: #536471;
+}
+
+@media (prefers-color-scheme: dark) {
+  .muted {
+    color: #8b98a5;
+  }
+}
+
+.small {
+  font-size: 11px;
+}
+
+.card {
+  border: 1px solid rgba(127, 127, 127, 0.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+.card h2 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #536471;
+}
+
+@media (prefers-color-scheme: dark) {
+  .card h2 {
+    color: #8b98a5;
+  }
+}
+
+.toggle-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.toggle-row label {
+  flex: 1;
+  cursor: pointer;
+}
+
+.toggle-row .toggle-label {
+  display: block;
+  font-weight: 600;
+}
+
+.toggle-row .toggle-help {
+  display: block;
+  color: #536471;
+  font-size: 11px;
+  margin-top: 1px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .toggle-row .toggle-help {
+    color: #8b98a5;
+  }
+}
+
+/* A real checkbox, styled as a switch — kept as an actual <input
+   type="checkbox"> (not a div with role="switch") so keyboard navigation,
+   Space/Enter activation and screen-reader semantics all come for free. */
+.switch {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  width: 34px;
+  height: 20px;
+  border-radius: 999px;
+  background: rgba(127, 127, 127, 0.35);
+  cursor: pointer;
+  margin: 2px 0 0;
+  transition: background 120ms ease;
+}
+
+.switch::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 120ms ease;
+}
+
+.switch:checked {
+  background: #4fb28f;
+}
+
+.switch:checked::before {
+  transform: translateX(14px);
+}
+
+.switch:focus-visible {
+  outline: 2px solid #4fb28f;
+  outline-offset: 2px;
+}
+
+#active-count {
+  margin: 0 0 10px;
+}
+
+.row {
+  display: flex;
+  gap: 6px;
+}
+
+.btn {
+  border: 1px solid rgba(127, 127, 127, 0.3);
+  background: transparent;
+  color: inherit;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: rgba(79, 178, 143, 0.12);
+  border-color: #4fb28f;
+}
+
+.btn:focus-visible {
+  outline: 2px solid #4fb28f;
+  outline-offset: 2px;
+}
+
+.stats {
+  margin: 0 0 8px;
+  padding: 8px;
+  background: rgba(127, 127, 127, 0.08);
+  border-radius: 6px;
+  font: 11px/1.5 ui-monospace, "SF Mono", Consolas, monospace;
+  white-space: pre-wrap;
+  max-height: 140px;
+  overflow: auto;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  border-top: 1px solid rgba(127, 127, 127, 0.2);
+}
+
+footer a {
+  color: #4fb28f;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #4fb28f;
+  outline-offset: 2px;
+}

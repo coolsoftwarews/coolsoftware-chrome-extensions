@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>X Feed Declutter &amp; Focus</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <h1>X Feed Declutter &amp; Focus</h1>
+    </header>
+
+    <main>
+      <p class="muted small">
+        Hides what X already renders — ads, algorithmic sidebar modules and vanity counts — and
+        defaults your home timeline to chronological Following. Nothing is read or sent anywhere;
+        every toggle here just adds or removes a CSS class on the page you're already looking at.
+      </p>
+
+      <section class="card" aria-label="Toggles">
+        <h2>Toggles</h2>
+        <ul id="toggle-list" class="toggle-list"></ul>
+      </section>
+
+      <p id="active-count" class="muted small" role="status"></p>
+
+      <section class="card">
+        <h2>Your data</h2>
+        <p class="muted small">
+          Just these five switches, plus local usage counters — stored on this device only. There
+          is nothing else to export: no post text, no ad content and no counts are ever written to
+          storage.
+        </p>
+        <div class="row">
+          <button id="reset-defaults" class="btn">Reset to defaults</button>
+        </div>
+        <p id="data-status" class="muted small" role="status"></p>
+      </section>
+
+      <section class="card">
+        <h2>Local usage counters</h2>
+        <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+        <pre id="stats-body" class="stats"></pre>
+        <div class="row">
+          <button id="stats-clear" class="btn">Reset counters</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <a href="https://x.com" target="_blank" rel="noopener">Open X</a>
+      <span class="muted small">v1.0.0</span>
+    </footer>
+
+    <script type="module" src="__POPUP_JS__"></script>
+  </body>
+</html>
