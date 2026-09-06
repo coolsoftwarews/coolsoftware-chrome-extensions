@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pinterest Competitor Research</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1>Competitor Research</h1>
+        <p id="count" class="muted small"></p>
+      </div>
+      <button id="data-toggle" class="icon-btn" title="Your data" aria-label="Your data">&#9776;</button>
+    </header>
+
+    <section class="controls">
+      <label class="visually-hidden" for="search">Search saved pins</label>
+      <input id="search" type="search" placeholder="Search title, description, domain, note…" class="search" />
+
+      <div class="row">
+        <div class="segmented" role="group" aria-label="Group pins by">
+          <button id="view-collection" class="seg seg--on" type="button">By collection</button>
+          <button id="view-domain" class="seg" type="button">By domain</button>
+        </div>
+      </div>
+
+      <div id="chips" class="chips" role="tablist" aria-label="Filter by collection"></div>
+    </section>
+
+    <main class="body">
+      <div id="state" class="state">
+        <p class="state__text">
+          Click <strong>+ Save to research</strong> on any pin in the grid, or on a pin's own page, to start
+          building a research file.
+        </p>
+      </div>
+      <div id="list" class="list" hidden></div>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small" role="status" aria-live="polite"></span>
+      <span class="footer__actions">
+        <button id="export-csv" class="link-btn">.csv</button>
+        <button id="export-md" class="link-btn">.md</button>
+        <button id="export-json" class="link-btn">.json</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Everything lives in this browser's local storage. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data (.json)</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+
+      <h3>Collections</h3>
+      <ul id="collection-manager" class="collection-manager"></ul>
+      <div class="row">
+        <input id="new-collection-name" type="text" placeholder="New collection name" class="text-input" />
+        <button id="new-collection-add" class="btn">Add</button>
+      </div>
+
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
