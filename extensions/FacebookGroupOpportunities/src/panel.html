@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Group Opportunities</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1>Group Opportunities</h1>
+        <p id="tab-status" class="muted small"></p>
+      </div>
+      <button id="refresh" class="icon-btn" title="Refresh" aria-label="Refresh">&#8635;</button>
+    </header>
+
+    <div id="gate" class="state state--gate" hidden>
+      <img class="gate__icon" alt="" id="gate-icon" />
+      <strong id="gate-title" class="gate__title"></strong>
+      <p id="gate-body" class="gate__body"></p>
+      <button id="gate-action" class="btn btn--primary gate__action" hidden type="button"></button>
+    </div>
+
+    <main id="app" class="app" hidden>
+      <section class="panel-section">
+        <div class="panel-section__head">
+          <h2>Rules</h2>
+          <button id="rule-add" class="link-btn">+ Add rule</button>
+        </div>
+        <ul id="rule-list" class="rule-list"></ul>
+        <p id="rule-empty" class="muted small" hidden>
+          No rules yet. Add a starter pack below, or write your own — a rule needs at least one
+          <strong>match phrase</strong> ("looking for") and one <strong>topic word</strong> ("bookkeeper").
+        </p>
+        <div id="starter-packs" class="starter-packs"></div>
+      </section>
+
+      <dialog id="rule-form" class="sheet sheet--wide">
+        <h2 id="rule-form-title">New rule</h2>
+        <form id="rule-fields">
+          <label class="field">
+            <span class="field__label">Name</span>
+            <input id="rf-name" type="text" placeholder="e.g. Bookkeeping leads" required maxlength="80" />
+          </label>
+          <label class="field">
+            <span class="field__label">Match phrases — the intent ("looking for")</span>
+            <textarea id="rf-match" rows="2" placeholder="looking for, can anyone recommend, does anyone know"></textarea>
+          </label>
+          <label class="field">
+            <span class="field__label">Topic words — what they need ("bookkeeper")</span>
+            <textarea id="rf-topic" rows="2" placeholder="bookkeeper, accountant, invoicing"></textarea>
+          </label>
+          <label class="field">
+            <span class="field__label">Ignore words — cuts obvious noise (optional)</span>
+            <textarea id="rf-ignore" rows="1" placeholder="free, intern"></textarea>
+          </label>
+          <p class="muted small">Comma or newline separated. A post matches when it has one of each — match AND topic — and none of the ignore words.</p>
+          <p id="rf-error" class="error small" role="alert" hidden></p>
+          <div class="row end">
+            <button id="rf-cancel" class="btn" type="button">Cancel</button>
+            <button id="rf-save" class="btn btn--primary" type="submit">Save rule</button>
+          </div>
+        </form>
+      </dialog>
+
+      <section class="panel-section panel-section--grow">
+        <div class="panel-section__head">
+          <h2>Matched posts</h2>
+          <span id="item-count" class="muted small"></span>
+        </div>
+
+        <div class="filters">
+          <input id="f-search" type="search" placeholder="Search text, author, group…" aria-label="Search matched posts" />
+          <select id="f-rule" aria-label="Filter by rule"><option value="">All rules</option></select>
+          <select id="f-status" aria-label="Filter by status">
+            <option value="all">All statuses</option>
+            <option value="new">New</option>
+            <option value="replied">Replied</option>
+            <option value="dismissed">Dismissed</option>
+          </select>
+        </div>
+
+        <div id="items-state" class="state">
+          <p class="state__text">
+            No matched posts yet. Browse a group feed you're a member of — matches show up here as you scroll.
+          </p>
+        </div>
+        <ol id="item-list" class="item-list" hidden></ol>
+      </section>
+
+      <div class="row exports">
+        <button id="export-csv" class="btn">Export .csv</button>
+        <button id="export-md" class="btn">Export .md</button>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <span class="footer__actions">
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Rules and matched posts live in this browser's local storage. Group content is personal —
+        nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>

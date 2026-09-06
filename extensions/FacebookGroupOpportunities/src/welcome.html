@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Group Opportunity Finder — first run</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #ffffff;
+        --card: #f6f6f6;
+        --text: #1a1a1a;
+        --muted: #5f6368;
+        --border: #e0e0e0;
+        --accent: #1a73e8;
+        --chip-bg: #fff4cc;
+        --chip-border: #e0b400;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1f1f1f;
+          --card: #2b2b2b;
+          --text: #e8eaed;
+          --muted: #9aa0a6;
+          --border: #3c4043;
+          --accent: #8ab4f8;
+          --chip-bg: #3a2f00;
+          --chip-border: #7a5f00;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 48px 20px 72px;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.6 -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      main { max-width: 40rem; margin: 0 auto; }
+      h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 8px; }
+      .lede { color: var(--muted); margin: 0 0 32px; }
+      ol { padding-left: 1.2rem; margin: 0 0 32px; }
+      li { margin-bottom: 14px; }
+      .chip {
+        display: inline-block; background: var(--chip-bg); border: 1px solid var(--chip-border);
+        border-radius: 999px; padding: 2px 10px; font-size: 0.85em; font-weight: 600;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+      }
+      .card h2 { font-size: 1rem; margin: 0 0 6px; }
+      .card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+      footer { margin-top: 40px; color: var(--muted); font-size: 0.85rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Catch the posts asking for exactly what you sell.</h1>
+      <p class="lede">Three things to know, then you're done reading this page forever.</p>
+
+      <ol>
+        <li>
+          <strong>Open a group you're already in</strong> and add a rule — or pick a starter pack in
+          the panel. A rule needs two parts: an <em>intent phrase</em> ("looking for") and a
+          <em>topic word</em> ("bookkeeper"). A post only counts when it has both.
+          <span class="chip">💡 opportunity — "looking for" + "bookkeeper"</span>
+        </li>
+        <li>
+          <strong>Scroll the feed as you normally would.</strong> Matching posts get a small badge —
+          nothing else on the page changes, and nothing is clicked, liked or commented on for you.
+        </li>
+        <li>
+          <strong>Open the panel</strong> to see every matched post — group, author, text, a link back
+          to it — mark it <em>replied</em> once you've reached out, and export the list as CSV or
+          Markdown any time.
+        </li>
+      </ol>
+
+      <div class="card" style="margin-top: 32px">
+        <h2>No alerts, on purpose</h2>
+        <p>
+          This only reads what Facebook renders while you're actively looking at a group. Background
+          scanning would mean automation, and automation is what gets accounts and extensions banned.
+          The habit that works instead: open the panel when you open Facebook.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>No account. No cloud. No network.</h2>
+        <p>
+          Group content is personal, so it stays that way: every rule and every matched post lives in
+          this browser's local storage and is never uploaded. Export everything from the panel's
+          <strong>Data</strong> menu any time, or clear it all with one click.
+        </p>
+      </div>
+
+      <footer>Click the toolbar icon in a Facebook group to open the panel.</footer>
+    </main>
+  </body>
+</html>
