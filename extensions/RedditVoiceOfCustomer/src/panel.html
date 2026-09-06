@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reddit Voice of Customer</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1>Reddit Voice-of-Customer</h1>
+        <p id="summary" class="muted small"></p>
+      </div>
+      <button id="refresh" class="icon-btn" title="Refresh" aria-label="Refresh">&#8635;</button>
+    </header>
+
+    <section class="controls">
+      <label class="field">
+        <span class="sr-only">Search quotes</span>
+        <input id="search" type="search" placeholder="Search quotes, notes, subreddit, author…" />
+      </label>
+
+      <div id="stats" class="stats" hidden>
+        <div id="theme-stats" class="chips" role="group" aria-label="Quotes per theme"></div>
+        <div id="subreddit-stats" class="chips" role="group" aria-label="Quotes per subreddit"></div>
+      </div>
+
+      <label class="check">
+        <input type="checkbox" id="opt-anonymize" />
+        Save new quotes without usernames
+      </label>
+
+      <div class="row exports">
+        <button id="copy" class="btn btn--primary">Copy as Markdown</button>
+        <button id="dl-md" class="btn">.md</button>
+        <button id="dl-csv" class="btn">.csv</button>
+        <button id="dl-json" class="btn">.json</button>
+      </div>
+    </section>
+
+    <main class="body">
+      <div id="state" class="state">
+        <p class="state__text">
+          Select text on a Reddit post or comment, then click “+ Save quote”. Saved quotes show up here,
+          grouped by theme.
+        </p>
+      </div>
+      <div id="groups" class="groups" hidden></div>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small" role="status"></span>
+      <span class="footer__actions">
+        <button id="themes-toggle" class="link-btn">Themes</button>
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="usage-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="themes" class="sheet">
+      <h2>Themes</h2>
+      <p class="muted small">
+        Rename the defaults to fit your research, or add your own. Deleting a theme moves its quotes to
+        Uncategorized rather than deleting them.
+      </p>
+      <div id="themes-list" class="themes-list"></div>
+      <div class="row wrap">
+        <input id="theme-new" type="text" placeholder="New theme name…" />
+        <button id="theme-add" class="btn">Add</button>
+      </div>
+      <div class="row end">
+        <button id="themes-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Everything lives in this browser's local storage. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="usage" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="usage-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="usage-clear" class="btn">Reset</button>
+        <button id="usage-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
