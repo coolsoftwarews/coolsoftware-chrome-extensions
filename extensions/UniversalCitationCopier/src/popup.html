@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Universal Citation & Link Copier</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup">
+      <header class="popup__header">
+        <img class="popup__icon" src="icons/icon-32.png" alt="" width="20" height="20" />
+        <h1 class="popup__title">Copy this page as&hellip;</h1>
+      </header>
+
+      <p id="page-summary" class="popup__page" aria-live="off"></p>
+
+      <!-- Loading state: shown while the active tab's metadata is being read. -->
+      <div id="loading-state" class="popup__state" role="status">
+        <span class="spinner" aria-hidden="true"></span>
+        Reading page&hellip;
+      </div>
+
+      <!-- Error state: unsupported page, or extraction failed. Plain language, no raw errors. -->
+      <div id="error-state" class="popup__state popup__state--error" role="alert" hidden>
+        <p id="error-message"></p>
+      </div>
+
+      <!-- Success state: live preview of all five formats. -->
+      <ul id="format-list" class="format-list" hidden></ul>
+
+      <p id="hint" class="popup__hint" hidden>
+        The keyboard shortcut copies your last-used format instantly — no popup needed.
+      </p>
+
+      <!-- Copy confirmations are announced here for screen reader users. -->
+      <p id="live-region" class="sr-only" role="status" aria-live="polite"></p>
+    </main>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
