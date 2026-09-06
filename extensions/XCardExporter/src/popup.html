@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>X Card Exporter</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="xce-popup">
+      <h1>X Card Exporter</h1>
+      <p class="xce-tagline">Save a post as a PNG. Rendered on this device — nothing is ever uploaded.</p>
+
+      <section aria-labelledby="xce-usage-heading">
+        <h2 id="xce-usage-heading">Usage</h2>
+        <dl class="xce-stats">
+          <div><dt>Cards exported</dt><dd id="xce-cards-exported">0</dd></div>
+          <div><dt>Threads exported</dt><dd id="xce-threads-exported">0</dd></div>
+          <div><dt>Last-used style</dt><dd id="xce-last-template">Light</dd></div>
+        </dl>
+      </section>
+
+      <section aria-labelledby="xce-data-heading">
+        <h2 id="xce-data-heading">Your data</h2>
+        <p class="xce-note">
+          Nothing is stored beyond your last-used style and the usage counts above — an export that
+          isn't downloaded is gone, there is no saved library.
+        </p>
+        <button type="button" id="xce-clear-btn" class="xce-btn">Clear local data</button>
+        <p class="xce-status" id="xce-clear-status" role="status"></p>
+      </section>
+
+      <footer>
+        <p>On x.com or twitter.com, look for the <span aria-hidden="true">🖼️</span> button near a post.</p>
+      </footer>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
