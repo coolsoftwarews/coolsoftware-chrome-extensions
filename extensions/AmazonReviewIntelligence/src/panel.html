@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Amazon Review Intelligence</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1 id="page-title">Amazon Review Intelligence</h1>
+        <p id="page-meta" class="muted"></p>
+      </div>
+      <button id="refresh" class="icon-btn" title="Re-scan this page" aria-label="Re-scan this page">&#8635;</button>
+    </header>
+
+    <div id="state" class="state">
+      <p class="state__text">Open a product's reviews on Amazon to get started.</p>
+    </div>
+
+    <main id="body" class="body" hidden>
+      <section class="summary">
+        <p id="summary-line" class="summary__line"></p>
+        <p id="more-hint" class="summary__hint" hidden></p>
+      </section>
+
+      <section class="filters">
+        <button id="filters-toggle" class="link-btn" type="button" aria-expanded="false">Filters</button>
+        <select id="lang-select" hidden aria-label="Language"></select>
+      </section>
+
+      <div id="filters-body" class="filters-body" hidden>
+        <div class="row wrap">
+          <label class="field field--inline">
+            <span class="field__label">Star band</span>
+            <select id="f-star">
+              <option value="0">All</option>
+              <option value="1">1★</option>
+              <option value="2">2★</option>
+              <option value="3">3★</option>
+              <option value="4">4★</option>
+              <option value="5">5★</option>
+            </select>
+          </label>
+          <label class="check"><input type="checkbox" id="f-verified" /> Verified only</label>
+        </div>
+        <label class="field">
+          <span class="field__label">Keyword</span>
+          <input type="search" id="f-keyword" placeholder="e.g. battery" />
+        </label>
+        <div class="row wrap">
+          <label class="field field--inline">
+            <span class="field__label">From</span>
+            <input type="date" id="f-date-from" />
+          </label>
+          <label class="field field--inline">
+            <span class="field__label">To</span>
+            <input type="date" id="f-date-to" />
+          </label>
+          <button id="filters-clear" class="link-btn" type="button">Clear</button>
+        </div>
+      </div>
+
+      <section class="themes">
+        <h2>Recurring themes in negative reviews</h2>
+        <p id="negative-note" class="muted small" hidden></p>
+        <ol id="negative-list" class="theme-list"></ol>
+      </section>
+
+      <section class="themes">
+        <h2>Recurring praise</h2>
+        <p id="praise-note" class="muted small" hidden></p>
+        <ol id="praise-list" class="theme-list"></ol>
+      </section>
+
+      <section class="controls">
+        <label class="field">
+          <span class="field__label">Note on this product</span>
+          <textarea id="note" rows="2" placeholder="What did you conclude?"></textarea>
+        </label>
+        <div class="row wrap exports">
+          <button id="export-csv" class="btn btn--primary">Export CSV</button>
+          <button id="export-md" class="btn">Export Markdown</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <span class="footer__actions">
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Everything lives in this browser's local storage, per product (ASIN). Nothing is uploaded, and there is
+        no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="product-clear" class="btn">Clear this product</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
