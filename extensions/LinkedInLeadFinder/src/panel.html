@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LinkedIn Lead Finder</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1>LinkedIn Lead Finder</h1>
+        <p id="summary" class="muted small"></p>
+      </div>
+    </header>
+
+    <section class="controls">
+      <input id="search" type="search" placeholder="Search name, headline, comment…" aria-label="Search leads" />
+
+      <div class="row wrap">
+        <select id="status-filter" aria-label="Filter by status">
+          <option value="all">All statuses</option>
+          <option value="new">New</option>
+          <option value="shortlist">Shortlist</option>
+          <option value="contacted">Contacted</option>
+          <option value="dismissed">Dismissed</option>
+        </select>
+        <label class="check"><input type="checkbox" id="qualified-only" /> Qualified only</label>
+        <label class="check"><input type="checkbox" id="group-by-post" /> Group by post</label>
+      </div>
+
+      <div class="row exports">
+        <button id="dl-csv" class="btn btn--primary">Export CSV</button>
+        <button id="dl-md" class="btn">Export Markdown</button>
+      </div>
+    </section>
+
+    <main class="body">
+      <div id="state" class="state" hidden></div>
+      <div id="list" class="list" hidden></div>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <span class="footer__actions">
+        <button id="rules-toggle" class="link-btn">Rules</button>
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="rules" class="sheet">
+      <h2>Qualification rules</h2>
+      <p class="muted small">
+        A lead is starred when its headline or comment text contains one of these words or phrases.
+        Nothing is ever hidden — rules only mark, they never filter.
+      </p>
+      <ul id="rules-list" class="rules-list"></ul>
+      <div class="row">
+        <input id="rule-input" type="text" placeholder="Add a keyword or phrase…" aria-label="New rule keyword" />
+        <button id="rule-add" class="btn">Add</button>
+      </div>
+      <div class="row end">
+        <button id="rules-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Everything lives in this browser's local storage. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
