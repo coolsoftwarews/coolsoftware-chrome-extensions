@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reddit Opportunity Lens</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1>Reddit Opportunity Lens</h1>
+        <p class="muted small">
+          A panel, not a monitor — it only reads what you've already scrolled past. No alerts, no polling.
+        </p>
+      </div>
+      <button id="tab-refresh" class="btn" type="button">Refresh from active tab</button>
+    </header>
+
+    <p id="tab-status" class="tab-status muted small" aria-live="polite"></p>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <section class="card">
+          <h2>Rules</h2>
+          <p class="muted small">A rule fires when a post has an <strong>intent</strong> phrase and a <strong>topic</strong> word.</p>
+
+          <div id="rules-empty" class="empty-inline" hidden>
+            <p class="muted small">No rules yet — start from a pack for your work, then edit freely.</p>
+          </div>
+
+          <ol id="rules-list" class="rules-list"></ol>
+
+          <div class="row wrap starter-row">
+            <select id="pack-select" aria-label="Starter pack"></select>
+            <button id="pack-add" class="btn" type="button">Add pack</button>
+          </div>
+
+          <details class="new-rule">
+            <summary>New rule</summary>
+            <label class="field">
+              <span class="field__label">Name</span>
+              <input id="rule-name" type="text" placeholder="e.g. Invoicing tool" />
+            </label>
+            <label class="field">
+              <span class="field__label">Intent phrases (comma or line separated)</span>
+              <textarea id="rule-intents" rows="2" placeholder="looking for, recommend, any alternative to"></textarea>
+            </label>
+            <label class="field">
+              <span class="field__label">Topic words</span>
+              <textarea id="rule-topics" rows="2" placeholder="invoicing, billing software"></textarea>
+            </label>
+            <label class="field">
+              <span class="field__label">Ignore words (optional)</span>
+              <textarea id="rule-ignore" rows="1" placeholder="free only"></textarea>
+            </label>
+            <div class="row end">
+              <button id="rule-add" class="btn btn--primary" type="button">Add rule</button>
+            </div>
+          </details>
+        </section>
+
+        <section class="card">
+          <h2>Signals</h2>
+          <p class="muted small">Topic words that fired in the last 30 days — the market talking.</p>
+          <ol id="signals-list" class="signals-list"></ol>
+          <p id="signals-empty" class="muted small" hidden>No matches yet in this window.</p>
+        </section>
+
+        <section class="card">
+          <h2>Subreddit read</h2>
+          <p class="muted small">From what's loaded on the active Reddit tab — reload the tab or scroll it for a bigger sample.</p>
+          <div id="subreddit-read" class="subreddit-read">
+            <p class="muted small">Open a subreddit's listing in another tab, then press Refresh above.</p>
+          </div>
+        </section>
+      </aside>
+
+      <main class="main">
+        <div class="toolbar">
+          <div class="row wrap filters">
+            <label class="filter">
+              <span class="filter__label">Subreddit</span>
+              <select id="filter-subreddit"><option value="">All</option></select>
+            </label>
+            <label class="filter">
+              <span class="filter__label">Rule</span>
+              <select id="filter-rule"><option value="">All</option></select>
+            </label>
+            <label class="filter">
+              <span class="filter__label">Status</span>
+              <select id="filter-status">
+                <option value="">All</option>
+                <option value="new">New</option>
+                <option value="replied">Replied</option>
+                <option value="dismissed">Dismissed</option>
+              </select>
+            </label>
+            <label class="filter filter--grow">
+              <span class="filter__label">Search</span>
+              <input id="filter-search" type="search" placeholder="Search title and snippet…" />
+            </label>
+          </div>
+          <div class="row wrap exports">
+            <button id="export-csv" class="btn">Export CSV</button>
+            <button id="export-md" class="btn">Export Markdown</button>
+          </div>
+        </div>
+
+        <div id="state" class="state">
+          <p class="state__text">Loading…</p>
+        </div>
+        <ol id="list" class="list" hidden></ol>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <span class="footer__actions">
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Everything lives in this browser's local storage. Nothing is uploaded, and there is no account.
+      </p>
+      <p id="quota" class="muted small"></p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export all data</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
