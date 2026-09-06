@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>YouTube Upload Archiver</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="yua-popup">
+      <h1>YouTube Upload Archiver</h1>
+      <p class="yua-tagline">
+        Not a video downloader. Archives a thumbnail image + metadata for your own uploads, and links
+        to YouTube Studio's own Download page for the file itself.
+      </p>
+
+      <section aria-labelledby="yua-search-heading">
+        <h2 id="yua-search-heading" class="yua-visually-hidden">Search your archive</h2>
+        <input type="search" id="yua-search" class="yua-search" placeholder="Search title or description…" />
+      </section>
+
+      <section aria-labelledby="yua-list-heading">
+        <h2 id="yua-list-heading" class="yua-visually-hidden">Archived uploads</h2>
+        <p class="yua-count" id="yua-count" role="status"></p>
+        <ul class="yua-list" id="yua-list"></ul>
+      </section>
+
+      <section aria-labelledby="yua-data-heading">
+        <h2 id="yua-data-heading">Your data</h2>
+        <div class="yua-export-row">
+          <button type="button" id="yua-export-csv" class="yua-btn">Export CSV</button>
+          <button type="button" id="yua-export-md" class="yua-btn">Export Markdown</button>
+          <button type="button" id="yua-export-json" class="yua-btn">Export JSON</button>
+        </div>
+        <button type="button" id="yua-clear-btn" class="yua-btn yua-btn-danger">Clear all data</button>
+        <p class="yua-status" id="yua-status" role="status"></p>
+        <p class="yua-quota" id="yua-quota"></p>
+      </section>
+
+      <footer>
+        <p>
+          On your own channel's Videos tab, or your Content list in YouTube Studio, look for the
+          <strong>Archive</strong> button next to a video.
+        </p>
+      </footer>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

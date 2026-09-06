@@ -1,0 +1,169 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 14px system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #0f1419;
+  background: #ffffff;
+}
+
+.yua-popup {
+  width: 360px;
+  max-height: 560px;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+h1 {
+  font-size: 16px;
+  margin: 0 0 4px;
+}
+
+h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #536471;
+  margin: 16px 0 8px;
+}
+
+.yua-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.yua-tagline {
+  margin: 0 0 12px;
+  color: #536471;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.yua-search {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #cfd9de;
+  font: inherit;
+}
+
+.yua-count {
+  font-size: 12px;
+  color: #536471;
+  margin: 8px 0 4px;
+}
+
+.yua-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.yua-item {
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  border: 1px solid #eff3f4;
+  border-radius: 8px;
+}
+
+.yua-item img {
+  width: 64px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #eff3f4;
+  flex-shrink: 0;
+}
+
+.yua-item-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.yua-item-title {
+  font-weight: 600;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yua-item-meta {
+  font-size: 11px;
+  color: #536471;
+}
+
+.yua-item-links {
+  font-size: 11px;
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.yua-item-links a { color: #0f3d3e; }
+
+.yua-empty {
+  color: #536471;
+  font-size: 12px;
+  padding: 8px 0;
+}
+
+.yua-export-row {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.yua-btn {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #cfd9de;
+  background: #ffffff;
+  color: #0f1419;
+  cursor: pointer;
+  font: inherit;
+}
+
+.yua-btn:hover { background: #f7f9f9; }
+.yua-btn:focus-visible {
+  outline: 2px solid #0f3d3e;
+  outline-offset: 2px;
+}
+
+.yua-btn-danger {
+  border-color: #f4b8b8;
+  color: #a12a2a;
+}
+
+.yua-status {
+  min-height: 16px;
+  font-size: 12px;
+  color: #536471;
+  margin: 6px 0 0;
+}
+
+.yua-quota {
+  font-size: 11px;
+  color: #8b98a1;
+  margin: 4px 0 0;
+}
+
+footer {
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 1px solid #eff3f4;
+  color: #536471;
+  font-size: 12px;
+}
+
+footer p { margin: 0; }
