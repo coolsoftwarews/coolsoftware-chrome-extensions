@@ -1,0 +1,439 @@
+/* Neutral chrome-like palette with a warm amber/teal accent — matches the
+   sticky-note mark, and stays visually distinct from both LinkedIn siblings'
+   blue accent so it never looks like the same product. */
+:root {
+  --bg: #ffffff;
+  --bg-raised: #f3f3f3;
+  --bg-hover: #e8e8e8;
+  --text: #1a1a1a;
+  --text-muted: #5f6368;
+  --border: #dcdcdc;
+  --accent: #b3541f;
+  --accent-text: #ffffff;
+  --danger: #b3261e;
+  --warn-bg: #fff4e5;
+  --note-bg: #fffaf3;
+  --note-border: #e2d9cf;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1f1f1f;
+    --bg-raised: #2b2b2b;
+    --bg-hover: #3a3a3a;
+    --text: #e8eaed;
+    --text-muted: #9aa0a6;
+    --border: #3c4043;
+    --accent: #f0a15c;
+    --accent-text: #1f1f1f;
+    --danger: #f2b8b5;
+    --warn-bg: #3a2f1a;
+    --note-bg: #2b2620;
+    --note-border: #4a4030;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+.small {
+  font-size: 12px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+
+.bar {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.bar__title {
+  flex: 1;
+  min-width: 0;
+}
+
+.bar h1 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.bar p {
+  margin: 2px 0 0;
+  font-size: 12px;
+}
+
+/* ── Controls ───────────────────────────────────────────────────────── */
+
+.controls {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.row.wrap,
+.exports {
+  flex-wrap: wrap;
+}
+
+.row.end {
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.search-field {
+  display: block;
+  width: 100%;
+}
+
+.search-field input {
+  width: 100%;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  padding: 0 12px;
+}
+
+.segmented {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.seg {
+  flex: 1;
+  height: 28px;
+  border: none;
+  background: var(--bg-raised);
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.seg--on {
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 500;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.chip--on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.btn {
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.btn--danger {
+  color: var(--danger);
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.link-btn {
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ── Note list ──────────────────────────────────────────────────────── */
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item {
+  border: 1px solid var(--note-border);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: var(--note-bg);
+}
+
+.item__head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.item__name {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.item__tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--warn-bg);
+  border-radius: 8px;
+  padding: 1px 7px;
+}
+
+.item__meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+
+.item__headline {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+textarea.item__note-edit {
+  width: 100%;
+  margin-top: 6px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 8px;
+}
+
+input.item__tag-edit {
+  margin-top: 6px;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  padding: 5px 8px;
+}
+
+.item__actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.state {
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.state__text {
+  margin: 0 0 12px;
+}
+
+.state--error .state__text {
+  color: var(--danger);
+}
+
+/* ── Footer + sheets ────────────────────────────────────────────────── */
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-top: 1px solid var(--border);
+}
+
+.footer span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.footer__actions {
+  display: flex;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.sheet {
+  width: min(340px, 92vw);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.sheet h2 {
+  margin: 0 0 4px;
+  font-size: 15px;
+}
+
+.sheet__body {
+  max-height: 40vh;
+  overflow: auto;
+  background: var(--bg-raised);
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.sheet::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* ── The gate ───────────────────────────────────────────────────────────
+   Shown when the panel has nothing to work with yet. Centred, with the mark,
+   one line of weight, and the button that resolves it where one exists. */
+
+.state--gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 100%;
+  padding: 24px 20px 44px;
+  text-align: center;
+}
+
+.gate__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 11px;
+}
+
+.gate__title {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.gate__body {
+  margin: 0;
+  max-width: 32ch;
+  color: var(--text-muted);
+}
+
+/* Respect the user's motion preference — nothing in this panel animates by
+   default, but keep any future addition honest. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
