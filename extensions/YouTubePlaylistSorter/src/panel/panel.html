@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Playlist Sorter</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__title">
+        <h1 id="playlist-title">Playlist Sorter</h1>
+        <p id="playlist-sub" class="muted small"></p>
+      </div>
+      <button id="refresh" class="icon-btn" title="Re-scan this playlist" aria-label="Re-scan">&#8635;</button>
+    </header>
+
+    <section id="empty-state" class="state" hidden>
+      <p class="state__text" id="empty-text">Open a YouTube playlist page to use this panel.</p>
+    </section>
+
+    <section id="error-state" class="state" hidden>
+      <p class="state__text">Couldn't reach this tab. Try reloading the YouTube page.</p>
+      <button id="error-retry" class="btn">Try again</button>
+    </section>
+
+    <section id="controls" class="controls" hidden>
+      <div class="row wrap">
+        <label class="field field--inline">
+          <span class="field__label">Sort</span>
+          <select id="sort-key">
+            <option value="custom">YouTube's own order</option>
+            <option value="duration">Duration (shortest first)</option>
+            <option value="title">Title (A–Z)</option>
+            <option value="date">Upload date (newest first)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="row wrap load-row">
+        <button id="load-full" class="btn btn--primary">Load full playlist</button>
+        <button id="load-cancel" class="btn" hidden>Cancel</button>
+        <span id="load-progress" class="muted small" aria-live="polite"></span>
+      </div>
+
+      <div class="row totals">
+        <span id="loaded-count" class="muted small"></span>
+        <span id="stated-total" class="muted small"></span>
+      </div>
+
+      <p id="notice" class="notice small" hidden></p>
+
+      <details class="budget">
+        <summary>Build a set that fits a time budget</summary>
+        <div class="row wrap">
+          <label class="field field--inline">
+            <span class="field__label">Minutes</span>
+            <input id="budget-minutes" type="number" min="1" step="1" placeholder="e.g. 45" />
+          </label>
+          <button id="budget-apply" class="btn">Build set</button>
+          <button id="budget-clear" class="btn" hidden>Clear</button>
+        </div>
+        <p id="budget-summary" class="muted small" hidden></p>
+      </details>
+
+      <div class="row exports">
+        <button id="export-csv" class="btn">Export CSV</button>
+        <button id="export-md" class="btn">Export Markdown</button>
+      </div>
+    </section>
+
+    <main id="body" class="body">
+      <p id="list-empty" class="muted small" hidden>No videos loaded yet.</p>
+      <table id="list" class="list" hidden>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Views</th>
+            <th scope="col">Uploaded</th>
+          </tr>
+        </thead>
+        <tbody id="list-body"></tbody>
+      </table>
+    </main>
+
+    <footer class="footer">
+      <span id="status" class="muted small"></span>
+      <span class="footer__actions">
+        <button id="data-toggle" class="link-btn">Data</button>
+        <button id="stats-toggle" class="link-btn">Usage</button>
+      </span>
+    </footer>
+
+    <dialog id="data" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        This extension never stores playlist contents — only your last sort choice and time-budget
+        value, so the next playlist you open remembers your preference. Nothing is uploaded, and there
+        is no account.
+      </p>
+      <div class="row wrap">
+        <button id="data-export" class="btn">Export preferences</button>
+        <button id="data-import" class="btn">Import</button>
+        <button id="data-clear" class="btn btn--danger">Clear all data</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden />
+      <div class="row end">
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats" class="sheet">
+      <h2>Local usage counters</h2>
+      <p class="muted small">Stored on this device only. Nothing is sent anywhere.</p>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-clear" class="btn">Reset</button>
+        <button id="stats-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
