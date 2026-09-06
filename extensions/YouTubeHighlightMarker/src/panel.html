@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Highlight Marker for YouTube</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="bar">
+        <div class="bar__title">
+          <h1 id="video-title">Highlight Marker</h1>
+          <p id="video-meta" class="muted small"></p>
+        </div>
+      </header>
+
+      <!-- Off YouTube, or no video open: nothing to mark yet. -->
+      <div id="gate" class="state state--gate" hidden>
+        <img class="gate__icon" src="icons/icon-128.png" alt="" />
+        <strong class="gate__title">Open a YouTube video</strong>
+        <p class="gate__body">
+          Marks are made while a video plays. Open one and this panel becomes your shot list for
+          it.
+        </p>
+        <button id="gate-open" type="button" class="btn btn--primary">Open YouTube</button>
+      </div>
+
+      <main id="main" class="body body--pad" hidden>
+        <section id="pending-status" class="pending" hidden>
+          <p id="pending-text" class="pending__text"></p>
+          <button id="pending-cancel" type="button" class="btn btn--sm">Cancel</button>
+        </section>
+
+        <section class="controls row" aria-label="Mark controls">
+          <button id="mark-in" type="button" class="btn mark-btn" title="Mark in-point (Alt+Shift+I)">
+            Mark in
+          </button>
+          <button id="mark-out" type="button" class="btn mark-btn" title="Mark out-point (Alt+Shift+O)">
+            Mark out
+          </button>
+          <span id="clip-count" class="muted small clip-count"></span>
+        </section>
+
+        <div id="empty" class="state" hidden>
+          <p class="state__text">
+            No highlights marked yet. Press <strong>Mark in</strong>, let the video play to the
+            moment worth keeping, then press <strong>Mark out</strong> — or use
+            <kbd>Alt+Shift+I</kbd> / <kbd>Alt+Shift+O</kbd> anytime while watching.
+          </p>
+        </div>
+
+        <ol id="clip-list" class="clip-list" hidden aria-label="Marked highlights"></ol>
+
+        <section id="export-row" class="controls row exports" hidden aria-label="Export">
+          <button id="export-md" class="export" title="Download Markdown, with thumbnails">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 17V7l4.2 5.2L11.4 7v10" />
+              <path d="M17.6 7v7.4" />
+              <path d="m14.4 11.8 3.2 3.4 3.2-3.4" />
+            </svg>
+            <span>.md</span>
+          </button>
+          <button id="export-csv" class="export" title="Download CSV — timestamps and notes only">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 6h16M4 10h16M4 14h11M4 18h7" />
+            </svg>
+            <span>.csv</span>
+          </button>
+        </section>
+
+        <section id="clipwizard-note" class="clipwizard" hidden>
+          <p class="muted small">
+            Ready to actually cut these? <a id="clipwizard-link" href="#" target="_blank" rel="noopener">ClipWizard</a>
+            turns a list like this into real clips.
+          </p>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <button id="data-open" class="link-btn">Data</button>
+        <span class="footer__end">
+          <span id="version" class="muted small"></span>
+        </span>
+      </footer>
+    </div>
+
+    <dialog id="data-sheet" class="sheet">
+      <h2>Your data</h2>
+      <p class="muted small">
+        Stored on this device only, keyed by video. Nothing is ever sent anywhere.
+      </p>
+      <div class="row wrap" style="margin: 10px 0">
+        <button id="data-export" type="button" class="btn">Export all (JSON)</button>
+        <button id="data-import" type="button" class="btn">Import</button>
+        <button id="data-clear" type="button" class="btn btn--danger">Clear all</button>
+        <input id="data-import-file" type="file" accept="application/json" hidden />
+      </div>
+      <p id="data-status" class="muted small" role="status"></p>
+      <h2 style="margin-top: 16px">Local usage counters</h2>
+      <pre id="stats-body" class="sheet__body"></pre>
+      <div class="row end">
+        <button id="stats-reset" class="btn">Reset counters</button>
+        <button id="data-close" class="btn btn--primary">Close</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="__PANEL_JS__"></script>
+  </body>
+</html>
