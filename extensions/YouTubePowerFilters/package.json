@@ -1,0 +1,19 @@
+{
+  "name": "youtube-power-filters",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Chrome MV3 extension — filter YouTube search results by views/day, channel size and outlier score.",
+  "scripts": {
+    "icons": "node ./scripts/gen-icons.mjs",
+    "build": "node ./scripts/gen-icons.mjs && node ./scripts/build.mjs",
+    "build:prod": "node ./scripts/gen-icons.mjs && node ./scripts/build.mjs --env production",
+    "build:watch": "node ./scripts/gen-icons.mjs && node ./scripts/build.mjs --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.258",
+    "esbuild": "^0.21.5",
+    "typescript": "^5.4.5"
+  }
+}

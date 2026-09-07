@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>YouTube Power Filters</title>
+    <style>
+      body { width: 280px; margin: 0; padding: 14px; font: 13px/1.5 'Roboto', system-ui, sans-serif; color: #0f0f0f; background: #fff; }
+      @media (prefers-color-scheme: dark) { body { color: #f1f1f1; background: #0f0f0f; } }
+      h1 { margin: 0 0 6px; font-size: 14px; }
+      p { margin: 0 0 12px; opacity: 0.75; }
+      dl { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; margin: 0 0 12px; font-variant-numeric: tabular-nums; }
+      dt { opacity: 0.75; }
+      dd { margin: 0; text-align: right; }
+      button { width: 100%; padding: 6px; border: 1px solid currentColor; border-radius: 16px; background: none; color: inherit; font: inherit; cursor: pointer; opacity: 0.75; }
+      .gate { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 6px 0 14px; text-align: center; }
+      .gate[hidden] { display: none; }
+      .gate__icon { border-radius: 11px; }
+      .gate p { margin: 0; }
+      .gate button { width: auto; padding: 6px 16px; opacity: 1; }
+    </style>
+  </head>
+  <body>
+    <div id="gate" class="gate" hidden>
+      <img class="gate__icon" src="/icons/icon128.png" alt="" width="48" height="48" />
+      <strong>Open YouTube to get started</strong>
+      <p>This adds a Filters bar above YouTube's own search results — by views, date, duration and more. Open a search and it appears.</p>
+      <button id="open-youtube" type="button">Open YouTube</button>
+    </div>
+    <div id="intro">
+      <h1>YouTube Power Filters</h1>
+      <p>Open a YouTube search and use the <strong>Filters</strong> bar above the results.</p>
+    </div>
+    <h1>Local usage counters</h1>
+    <p>Stored on this device only. Nothing is ever sent anywhere.</p>
+    <dl id="metrics"></dl>
+    <button id="reset" type="button">Reset counters</button>
+    <script src="popup.js"></script>
+  </body>
+</html>
